@@ -1,6 +1,15 @@
+import { getDb } from "@/db/client";
 import Image from "next/image";
 
-export default function Home() {
+export default async function Home() {
+  async function debug() {
+    "use server";
+    const db = getDb();
+
+    const users = await db.query.usersTable.findMany();
+    console.log("users", users);
+  }
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
@@ -24,6 +33,10 @@ export default function Home() {
             Save and see your changes instantly.
           </li>
         </ol>
+
+        <form action={debug}>
+          <button>Debug Db Call</button>
+        </form>
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
           <a

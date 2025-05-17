@@ -12,12 +12,16 @@
     "fix": "run-s 'fix:*'",
     "fix:biome-format": "biome format --write .",
     "fix:biome-lint": "biome check --write .",
+    "migrate:generate": "drizzle-kit generate",
+    "migrate:local": "wrangler d1 migrations apply nextjs-cloudflare-workers-db --local",
+    "migrate:prod": "wrangler d1 migrations apply nextjs-cloudflare-workers-db --remote",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "cf-typegen": "wrangler types --env-interface CloudflareBindings ./cloudflare-env.d.ts"
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.0.2",
+    "drizzle-orm": "^0.43.1",
     "next": "15.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
@@ -28,6 +32,7 @@
     "@types/node": "^20.17.47",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "drizzle-kit": "^0.31.1",
     "npm-run-all2": "^8.0.1",
     "tailwindcss": "^4",
     "typescript": "^5",
