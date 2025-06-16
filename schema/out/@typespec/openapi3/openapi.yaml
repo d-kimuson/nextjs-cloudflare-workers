@@ -751,30 +751,6 @@ paths:
           schema:
             type: string
           explode: false
-        - name: article
-          in: query
-          required: false
-          description: 絞り込み項目（女優：actress、作者：author、ジャンル：genre、シリーズ：series、メーカー：maker）
-          schema:
-            type: array
-            items:
-              type: string
-              enum:
-                - actress
-                - author
-                - genre
-                - series
-                - maker
-          explode: false
-        - name: article_id
-          in: query
-          required: false
-          description: 絞り込み項目のID（各検索APIから取得可能）
-          schema:
-            type: array
-            items:
-              type: string
-          explode: false
         - name: gte_date
           in: query
           required: false
@@ -820,6 +796,404 @@ paths:
           schema:
             type: string
           explode: false
+        - name: article
+          in: query
+          required: false
+          description: 絞り込み項目（女優：actress、作者：author、ジャンル：genre、シリーズ：series、メーカー：maker）
+          schema:
+            type: string
+            enum:
+              - actress
+              - author
+              - genre
+              - series
+              - maker
+          explode: false
+        - name: article_id
+          in: query
+          required: false
+          description: 絞り込み項目のID（各検索APIから取得可能）
+          schema:
+            type: string
+          explode: false
+        - name: article[0]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - actress
+              - author
+              - genre
+              - series
+              - maker
+          explode: false
+        - name: article_id[0]
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: article[1]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - actress
+              - author
+              - genre
+              - series
+              - maker
+          explode: false
+        - name: article_id[1]
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: article[2]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - actress
+              - author
+              - genre
+              - series
+              - maker
+          explode: false
+        - name: article_id[2]
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: article[3]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - actress
+              - author
+              - genre
+              - series
+              - maker
+          explode: false
+        - name: article_id[3]
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: article[4]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - actress
+              - author
+              - genre
+              - series
+              - maker
+          explode: false
+        - name: article_id[4]
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: article[5]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - actress
+              - author
+              - genre
+              - series
+              - maker
+          explode: false
+        - name: article_id[5]
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: article[6]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - actress
+              - author
+              - genre
+              - series
+              - maker
+          explode: false
+        - name: article_id[6]
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: article[7]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - actress
+              - author
+              - genre
+              - series
+              - maker
+          explode: false
+        - name: article_id[7]
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: article[8]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - actress
+              - author
+              - genre
+              - series
+              - maker
+          explode: false
+        - name: article_id[8]
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: article[9]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - actress
+              - author
+              - genre
+              - series
+              - maker
+          explode: false
+        - name: article_id[9]
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: article[10]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - actress
+              - author
+              - genre
+              - series
+              - maker
+          explode: false
+        - name: article_id[10]
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: article[11]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - actress
+              - author
+              - genre
+              - series
+              - maker
+          explode: false
+        - name: article_id[11]
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: article[12]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - actress
+              - author
+              - genre
+              - series
+              - maker
+          explode: false
+        - name: article_id[12]
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: article[13]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - actress
+              - author
+              - genre
+              - series
+              - maker
+          explode: false
+        - name: article_id[13]
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: article[14]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - actress
+              - author
+              - genre
+              - series
+              - maker
+          explode: false
+        - name: article_id[14]
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: article[15]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - actress
+              - author
+              - genre
+              - series
+              - maker
+          explode: false
+        - name: article_id[15]
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: article[16]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - actress
+              - author
+              - genre
+              - series
+              - maker
+          explode: false
+        - name: article_id[16]
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: article[17]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - actress
+              - author
+              - genre
+              - series
+              - maker
+          explode: false
+        - name: article_id[17]
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: article[18]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - actress
+              - author
+              - genre
+              - series
+              - maker
+          explode: false
+        - name: article_id[18]
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: article[19]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - actress
+              - author
+              - genre
+              - series
+              - maker
+          explode: false
+        - name: article_id[19]
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: article[20]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - actress
+              - author
+              - genre
+              - series
+              - maker
+          explode: false
+        - name: article_id[20]
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
       responses:
         '200':
           description: The request has succeeded.
@@ -861,13 +1235,15 @@ paths:
                           cid:
                             type: string
                           article:
-                            type: array
-                            items:
-                              type: string
+                            type: string
+                            enum:
+                              - actress
+                              - author
+                              - genre
+                              - series
+                              - maker
                           article_id:
-                            type: array
-                            items:
-                              type: string
+                            type: string
                           gte_date:
                             type: string
                           lte_date:
@@ -1850,10 +2226,9 @@ components:
           description: タイトル
           example: GET！！ 素人ナンパ Best100！！ 街角女子ベスト100人 8時間
         volume:
-          type: integer
-          format: int32
+          type: string
           description: 収録時間 or ページ数
-          example: 350
+          example: '350'
         number:
           type: integer
           format: int32
@@ -2105,28 +2480,32 @@ components:
         - sample_l
       properties:
         sample_s:
-          type: array
-          items:
-            type: object
-            properties:
-              image:
+          type: object
+          properties:
+            image:
+              type: array
+              items:
                 type: string
-                description: サンプル画像（小）URL
-                example: http://pics.dmm.co.jp/digital/video/15dss00145/15dss00145-1.jpg
-            required:
-              - image
+              description: サンプル画像（小）URL
+              example:
+                - http://pics.dmm.co.jp/digital/video/15dss00145/15dss00145-1.jpg
+                - http://pics.dmm.co.jp/digital/video/15dss00145/15dss00145-1.jpg
+          required:
+            - image
           description: サンプル（小）画像リスト
         sample_l:
-          type: array
-          items:
-            type: object
-            properties:
-              image:
+          type: object
+          properties:
+            image:
+              type: array
+              items:
                 type: string
-                description: サンプル画像（大）URL
-                example: http://pics.dmm.co.jp/digital/video/15dss00145/15dss00145jp-1.jpg
-            required:
-              - image
+              description: サンプル画像（大）URL
+              example:
+                - http://pics.dmm.co.jp/digital/video/15dss00145/15dss00145jp-1.jpg
+                - http://pics.dmm.co.jp/digital/video/15dss00145/15dss00145jp-1.jpg
+          required:
+            - image
           description: サンプル（大）画像リスト
       description: サンプル画像URL情報
     Item.SampleMovieURL:

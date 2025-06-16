@@ -11,7 +11,7 @@ const requiredEnv = (key: string) => {
 
 export default defineConfig({
   out: "./drizzle/migrations",
-  schema: "./src/db/schema.ts",
+  schema: "./src/server/db/schema.ts",
   dialect: "sqlite",
   driver: "d1-http",
   dbCredentials: {

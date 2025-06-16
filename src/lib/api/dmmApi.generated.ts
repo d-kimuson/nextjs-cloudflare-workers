@@ -363,7 +363,7 @@ export interface ItemItem {
   /** タイトル */
   title: string;
   /** 収録時間 or ページ数 */
-  volume?: number;
+  volume?: string;
   /** 巻数 */
   number?: number;
   /** レビュー情報 */
@@ -504,14 +504,20 @@ export interface ItemReview {
   average: number;
 }
 
-export type ItemSampleImageURLSampleSItem = {
+/**
+ * サンプル（小）画像リスト
+ */
+export type ItemSampleImageURLSampleS = {
   /** サンプル画像（小）URL */
-  image: string;
+  image: string[];
 };
 
-export type ItemSampleImageURLSampleLItem = {
+/**
+ * サンプル（大）画像リスト
+ */
+export type ItemSampleImageURLSampleL = {
   /** サンプル画像（大）URL */
-  image: string;
+  image: string[];
 };
 
 /**
@@ -519,9 +525,9 @@ export type ItemSampleImageURLSampleLItem = {
  */
 export interface ItemSampleImageURL {
   /** サンプル（小）画像リスト */
-  sample_s: ItemSampleImageURLSampleSItem[];
+  sample_s: ItemSampleImageURLSampleS;
   /** サンプル（大）画像リスト */
-  sample_l: ItemSampleImageURLSampleLItem[];
+  sample_l: ItemSampleImageURLSampleL;
 }
 
 /**
@@ -1033,14 +1039,6 @@ keyword?: string;
  */
 cid?: string;
 /**
- * 絞り込み項目（女優：actress、作者：author、ジャンル：genre、シリーズ：series、メーカー：maker）
- */
-article?: ItemListArticleItem[];
-/**
- * 絞り込み項目のID（各検索APIから取得可能）
- */
-article_id?: string[];
-/**
  * このパラメータで指定した日付以降に発売された商品を絞り込み（ISO8601形式）
  */
 gte_date?: string;
@@ -1060,6 +1058,56 @@ output?: ItemListOutput;
  * JSONP形式で出力する場合のコールバック関数名
  */
 callback?: string;
+/**
+ * 絞り込み項目（女優：actress、作者：author、ジャンル：genre、シリーズ：series、メーカー：maker）
+ */
+article?: ItemListArticle;
+/**
+ * 絞り込み項目のID（各検索APIから取得可能）
+ */
+article_id?: string;
+'article[0]'?: ItemListArticle0;
+'article_id[0]'?: string;
+'article[1]'?: ItemListArticle1;
+'article_id[1]'?: string;
+'article[2]'?: ItemListArticle2;
+'article_id[2]'?: string;
+'article[3]'?: ItemListArticle3;
+'article_id[3]'?: string;
+'article[4]'?: ItemListArticle4;
+'article_id[4]'?: string;
+'article[5]'?: ItemListArticle5;
+'article_id[5]'?: string;
+'article[6]'?: ItemListArticle6;
+'article_id[6]'?: string;
+'article[7]'?: ItemListArticle7;
+'article_id[7]'?: string;
+'article[8]'?: ItemListArticle8;
+'article_id[8]'?: string;
+'article[9]'?: ItemListArticle9;
+'article_id[9]'?: string;
+'article[10]'?: ItemListArticle10;
+'article_id[10]'?: string;
+'article[11]'?: ItemListArticle11;
+'article_id[11]'?: string;
+'article[12]'?: ItemListArticle12;
+'article_id[12]'?: string;
+'article[13]'?: ItemListArticle13;
+'article_id[13]'?: string;
+'article[14]'?: ItemListArticle14;
+'article_id[14]'?: string;
+'article[15]'?: ItemListArticle15;
+'article_id[15]'?: string;
+'article[16]'?: ItemListArticle16;
+'article_id[16]'?: string;
+'article[17]'?: ItemListArticle17;
+'article_id[17]'?: string;
+'article[18]'?: ItemListArticle18;
+'article_id[18]'?: string;
+'article[19]'?: ItemListArticle19;
+'article_id[19]'?: string;
+'article[20]'?: ItemListArticle20;
+'article_id[20]'?: string;
 };
 
 export type ItemListSite = typeof ItemListSite[keyof typeof ItemListSite];
@@ -1084,18 +1132,6 @@ export const ItemListSort = {
   match: 'match',
 } as const;
 
-export type ItemListArticleItem = typeof ItemListArticleItem[keyof typeof ItemListArticleItem];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const ItemListArticleItem = {
-  actress: 'actress',
-  author: 'author',
-  genre: 'genre',
-  series: 'series',
-  maker: 'maker',
-} as const;
-
 export type ItemListMonoStock = typeof ItemListMonoStock[keyof typeof ItemListMonoStock];
 
 
@@ -1117,6 +1153,282 @@ export const ItemListOutput = {
   xml: 'xml',
 } as const;
 
+export type ItemListArticle = typeof ItemListArticle[keyof typeof ItemListArticle];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemListArticle = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
+export type ItemListArticle0 = typeof ItemListArticle0[keyof typeof ItemListArticle0];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemListArticle0 = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
+export type ItemListArticle1 = typeof ItemListArticle1[keyof typeof ItemListArticle1];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemListArticle1 = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
+export type ItemListArticle2 = typeof ItemListArticle2[keyof typeof ItemListArticle2];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemListArticle2 = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
+export type ItemListArticle3 = typeof ItemListArticle3[keyof typeof ItemListArticle3];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemListArticle3 = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
+export type ItemListArticle4 = typeof ItemListArticle4[keyof typeof ItemListArticle4];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemListArticle4 = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
+export type ItemListArticle5 = typeof ItemListArticle5[keyof typeof ItemListArticle5];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemListArticle5 = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
+export type ItemListArticle6 = typeof ItemListArticle6[keyof typeof ItemListArticle6];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemListArticle6 = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
+export type ItemListArticle7 = typeof ItemListArticle7[keyof typeof ItemListArticle7];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemListArticle7 = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
+export type ItemListArticle8 = typeof ItemListArticle8[keyof typeof ItemListArticle8];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemListArticle8 = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
+export type ItemListArticle9 = typeof ItemListArticle9[keyof typeof ItemListArticle9];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemListArticle9 = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
+export type ItemListArticle10 = typeof ItemListArticle10[keyof typeof ItemListArticle10];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemListArticle10 = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
+export type ItemListArticle11 = typeof ItemListArticle11[keyof typeof ItemListArticle11];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemListArticle11 = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
+export type ItemListArticle12 = typeof ItemListArticle12[keyof typeof ItemListArticle12];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemListArticle12 = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
+export type ItemListArticle13 = typeof ItemListArticle13[keyof typeof ItemListArticle13];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemListArticle13 = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
+export type ItemListArticle14 = typeof ItemListArticle14[keyof typeof ItemListArticle14];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemListArticle14 = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
+export type ItemListArticle15 = typeof ItemListArticle15[keyof typeof ItemListArticle15];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemListArticle15 = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
+export type ItemListArticle16 = typeof ItemListArticle16[keyof typeof ItemListArticle16];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemListArticle16 = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
+export type ItemListArticle17 = typeof ItemListArticle17[keyof typeof ItemListArticle17];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemListArticle17 = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
+export type ItemListArticle18 = typeof ItemListArticle18[keyof typeof ItemListArticle18];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemListArticle18 = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
+export type ItemListArticle19 = typeof ItemListArticle19[keyof typeof ItemListArticle19];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemListArticle19 = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
+export type ItemListArticle20 = typeof ItemListArticle20[keyof typeof ItemListArticle20];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemListArticle20 = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
+export type ItemList200RequestParametersArticle = typeof ItemList200RequestParametersArticle[keyof typeof ItemList200RequestParametersArticle];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemList200RequestParametersArticle = {
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
+} as const;
+
 export type ItemList200RequestParameters = {
   /** リクエストパラメータ */
   api_id: string;
@@ -1129,8 +1441,8 @@ export type ItemList200RequestParameters = {
   sort?: string;
   keyword?: string;
   cid?: string;
-  article?: string[];
-  article_id?: string[];
+  article?: ItemList200RequestParametersArticle;
+  article_id?: string;
   gte_date?: string;
   lte_date?: string;
   mono_stock?: string;

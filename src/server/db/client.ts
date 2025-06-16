@@ -10,3 +10,5 @@ export const getDb = cache(() => {
 
   return drizzle(env.DB, { schema });
 });
+
+export type DB = ReturnType<typeof getDb>;

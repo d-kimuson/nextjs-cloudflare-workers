@@ -43,6 +43,15 @@ export default async function Home() {
                   </Link>
                 </NavigationMenuLink>
               </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild>
+                  <Link href="/authors">
+                    <Button variant="outline" className="w-full">
+                      作者一覧
+                    </Button>
+                  </Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
         </nav>
@@ -51,12 +60,24 @@ export default async function Home() {
           <div className="max-w-2xl mx-auto">
             <p className="text-muted-foreground mb-8">
               最新の同人ランキングをチェックして、お気に入りの作品を見つけましょう。
+              人気作者の作品や試し読みも充実しています。
             </p>
-            <Link href="/tmp">
-              <Button size="lg" className="text-lg px-8 py-4">
-                ランキングを見る
-              </Button>
-            </Link>
+            <div className="flex gap-4 justify-center">
+              <Link href="/doujinshi/daily-ranking">
+                <Button size="lg" className="text-lg px-8 py-4">
+                  ランキングを見る
+                </Button>
+              </Link>
+              <Link href="/authors">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="text-lg px-8 py-4"
+                >
+                  作者一覧
+                </Button>
+              </Link>
+            </div>
           </div>
         </main>
       </div>

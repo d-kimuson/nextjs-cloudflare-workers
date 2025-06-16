@@ -75,14 +75,6 @@ namespace DmmApi {
     @example("15dss00145")
     cid?: string,
     
-    @doc("絞り込み項目（女優：actress、作者：author、ジャンル：genre、シリーズ：series、メーカー：maker）")
-    @query("article")
-    article?: ("actress" | "author" | "genre" | "series" | "maker")[],
-    
-    @doc("絞り込み項目のID（各検索APIから取得可能）")
-    @query("article_id")
-    article_id?: string[],
-    
     @doc("このパラメータで指定した日付以降に発売された商品を絞り込み（ISO8601形式）")
     @query 
     @example("2016-04-01T00:00:00")
@@ -106,7 +98,101 @@ namespace DmmApi {
     @doc("JSONP形式で出力する場合のコールバック関数名")
     @query
     @example("callback")
-    callback?: string
+    callback?: string,
+
+    @doc("絞り込み項目（女優：actress、作者：author、ジャンル：genre、シリーズ：series、メーカー：maker）")
+    @query("article")
+    article?: Item.ItemFilter,
+    
+    @doc("絞り込み項目のID（各検索APIから取得可能）")
+    @query("article_id")
+    article_id?: string,
+
+    // 複数指定
+    @query("article[0]")
+    "article[0]"?: Item.ItemFilter,
+    @query("article_id[0]")
+    "article_id[0]"?: string,
+    @query("article[1]")
+    "article[1]"?: Item.ItemFilter,
+    @query("article_id[1]")
+    "article_id[1]"?: string,
+    @query("article[2]")
+    "article[2]"?: Item.ItemFilter,
+    @query("article_id[2]")
+    "article_id[2]"?: string,
+    @query("article[3]")
+    "article[3]"?: Item.ItemFilter,
+    @query("article_id[3]")
+    "article_id[3]"?: string,
+    @query("article[4]")
+    "article[4]"?: Item.ItemFilter,
+    @query("article_id[4]")
+    "article_id[4]"?: string,
+    @query("article[5]")
+    "article[5]"?: Item.ItemFilter,
+    @query("article_id[5]")
+    "article_id[5]"?: string,
+    @query("article[6]")
+    "article[6]"?: Item.ItemFilter,
+    @query("article_id[6]")
+    "article_id[6]"?: string,
+    @query("article[7]")
+    "article[7]"?: Item.ItemFilter,
+    @query("article_id[7]")
+    "article_id[7]"?: string,
+    @query("article[8]")
+    "article[8]"?: Item.ItemFilter,
+    @query("article_id[8]")
+    "article_id[8]"?: string,
+    @query("article[9]")
+    "article[9]"?: Item.ItemFilter,
+    @query("article_id[9]")
+    "article_id[9]"?: string,
+    @query("article[10]")
+    "article[10]"?: Item.ItemFilter,
+    @query("article_id[10]")
+    "article_id[10]"?: string,
+    @query("article[11]")
+    "article[11]"?: Item.ItemFilter,
+    @query("article_id[11]")
+    "article_id[11]"?: string,
+    @query("article[12]")
+    "article[12]"?: Item.ItemFilter,
+    @query("article_id[12]")
+    "article_id[12]"?: string,
+    @query("article[13]")
+    "article[13]"?: Item.ItemFilter,
+    @query("article_id[13]")
+    "article_id[13]"?: string,
+    @query("article[14]")
+    "article[14]"?: Item.ItemFilter,
+    @query("article_id[14]")
+    "article_id[14]"?: string,
+    @query("article[15]")
+    "article[15]"?: Item.ItemFilter,
+    @query("article_id[15]")
+    "article_id[15]"?: string,
+    @query("article[16]")
+    "article[16]"?: Item.ItemFilter,
+    @query("article_id[16]")
+    "article_id[16]"?: string,
+    @query("article[17]")
+    "article[17]"?: Item.ItemFilter,
+    @query("article_id[17]")
+    "article_id[17]"?: string,
+    @query("article[18]")
+    "article[18]"?: Item.ItemFilter,
+    @query("article_id[18]")
+    "article_id[18]"?: string,
+    @query("article[19]")
+    "article[19]"?: Item.ItemFilter,
+    @query("article_id[19]")
+    "article_id[19]"?: string,
+    @query("article[20]")
+    "article[20]"?: Item.ItemFilter,
+    @query("article_id[20]")
+    "article_id[20]"?: string,
   ): SharedResponse.GetResponse<{
     @doc("リクエストパラメータ")
     api_id: string;
@@ -119,8 +205,8 @@ namespace DmmApi {
     sort?: string;
     keyword?: string;
     cid?: string;
-    article?: string[];
-    article_id?: string[];
+    article?: Item.ItemFilter;
+    article_id?: string;
     gte_date?: string;
     lte_date?: string;
     mono_stock?: string;

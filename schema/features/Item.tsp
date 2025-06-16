@@ -42,16 +42,16 @@ model SampleImageURL {
   @doc("サンプル（小）画像リスト")
   sample_s: {
     @doc("サンプル画像（小）URL")
-    @example("http://pics.dmm.co.jp/digital/video/15dss00145/15dss00145-1.jpg")
-    image: string;
-  }[];
+    @example(#["http://pics.dmm.co.jp/digital/video/15dss00145/15dss00145-1.jpg", "http://pics.dmm.co.jp/digital/video/15dss00145/15dss00145-1.jpg"])
+    image: string[];
+  };
   
   @doc("サンプル（大）画像リスト")
   sample_l: {
     @doc("サンプル画像（大）URL")
-    @example("http://pics.dmm.co.jp/digital/video/15dss00145/15dss00145jp-1.jpg")
-    image: string;
-  }[];
+    @example(#["http://pics.dmm.co.jp/digital/video/15dss00145/15dss00145jp-1.jpg", "http://pics.dmm.co.jp/digital/video/15dss00145/15dss00145jp-1.jpg"])
+    image: string[];
+  };
 }
 
 @doc("サンプル動画URL情報")
@@ -319,8 +319,8 @@ model Item {
   title: string;
   
   @doc("収録時間 or ページ数")
-  @example(350)
-  volume?: int32;
+  @example("350")
+  volume?: string;
   
   @doc("巻数")
   @example(3)
@@ -405,3 +405,6 @@ model ItemListResult {
   @doc("商品情報リスト")
   items: Item[];
 }
+
+
+alias ItemFilter = "actress" | "author" | "genre" | "series" | "maker";
