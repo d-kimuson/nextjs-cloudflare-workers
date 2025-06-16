@@ -126,7 +126,7 @@ namespace DmmApi {
     mono_stock?: string;
     output?: string;
     callback?: string;
-  }, Item.ItemListResponse>;
+  }, Item.ItemListResult>;
 
   @summary("フロア情報API")
   @doc("DMM APIで利用可能なサイト、サービス、フロア情報を取得するAPI。商品検索時のパラメータ指定に使用します。")

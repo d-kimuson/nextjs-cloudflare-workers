@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# アフィサイト
 
-## Getting Started
+## 方針
 
-First, run the development server:
+- アダルト系、結局購入せずにサイトに違法アップロードに行かれてしまうのでそこと競合しないようにしたい
+  - どういう場合に違法アップロードサイトではなく購入するか
+  - 違法アップロードがそもそも存在しない作品
+    - → 新作でまだアップロードされていない
+    - → 積極的に削除されている (作者依存なのかな？)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [ ] ランキング + 24時間以内くらいの最新ランキング
+  - Fanza で見れないかつ割れ投稿が存在しにくいので購買につながりやすい
+  - 鮮度が大事なので SNS とセットにしたいなこれ
+- [ ] 人気が高い作者の新作
+  - 作者を事前に過去作品からスコアリングしたい
+  - こちらも鮮度ベースなので SNS や通知を運用したいなーー
+  - ただ通知先が個人に向くから個人情報扱う必要があっていやなんだよな...、やる場合はプラポリ作成とセット。これははねたら考えるでいいや
+- [ ] 個人向けレコメンド
+  - どこで見せるかが難しいけども...
+  - まああれか、サイドの場所とかに置けばよいか
+  - セッションにクリックした対象のジャンルを加算していき、例えば「処女×10」なら処女作品優先、みたいな
+- [ ] 作者ページ・記事ページ作る
+  - `(同人誌) [タイトル] タイトル`: タイトルを割れサイトに似せる、無料試し読みとかで「無料」に引っ掛けて良いかも
+  - サイト上で試し読みができる
+  - シリーズ作品へのリンク
+- [ ] ログイン不要でステートレースセッションでお気に入り
+  - あなたへのおすすめ

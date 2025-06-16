@@ -384,11 +384,11 @@ model Item {
   campaign?: Campaign[];
 }
 
-@doc("商品リストレスポンス")
-model ItemListResponse {
+@doc("商品リスト成功レスポンス")
+model ItemListResult {
   @doc("ステータスコード")
   @example(200)
-  status: int32;
+  status: 200;
   
   @doc("取得件数")
   @example(20)

@@ -123,6 +123,25 @@ export interface AuthorAuthorSearchResponse {
   author: AuthorAuthor[];
 }
 
+export type ErrorResponseBodyRequestParameters = {[key: string]: string};
+
+export type ErrorResponseBodyRequest = {
+  parameters: ErrorResponseBodyRequestParameters;
+};
+
+export type ErrorResponseBodyResultErrors = {[key: string]: string};
+
+export type ErrorResponseBodyResult = {
+  status: number;
+  message: string;
+  errors: ErrorResponseBodyResultErrors;
+};
+
+export interface ErrorResponseBody {
+  request: ErrorResponseBodyRequest;
+  result: ErrorResponseBodyResult;
+}
+
 /**
  * フロア情報
  */
@@ -412,11 +431,22 @@ export interface ItemItemInfo {
 }
 
 /**
- * 商品リストレスポンス
+ * ステータスコード
  */
-export interface ItemItemListResponse {
+export type ItemItemListResultStatus = typeof ItemItemListResultStatus[keyof typeof ItemItemListResultStatus];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ItemItemListResultStatus = {
+  NUMBER_200: 200,
+} as const;
+
+/**
+ * 商品リスト成功レスポンス
+ */
+export interface ItemItemListResult {
   /** ステータスコード */
-  status: number;
+  status: ItemItemListResultStatus;
   /** 取得件数 */
   result_count: number;
   /** 全体件数 */
@@ -1114,7 +1144,7 @@ export type ItemList200Request = {
 
 export type ItemList200 = {
   request: ItemList200Request;
-  result: ItemItemListResponse;
+  result: ItemItemListResult;
 };
 
 export type MakerSearchParams = {
@@ -1255,8 +1285,13 @@ export type actressSearchResponse200 = {
   data: ActressSearch200
   status: 200
 }
+
+export type actressSearchResponse400 = {
+  data: ErrorResponseBody
+  status: 400
+}
     
-export type actressSearchResponseComposite = actressSearchResponse200;
+export type actressSearchResponseComposite = actressSearchResponse200 | actressSearchResponse400;
     
 export type actressSearchResponse = actressSearchResponseComposite & {
   headers: Headers;
@@ -1304,8 +1339,13 @@ export type authorSearchResponse200 = {
   data: AuthorSearch200
   status: 200
 }
+
+export type authorSearchResponse400 = {
+  data: ErrorResponseBody
+  status: 400
+}
     
-export type authorSearchResponseComposite = authorSearchResponse200;
+export type authorSearchResponseComposite = authorSearchResponse200 | authorSearchResponse400;
     
 export type authorSearchResponse = authorSearchResponseComposite & {
   headers: Headers;
@@ -1353,8 +1393,13 @@ export type floorListResponse200 = {
   data: FloorList200
   status: 200
 }
+
+export type floorListResponse400 = {
+  data: ErrorResponseBody
+  status: 400
+}
     
-export type floorListResponseComposite = floorListResponse200;
+export type floorListResponseComposite = floorListResponse200 | floorListResponse400;
     
 export type floorListResponse = floorListResponseComposite & {
   headers: Headers;
@@ -1402,8 +1447,13 @@ export type genreSearchResponse200 = {
   data: GenreSearch200
   status: 200
 }
+
+export type genreSearchResponse400 = {
+  data: ErrorResponseBody
+  status: 400
+}
     
-export type genreSearchResponseComposite = genreSearchResponse200;
+export type genreSearchResponseComposite = genreSearchResponse200 | genreSearchResponse400;
     
 export type genreSearchResponse = genreSearchResponseComposite & {
   headers: Headers;
@@ -1451,8 +1501,13 @@ export type itemListResponse200 = {
   data: ItemList200
   status: 200
 }
+
+export type itemListResponse400 = {
+  data: ErrorResponseBody
+  status: 400
+}
     
-export type itemListResponseComposite = itemListResponse200;
+export type itemListResponseComposite = itemListResponse200 | itemListResponse400;
     
 export type itemListResponse = itemListResponseComposite & {
   headers: Headers;
@@ -1500,8 +1555,13 @@ export type makerSearchResponse200 = {
   data: MakerSearch200
   status: 200
 }
+
+export type makerSearchResponse400 = {
+  data: ErrorResponseBody
+  status: 400
+}
     
-export type makerSearchResponseComposite = makerSearchResponse200;
+export type makerSearchResponseComposite = makerSearchResponse200 | makerSearchResponse400;
     
 export type makerSearchResponse = makerSearchResponseComposite & {
   headers: Headers;
@@ -1549,8 +1609,13 @@ export type seriesSearchResponse200 = {
   data: SeriesSearch200
   status: 200
 }
+
+export type seriesSearchResponse400 = {
+  data: ErrorResponseBody
+  status: 400
+}
     
-export type seriesSearchResponseComposite = seriesSearchResponse200;
+export type seriesSearchResponseComposite = seriesSearchResponse200 | seriesSearchResponse400;
     
 export type seriesSearchResponse = seriesSearchResponseComposite & {
   headers: Headers;

@@ -17,7 +17,15 @@ export const dmmApiClient = () => {
         floor: sites["FANZA（アダルト）"].services.同人.floors.同人.code,
         sort: "rank",
         output: "json",
+        // gte_date: new Date("2025-06-15").toISOString(),
+        gte_date: "2025-06-15T00:00:00"
       });
+
+      if (result.status !== 200) {
+        console.error('parameters', result.data.request.parameters)
+        console.error('errors', result.data.result.errors)
+        throw new Error('Error!');
+      }
 
       return result.data.result.items;
     },

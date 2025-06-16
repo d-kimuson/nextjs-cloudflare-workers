@@ -261,6 +261,12 @@ paths:
                       - parameters
                   result:
                     $ref: '#/components/schemas/Actress.ActressSearchResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseBody'
   /AuthorSearch:
     get:
       operationId: authorSearch
@@ -377,6 +383,12 @@ paths:
                       - parameters
                   result:
                     $ref: '#/components/schemas/Author.AuthorSearchResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseBody'
   /FloorList:
     get:
       operationId: floorList
@@ -448,6 +460,12 @@ paths:
                       - parameters
                   result:
                     $ref: '#/components/schemas/Floor.FloorListResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseBody'
   /GenreSearch:
     get:
       operationId: genreSearch
@@ -564,6 +582,12 @@ paths:
                       - parameters
                   result:
                     $ref: '#/components/schemas/Genre.GenreSearchResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseBody'
   /ItemList:
     get:
       operationId: itemList
@@ -789,7 +813,13 @@ paths:
                     required:
                       - parameters
                   result:
-                    $ref: '#/components/schemas/Item.ItemListResponse'
+                    $ref: '#/components/schemas/Item.ItemListResult'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseBody'
   /MakerSearch:
     get:
       operationId: makerSearch
@@ -906,6 +936,12 @@ paths:
                       - parameters
                   result:
                     $ref: '#/components/schemas/Maker.MakerSearchResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseBody'
   /SeriesSearch:
     get:
       operationId: seriesSearch
@@ -1022,6 +1058,12 @@ paths:
                       - parameters
                   result:
                     $ref: '#/components/schemas/Series.SeriesSearchResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseBody'
 components:
   schemas:
     Actress.Actress:
@@ -1264,6 +1306,37 @@ components:
             $ref: '#/components/schemas/Author.Author'
           description: 作者情報リスト
       description: 作者検索レスポンス
+    ErrorResponseBody:
+      type: object
+      required:
+        - request
+        - result
+      properties:
+        request:
+          type: object
+          properties:
+            parameters:
+              type: object
+              additionalProperties:
+                type: string
+          required:
+            - parameters
+        result:
+          type: object
+          properties:
+            status:
+              type: integer
+              format: int32
+            message:
+              type: string
+            errors:
+              type: object
+              additionalProperties:
+                type: string
+          required:
+            - status
+            - message
+            - errors
     Floor.Floor:
       type: object
       required:
@@ -1789,7 +1862,7 @@ components:
             $ref: '#/components/schemas/Item.Size'
           description: サイズ情報
       description: 商品詳細情報
-    Item.ItemListResponse:
+    Item.ItemListResult:
       type: object
       required:
         - status
@@ -1799,8 +1872,9 @@ components:
         - items
       properties:
         status:
-          type: integer
-          format: int32
+          type: number
+          enum:
+            - 200
           description: ステータスコード
           example: 200
         result_count:
@@ -1823,7 +1897,7 @@ components:
           items:
             $ref: '#/components/schemas/Item.Item'
           description: 商品情報リスト
-      description: 商品リストレスポンス
+      description: 商品リスト成功レスポンス
     Item.Label:
       type: object
       required:
