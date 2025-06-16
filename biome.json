@@ -7,7 +7,15 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": [".open-next", ".next", "cloudflare-env.d.ts"]
+    "ignore": [
+      ".open-next",
+      ".next",
+      "cloudflare-env.d.ts",
+      "drizzle/migrations",
+      "schema/out",
+      "src/lib/api/dmmApi.ts",
+      "src/lib/api/sites.json"
+    ]
   },
   "formatter": {
     "enabled": true,

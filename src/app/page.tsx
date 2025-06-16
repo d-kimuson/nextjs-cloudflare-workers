@@ -35,7 +35,7 @@ export default async function Home() {
         </ol>
 
         <form action={debug}>
-          <button>Debug Db Call</button>
+          <button type="button">Debug Db Call</button>
         </form>
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
