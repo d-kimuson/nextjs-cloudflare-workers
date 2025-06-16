@@ -1,6 +1,6 @@
 import { writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { floorList } from "../src/lib/api/dmmApi";
+import { floorList } from "../src/lib/api/dmmApi.generated";
 import { getRequiredEnv } from "./utils/env";
 
 const main = async () => {
@@ -10,7 +10,7 @@ const main = async () => {
   });
 
   await writeFile(
-    resolve(process.cwd(), "src", "lib", "api", "sites.json"),
+    resolve(process.cwd(), "src", "lib", "api", "sites.generated.json"),
     JSON.stringify(
       result.data.result.site.reduce(
         (sites: Partial<Record<string, Record<string, unknown>>>, site) => {

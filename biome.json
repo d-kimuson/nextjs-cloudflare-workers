@@ -13,8 +13,7 @@
       "cloudflare-env.d.ts",
       "drizzle/migrations",
       "schema/out",
-      "src/lib/api/dmmApi.ts",
-      "src/lib/api/sites.json"
+      "**/*.generated.*"
     ]
   },
   "formatter": {

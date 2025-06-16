@@ -641,116 +641,116 @@ export interface SeriesSeriesSearchResponse {
 }
 
 export type ActressSearchParams = {
-  /**
-   * 登録時に割り振られたAPIID
-   */
-  api_id: string;
-  /**
-   * 登録時に割り振られた990～999までのアフィリエイトID
-   */
-  affiliate_id: string;
-  /**
-   * 頭文字（50音をUTF-8で指定）
-   */
-  initial?: string;
-  /**
-   * 女優ID
-   */
-  actress_id?: number;
-  /**
-   * 検索キーワード（UTF-8で指定）
-   */
-  keyword?: string;
-  /**
-   * バスト下限（cm）
-   */
-  gte_bust?: number;
-  /**
-   * バスト上限（cm）
-   */
-  lte_bust?: number;
-  /**
-   * ウエスト下限（cm）
-   */
-  gte_waist?: number;
-  /**
-   * ウエスト上限（cm）
-   */
-  lte_waist?: number;
-  /**
-   * ヒップ下限（cm）
-   */
-  gte_hip?: number;
-  /**
-   * ヒップ上限（cm）
-   */
-  lte_hip?: number;
-  /**
-   * 身長下限（cm）
-   */
-  gte_height?: number;
-  /**
-   * 身長上限（cm）
-   */
-  lte_height?: number;
-  /**
-   * 生年月日下限（yyyy-mm-dd形式）
-   */
-  gte_birthday?: string;
-  /**
-   * 生年月日上限（yyyy-mm-dd形式）
-   */
-  lte_birthday?: string;
-  /**
-   * 取得件数（初期値：20、最大：100）
-   */
-  hits?: number;
-  /**
-   * 検索開始位置（初期値：1）
-   */
-  offset?: number;
-  /**
-   * ソート順
-   */
-  sort?: ActressSearchSort;
-  /**
-   * 出力形式
-   */
-  output?: ActressSearchOutput;
-  /**
-   * JSONP形式で出力する場合のコールバック関数名
-   */
-  callback?: string;
+/**
+ * 登録時に割り振られたAPIID
+ */
+api_id: string;
+/**
+ * 登録時に割り振られた990～999までのアフィリエイトID
+ */
+affiliate_id: string;
+/**
+ * 頭文字（50音をUTF-8で指定）
+ */
+initial?: string;
+/**
+ * 女優ID
+ */
+actress_id?: number;
+/**
+ * 検索キーワード（UTF-8で指定）
+ */
+keyword?: string;
+/**
+ * バスト下限（cm）
+ */
+gte_bust?: number;
+/**
+ * バスト上限（cm）
+ */
+lte_bust?: number;
+/**
+ * ウエスト下限（cm）
+ */
+gte_waist?: number;
+/**
+ * ウエスト上限（cm）
+ */
+lte_waist?: number;
+/**
+ * ヒップ下限（cm）
+ */
+gte_hip?: number;
+/**
+ * ヒップ上限（cm）
+ */
+lte_hip?: number;
+/**
+ * 身長下限（cm）
+ */
+gte_height?: number;
+/**
+ * 身長上限（cm）
+ */
+lte_height?: number;
+/**
+ * 生年月日下限（yyyy-mm-dd形式）
+ */
+gte_birthday?: string;
+/**
+ * 生年月日上限（yyyy-mm-dd形式）
+ */
+lte_birthday?: string;
+/**
+ * 取得件数（初期値：20、最大：100）
+ */
+hits?: number;
+/**
+ * 検索開始位置（初期値：1）
+ */
+offset?: number;
+/**
+ * ソート順
+ */
+sort?: ActressSearchSort;
+/**
+ * 出力形式
+ */
+output?: ActressSearchOutput;
+/**
+ * JSONP形式で出力する場合のコールバック関数名
+ */
+callback?: string;
 };
 
-export type ActressSearchSort =
-  (typeof ActressSearchSort)[keyof typeof ActressSearchSort];
+export type ActressSearchSort = typeof ActressSearchSort[keyof typeof ActressSearchSort];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ActressSearchSort = {
-  name: "name",
-  "-name": "-name",
-  bust: "bust",
-  "-bust": "-bust",
-  waist: "waist",
-  "-waist": "-waist",
-  hip: "hip",
-  "-hip": "-hip",
-  height: "height",
-  "-height": "-height",
-  birthday: "birthday",
-  "-birthday": "-birthday",
-  id: "id",
-  "-id": "-id",
+  name: 'name',
+  '-name': '-name',
+  bust: 'bust',
+  '-bust': '-bust',
+  waist: 'waist',
+  '-waist': '-waist',
+  hip: 'hip',
+  '-hip': '-hip',
+  height: 'height',
+  '-height': '-height',
+  birthday: 'birthday',
+  '-birthday': '-birthday',
+  id: 'id',
+  '-id': '-id',
 } as const;
 
-export type ActressSearchOutput =
-  (typeof ActressSearchOutput)[keyof typeof ActressSearchOutput];
+export type ActressSearchOutput = typeof ActressSearchOutput[keyof typeof ActressSearchOutput];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ActressSearchOutput = {
-  json: "json",
-  xml: "xml",
+  json: 'json',
+  xml: 'xml',
 } as const;
 
 export type ActressSearch200RequestParameters = {
@@ -787,47 +787,47 @@ export type ActressSearch200 = {
 };
 
 export type AuthorSearchParams = {
-  /**
-   * 登録時に割り振られたAPIID
-   */
-  api_id: string;
-  /**
-   * 登録時に割り振られた990～999までのアフィリエイトID
-   */
-  affiliate_id: string;
-  /**
-   * フロア検索APIから取得可能なフロアID
-   */
-  floor_id: number;
-  /**
-   * 読み仮名（作者名読み仮名をUTF-8で指定、前方一致検索）
-   */
-  initial?: string;
-  /**
-   * 取得件数（初期値：100、最大：500）
-   */
-  hits?: number;
-  /**
-   * 検索開始位置（初期値：1）
-   */
-  offset?: number;
-  /**
-   * 出力形式
-   */
-  output?: AuthorSearchOutput;
-  /**
-   * JSONP形式で出力する場合のコールバック関数名
-   */
-  callback?: string;
+/**
+ * 登録時に割り振られたAPIID
+ */
+api_id: string;
+/**
+ * 登録時に割り振られた990～999までのアフィリエイトID
+ */
+affiliate_id: string;
+/**
+ * フロア検索APIから取得可能なフロアID
+ */
+floor_id: number;
+/**
+ * 読み仮名（作者名読み仮名をUTF-8で指定、前方一致検索）
+ */
+initial?: string;
+/**
+ * 取得件数（初期値：100、最大：500）
+ */
+hits?: number;
+/**
+ * 検索開始位置（初期値：1）
+ */
+offset?: number;
+/**
+ * 出力形式
+ */
+output?: AuthorSearchOutput;
+/**
+ * JSONP形式で出力する場合のコールバック関数名
+ */
+callback?: string;
 };
 
-export type AuthorSearchOutput =
-  (typeof AuthorSearchOutput)[keyof typeof AuthorSearchOutput];
+export type AuthorSearchOutput = typeof AuthorSearchOutput[keyof typeof AuthorSearchOutput];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AuthorSearchOutput = {
-  json: "json",
-  xml: "xml",
+  json: 'json',
+  xml: 'xml',
 } as const;
 
 export type AuthorSearch200RequestParameters = {
@@ -852,31 +852,31 @@ export type AuthorSearch200 = {
 };
 
 export type FloorListParams = {
-  /**
-   * 登録時に割り振られたAPIID
-   */
-  api_id: string;
-  /**
-   * 登録時に割り振られた990～999までのアフィリエイトID
-   */
-  affiliate_id: string;
-  /**
-   * 出力形式
-   */
-  output?: FloorListOutput;
-  /**
-   * JSONP形式で出力する場合のコールバック関数名
-   */
-  callback?: string;
+/**
+ * 登録時に割り振られたAPIID
+ */
+api_id: string;
+/**
+ * 登録時に割り振られた990～999までのアフィリエイトID
+ */
+affiliate_id: string;
+/**
+ * 出力形式
+ */
+output?: FloorListOutput;
+/**
+ * JSONP形式で出力する場合のコールバック関数名
+ */
+callback?: string;
 };
 
-export type FloorListOutput =
-  (typeof FloorListOutput)[keyof typeof FloorListOutput];
+export type FloorListOutput = typeof FloorListOutput[keyof typeof FloorListOutput];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const FloorListOutput = {
-  json: "json",
-  xml: "xml",
+  json: 'json',
+  xml: 'xml',
 } as const;
 
 export type FloorList200RequestParameters = {
@@ -897,47 +897,47 @@ export type FloorList200 = {
 };
 
 export type GenreSearchParams = {
-  /**
-   * 登録時に割り振られたAPIID
-   */
-  api_id: string;
-  /**
-   * 登録時に割り振られた990～999までのアフィリエイトID
-   */
-  affiliate_id: string;
-  /**
-   * フロア検索APIから取得可能なフロアID
-   */
-  floor_id: number;
-  /**
-   * 頭文字（50音をUTF-8で指定）
-   */
-  initial?: string;
-  /**
-   * 取得件数（初期値：100、最大：500）
-   */
-  hits?: number;
-  /**
-   * 検索開始位置（初期値：1）
-   */
-  offset?: number;
-  /**
-   * 出力形式
-   */
-  output?: GenreSearchOutput;
-  /**
-   * JSONP形式で出力する場合のコールバック関数名
-   */
-  callback?: string;
+/**
+ * 登録時に割り振られたAPIID
+ */
+api_id: string;
+/**
+ * 登録時に割り振られた990～999までのアフィリエイトID
+ */
+affiliate_id: string;
+/**
+ * フロア検索APIから取得可能なフロアID
+ */
+floor_id: number;
+/**
+ * 頭文字（50音をUTF-8で指定）
+ */
+initial?: string;
+/**
+ * 取得件数（初期値：100、最大：500）
+ */
+hits?: number;
+/**
+ * 検索開始位置（初期値：1）
+ */
+offset?: number;
+/**
+ * 出力形式
+ */
+output?: GenreSearchOutput;
+/**
+ * JSONP形式で出力する場合のコールバック関数名
+ */
+callback?: string;
 };
 
-export type GenreSearchOutput =
-  (typeof GenreSearchOutput)[keyof typeof GenreSearchOutput];
+export type GenreSearchOutput = typeof GenreSearchOutput[keyof typeof GenreSearchOutput];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GenreSearchOutput = {
-  json: "json",
-  xml: "xml",
+  json: 'json',
+  xml: 'xml',
 } as const;
 
 export type GenreSearch200RequestParameters = {
@@ -962,127 +962,129 @@ export type GenreSearch200 = {
 };
 
 export type ItemListParams = {
-  /**
-   * 登録時に割り振られたAPIID
-   */
-  api_id: string;
-  /**
-   * 登録時に割り振られた990～999までのアフィリエイトID
-   */
-  affiliate_id: string;
-  /**
-   * 一般（DMM.com）かアダルト（FANZA）かを指定
-   */
-  site: ItemListSite;
-  /**
-   * フロアAPIから取得できるサービスコードを指定
-   */
-  service?: string;
-  /**
-   * フロアAPIから取得できるフロアコードを指定
-   */
-  floor?: string;
-  /**
-   * 取得件数（初期値：20、最大：100）
-   */
-  hits?: number;
-  /**
-   * 検索開始位置（初期値：1、最大：50000）
-   */
-  offset?: number;
-  /**
-   * ソート順（初期値：rank）
-   */
-  sort?: ItemListSort;
-  /**
-   * 検索キーワード（UTF-8で指定）
-   */
-  keyword?: string;
-  /**
-   * 商品に振られているcontent_id
-   */
-  cid?: string;
-  /**
-   * 絞り込み項目（女優：actress、作者：author、ジャンル：genre、シリーズ：series、メーカー：maker）
-   */
-  article?: ItemListArticleItem[];
-  /**
-   * 絞り込み項目のID（各検索APIから取得可能）
-   */
-  article_id?: string[];
-  /**
-   * このパラメータで指定した日付以降に発売された商品を絞り込み（ISO8601形式）
-   */
-  gte_date?: string;
-  /**
-   * このパラメータで指定した日付以前に発売された商品を絞り込み（ISO8601形式）
-   */
-  lte_date?: string;
-  /**
-   * 在庫絞り込み（通販サービスのみ指定可能）
-   */
-  mono_stock?: ItemListMonoStock;
-  /**
-   * 出力形式
-   */
-  output?: ItemListOutput;
-  /**
-   * JSONP形式で出力する場合のコールバック関数名
-   */
-  callback?: string;
+/**
+ * 登録時に割り振られたAPIID
+ */
+api_id: string;
+/**
+ * 登録時に割り振られた990～999までのアフィリエイトID
+ */
+affiliate_id: string;
+/**
+ * 一般（DMM.com）かアダルト（FANZA）かを指定
+ */
+site: ItemListSite;
+/**
+ * フロアAPIから取得できるサービスコードを指定
+ */
+service?: string;
+/**
+ * フロアAPIから取得できるフロアコードを指定
+ */
+floor?: string;
+/**
+ * 取得件数（初期値：20、最大：100）
+ */
+hits?: number;
+/**
+ * 検索開始位置（初期値：1、最大：50000）
+ */
+offset?: number;
+/**
+ * ソート順（初期値：rank）
+ */
+sort?: ItemListSort;
+/**
+ * 検索キーワード（UTF-8で指定）
+ */
+keyword?: string;
+/**
+ * 商品に振られているcontent_id
+ */
+cid?: string;
+/**
+ * 絞り込み項目（女優：actress、作者：author、ジャンル：genre、シリーズ：series、メーカー：maker）
+ */
+article?: ItemListArticleItem[];
+/**
+ * 絞り込み項目のID（各検索APIから取得可能）
+ */
+article_id?: string[];
+/**
+ * このパラメータで指定した日付以降に発売された商品を絞り込み（ISO8601形式）
+ */
+gte_date?: string;
+/**
+ * このパラメータで指定した日付以前に発売された商品を絞り込み（ISO8601形式）
+ */
+lte_date?: string;
+/**
+ * 在庫絞り込み（通販サービスのみ指定可能）
+ */
+mono_stock?: ItemListMonoStock;
+/**
+ * 出力形式
+ */
+output?: ItemListOutput;
+/**
+ * JSONP形式で出力する場合のコールバック関数名
+ */
+callback?: string;
 };
 
-export type ItemListSite = (typeof ItemListSite)[keyof typeof ItemListSite];
+export type ItemListSite = typeof ItemListSite[keyof typeof ItemListSite];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ItemListSite = {
-  DMMcom: "DMM.com",
-  FANZA: "FANZA",
+  DMMcom: 'DMM.com',
+  FANZA: 'FANZA',
 } as const;
 
-export type ItemListSort = (typeof ItemListSort)[keyof typeof ItemListSort];
+export type ItemListSort = typeof ItemListSort[keyof typeof ItemListSort];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ItemListSort = {
-  rank: "rank",
-  price: "price",
-  "-price": "-price",
-  date: "date",
-  review: "review",
-  match: "match",
+  rank: 'rank',
+  price: 'price',
+  '-price': '-price',
+  date: 'date',
+  review: 'review',
+  match: 'match',
 } as const;
 
-export type ItemListArticleItem =
-  (typeof ItemListArticleItem)[keyof typeof ItemListArticleItem];
+export type ItemListArticleItem = typeof ItemListArticleItem[keyof typeof ItemListArticleItem];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ItemListArticleItem = {
-  actress: "actress",
-  author: "author",
-  genre: "genre",
-  series: "series",
-  maker: "maker",
+  actress: 'actress',
+  author: 'author',
+  genre: 'genre',
+  series: 'series',
+  maker: 'maker',
 } as const;
 
-export type ItemListMonoStock =
-  (typeof ItemListMonoStock)[keyof typeof ItemListMonoStock];
+export type ItemListMonoStock = typeof ItemListMonoStock[keyof typeof ItemListMonoStock];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ItemListMonoStock = {
-  stock: "stock",
-  reserve: "reserve",
-  reserve_empty: "reserve_empty",
-  mono: "mono",
-  dmp: "dmp",
+  stock: 'stock',
+  reserve: 'reserve',
+  reserve_empty: 'reserve_empty',
+  mono: 'mono',
+  dmp: 'dmp',
 } as const;
 
-export type ItemListOutput =
-  (typeof ItemListOutput)[keyof typeof ItemListOutput];
+export type ItemListOutput = typeof ItemListOutput[keyof typeof ItemListOutput];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ItemListOutput = {
-  json: "json",
-  xml: "xml",
+  json: 'json',
+  xml: 'xml',
 } as const;
 
 export type ItemList200RequestParameters = {
@@ -1116,47 +1118,47 @@ export type ItemList200 = {
 };
 
 export type MakerSearchParams = {
-  /**
-   * 登録時に割り振られたAPIID
-   */
-  api_id: string;
-  /**
-   * 登録時に割り振られた990～999までのアフィリエイトID
-   */
-  affiliate_id: string;
-  /**
-   * フロア検索APIから取得可能なフロアID
-   */
-  floor_id: number;
-  /**
-   * 頭文字（50音をUTF-8で指定）
-   */
-  initial?: string;
-  /**
-   * 取得件数（初期値：100、最大：500）
-   */
-  hits?: number;
-  /**
-   * 検索開始位置（初期値：1）
-   */
-  offset?: number;
-  /**
-   * 出力形式
-   */
-  output?: MakerSearchOutput;
-  /**
-   * JSONP形式で出力する場合のコールバック関数名
-   */
-  callback?: string;
+/**
+ * 登録時に割り振られたAPIID
+ */
+api_id: string;
+/**
+ * 登録時に割り振られた990～999までのアフィリエイトID
+ */
+affiliate_id: string;
+/**
+ * フロア検索APIから取得可能なフロアID
+ */
+floor_id: number;
+/**
+ * 頭文字（50音をUTF-8で指定）
+ */
+initial?: string;
+/**
+ * 取得件数（初期値：100、最大：500）
+ */
+hits?: number;
+/**
+ * 検索開始位置（初期値：1）
+ */
+offset?: number;
+/**
+ * 出力形式
+ */
+output?: MakerSearchOutput;
+/**
+ * JSONP形式で出力する場合のコールバック関数名
+ */
+callback?: string;
 };
 
-export type MakerSearchOutput =
-  (typeof MakerSearchOutput)[keyof typeof MakerSearchOutput];
+export type MakerSearchOutput = typeof MakerSearchOutput[keyof typeof MakerSearchOutput];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const MakerSearchOutput = {
-  json: "json",
-  xml: "xml",
+  json: 'json',
+  xml: 'xml',
 } as const;
 
 export type MakerSearch200RequestParameters = {
@@ -1181,47 +1183,47 @@ export type MakerSearch200 = {
 };
 
 export type SeriesSearchParams = {
-  /**
-   * 登録時に割り振られたAPIID
-   */
-  api_id: string;
-  /**
-   * 登録時に割り振られた990～999までのアフィリエイトID
-   */
-  affiliate_id: string;
-  /**
-   * フロア検索APIから取得可能なフロアID
-   */
-  floor_id: number;
-  /**
-   * 頭文字（50音をUTF-8で指定）
-   */
-  initial?: string;
-  /**
-   * 取得件数（初期値：100、最大：500）
-   */
-  hits?: number;
-  /**
-   * 検索開始位置（初期値：1）
-   */
-  offset?: number;
-  /**
-   * 出力形式
-   */
-  output?: SeriesSearchOutput;
-  /**
-   * JSONP形式で出力する場合のコールバック関数名
-   */
-  callback?: string;
+/**
+ * 登録時に割り振られたAPIID
+ */
+api_id: string;
+/**
+ * 登録時に割り振られた990～999までのアフィリエイトID
+ */
+affiliate_id: string;
+/**
+ * フロア検索APIから取得可能なフロアID
+ */
+floor_id: number;
+/**
+ * 頭文字（50音をUTF-8で指定）
+ */
+initial?: string;
+/**
+ * 取得件数（初期値：100、最大：500）
+ */
+hits?: number;
+/**
+ * 検索開始位置（初期値：1）
+ */
+offset?: number;
+/**
+ * 出力形式
+ */
+output?: SeriesSearchOutput;
+/**
+ * JSONP形式で出力する場合のコールバック関数名
+ */
+callback?: string;
 };
 
-export type SeriesSearchOutput =
-  (typeof SeriesSearchOutput)[keyof typeof SeriesSearchOutput];
+export type SeriesSearchOutput = typeof SeriesSearchOutput[keyof typeof SeriesSearchOutput];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const SeriesSearchOutput = {
-  json: "json",
-  xml: "xml",
+  json: 'json',
+  xml: 'xml',
 } as const;
 
 export type SeriesSearch200RequestParameters = {
@@ -1250,343 +1252,338 @@ export type SeriesSearch200 = {
  * @summary 女優検索API
  */
 export type actressSearchResponse200 = {
-  data: ActressSearch200;
-  status: 200;
-};
-
+  data: ActressSearch200
+  status: 200
+}
+    
 export type actressSearchResponseComposite = actressSearchResponse200;
-
+    
 export type actressSearchResponse = actressSearchResponseComposite & {
   headers: Headers;
-};
+}
 
-export const getActressSearchUrl = (params: ActressSearchParams) => {
+export const getActressSearchUrl = (params: ActressSearchParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString());
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
   });
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `https://api.dmm.com/affiliate/v3/ActressSearch?${stringifiedParams}`
-    : `https://api.dmm.com/affiliate/v3/ActressSearch`;
-};
+  return stringifiedParams.length > 0 ? `https://api.dmm.com/affiliate/v3/ActressSearch?${stringifiedParams}` : `https://api.dmm.com/affiliate/v3/ActressSearch`
+}
 
-export const actressSearch = async (
-  params: ActressSearchParams,
-  options?: RequestInit,
-): Promise<actressSearchResponse> => {
-  const res = await fetch(getActressSearchUrl(params), {
+export const actressSearch = async (params: ActressSearchParams, options?: RequestInit): Promise<actressSearchResponse> => {
+  
+  const res = await fetch(getActressSearchUrl(params),
+  {      
     ...options,
-    method: "GET",
-  });
+    method: 'GET'
+    
+    
+  }
+)
 
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  const data: actressSearchResponse["data"] = body ? JSON.parse(body) : {};
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: actressSearchResponse['data'] = body ? JSON.parse(body) : {}
 
-  return {
-    data,
-    status: res.status,
-    headers: res.headers,
-  } as actressSearchResponse;
-};
+  return { data, status: res.status, headers: res.headers } as actressSearchResponse
+}
+
+
 
 /**
  * DMM商品の作者情報を検索するAPI。フロア別の作者一覧を取得できます。
  * @summary 作者検索API
  */
 export type authorSearchResponse200 = {
-  data: AuthorSearch200;
-  status: 200;
-};
-
+  data: AuthorSearch200
+  status: 200
+}
+    
 export type authorSearchResponseComposite = authorSearchResponse200;
-
+    
 export type authorSearchResponse = authorSearchResponseComposite & {
   headers: Headers;
-};
+}
 
-export const getAuthorSearchUrl = (params: AuthorSearchParams) => {
+export const getAuthorSearchUrl = (params: AuthorSearchParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString());
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
   });
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `https://api.dmm.com/affiliate/v3/AuthorSearch?${stringifiedParams}`
-    : `https://api.dmm.com/affiliate/v3/AuthorSearch`;
-};
+  return stringifiedParams.length > 0 ? `https://api.dmm.com/affiliate/v3/AuthorSearch?${stringifiedParams}` : `https://api.dmm.com/affiliate/v3/AuthorSearch`
+}
 
-export const authorSearch = async (
-  params: AuthorSearchParams,
-  options?: RequestInit,
-): Promise<authorSearchResponse> => {
-  const res = await fetch(getAuthorSearchUrl(params), {
+export const authorSearch = async (params: AuthorSearchParams, options?: RequestInit): Promise<authorSearchResponse> => {
+  
+  const res = await fetch(getAuthorSearchUrl(params),
+  {      
     ...options,
-    method: "GET",
-  });
+    method: 'GET'
+    
+    
+  }
+)
 
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  const data: authorSearchResponse["data"] = body ? JSON.parse(body) : {};
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: authorSearchResponse['data'] = body ? JSON.parse(body) : {}
 
-  return {
-    data,
-    status: res.status,
-    headers: res.headers,
-  } as authorSearchResponse;
-};
+  return { data, status: res.status, headers: res.headers } as authorSearchResponse
+}
+
+
 
 /**
  * DMM APIで利用可能なサイト、サービス、フロア情報を取得するAPI。商品検索時のパラメータ指定に使用します。
  * @summary フロア情報API
  */
 export type floorListResponse200 = {
-  data: FloorList200;
-  status: 200;
-};
-
+  data: FloorList200
+  status: 200
+}
+    
 export type floorListResponseComposite = floorListResponse200;
-
+    
 export type floorListResponse = floorListResponseComposite & {
   headers: Headers;
-};
+}
 
-export const getFloorListUrl = (params: FloorListParams) => {
+export const getFloorListUrl = (params: FloorListParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString());
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
   });
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `https://api.dmm.com/affiliate/v3/FloorList?${stringifiedParams}`
-    : `https://api.dmm.com/affiliate/v3/FloorList`;
-};
+  return stringifiedParams.length > 0 ? `https://api.dmm.com/affiliate/v3/FloorList?${stringifiedParams}` : `https://api.dmm.com/affiliate/v3/FloorList`
+}
 
-export const floorList = async (
-  params: FloorListParams,
-  options?: RequestInit,
-): Promise<floorListResponse> => {
-  const res = await fetch(getFloorListUrl(params), {
+export const floorList = async (params: FloorListParams, options?: RequestInit): Promise<floorListResponse> => {
+  
+  const res = await fetch(getFloorListUrl(params),
+  {      
     ...options,
-    method: "GET",
-  });
+    method: 'GET'
+    
+    
+  }
+)
 
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  const data: floorListResponse["data"] = body ? JSON.parse(body) : {};
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: floorListResponse['data'] = body ? JSON.parse(body) : {}
 
-  return {
-    data,
-    status: res.status,
-    headers: res.headers,
-  } as floorListResponse;
-};
+  return { data, status: res.status, headers: res.headers } as floorListResponse
+}
+
+
 
 /**
  * DMM商品のジャンル情報を検索するAPI。フロア別のジャンル一覧を取得できます。
  * @summary ジャンル検索API
  */
 export type genreSearchResponse200 = {
-  data: GenreSearch200;
-  status: 200;
-};
-
+  data: GenreSearch200
+  status: 200
+}
+    
 export type genreSearchResponseComposite = genreSearchResponse200;
-
+    
 export type genreSearchResponse = genreSearchResponseComposite & {
   headers: Headers;
-};
+}
 
-export const getGenreSearchUrl = (params: GenreSearchParams) => {
+export const getGenreSearchUrl = (params: GenreSearchParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString());
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
   });
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `https://api.dmm.com/affiliate/v3/GenreSearch?${stringifiedParams}`
-    : `https://api.dmm.com/affiliate/v3/GenreSearch`;
-};
+  return stringifiedParams.length > 0 ? `https://api.dmm.com/affiliate/v3/GenreSearch?${stringifiedParams}` : `https://api.dmm.com/affiliate/v3/GenreSearch`
+}
 
-export const genreSearch = async (
-  params: GenreSearchParams,
-  options?: RequestInit,
-): Promise<genreSearchResponse> => {
-  const res = await fetch(getGenreSearchUrl(params), {
+export const genreSearch = async (params: GenreSearchParams, options?: RequestInit): Promise<genreSearchResponse> => {
+  
+  const res = await fetch(getGenreSearchUrl(params),
+  {      
     ...options,
-    method: "GET",
-  });
+    method: 'GET'
+    
+    
+  }
+)
 
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  const data: genreSearchResponse["data"] = body ? JSON.parse(body) : {};
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: genreSearchResponse['data'] = body ? JSON.parse(body) : {}
 
-  return {
-    data,
-    status: res.status,
-    headers: res.headers,
-  } as genreSearchResponse;
-};
+  return { data, status: res.status, headers: res.headers } as genreSearchResponse
+}
+
+
 
 /**
  * DMM商品情報を取得するAPI。キーワード検索、カテゴリ絞り込み、ソート機能を提供します。
  * @summary 商品情報API
  */
 export type itemListResponse200 = {
-  data: ItemList200;
-  status: 200;
-};
-
+  data: ItemList200
+  status: 200
+}
+    
 export type itemListResponseComposite = itemListResponse200;
-
+    
 export type itemListResponse = itemListResponseComposite & {
   headers: Headers;
-};
+}
 
-export const getItemListUrl = (params: ItemListParams) => {
+export const getItemListUrl = (params: ItemListParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString());
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
   });
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `https://api.dmm.com/affiliate/v3/ItemList?${stringifiedParams}`
-    : `https://api.dmm.com/affiliate/v3/ItemList`;
-};
+  return stringifiedParams.length > 0 ? `https://api.dmm.com/affiliate/v3/ItemList?${stringifiedParams}` : `https://api.dmm.com/affiliate/v3/ItemList`
+}
 
-export const itemList = async (
-  params: ItemListParams,
-  options?: RequestInit,
-): Promise<itemListResponse> => {
-  const res = await fetch(getItemListUrl(params), {
+export const itemList = async (params: ItemListParams, options?: RequestInit): Promise<itemListResponse> => {
+  
+  const res = await fetch(getItemListUrl(params),
+  {      
     ...options,
-    method: "GET",
-  });
+    method: 'GET'
+    
+    
+  }
+)
 
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  const data: itemListResponse["data"] = body ? JSON.parse(body) : {};
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: itemListResponse['data'] = body ? JSON.parse(body) : {}
 
-  return { data, status: res.status, headers: res.headers } as itemListResponse;
-};
+  return { data, status: res.status, headers: res.headers } as itemListResponse
+}
+
+
 
 /**
  * DMM商品のメーカー情報を検索するAPI。フロア別のメーカー一覧を取得できます。
  * @summary メーカー検索API
  */
 export type makerSearchResponse200 = {
-  data: MakerSearch200;
-  status: 200;
-};
-
+  data: MakerSearch200
+  status: 200
+}
+    
 export type makerSearchResponseComposite = makerSearchResponse200;
-
+    
 export type makerSearchResponse = makerSearchResponseComposite & {
   headers: Headers;
-};
+}
 
-export const getMakerSearchUrl = (params: MakerSearchParams) => {
+export const getMakerSearchUrl = (params: MakerSearchParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString());
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
   });
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `https://api.dmm.com/affiliate/v3/MakerSearch?${stringifiedParams}`
-    : `https://api.dmm.com/affiliate/v3/MakerSearch`;
-};
+  return stringifiedParams.length > 0 ? `https://api.dmm.com/affiliate/v3/MakerSearch?${stringifiedParams}` : `https://api.dmm.com/affiliate/v3/MakerSearch`
+}
 
-export const makerSearch = async (
-  params: MakerSearchParams,
-  options?: RequestInit,
-): Promise<makerSearchResponse> => {
-  const res = await fetch(getMakerSearchUrl(params), {
+export const makerSearch = async (params: MakerSearchParams, options?: RequestInit): Promise<makerSearchResponse> => {
+  
+  const res = await fetch(getMakerSearchUrl(params),
+  {      
     ...options,
-    method: "GET",
-  });
+    method: 'GET'
+    
+    
+  }
+)
 
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  const data: makerSearchResponse["data"] = body ? JSON.parse(body) : {};
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: makerSearchResponse['data'] = body ? JSON.parse(body) : {}
 
-  return {
-    data,
-    status: res.status,
-    headers: res.headers,
-  } as makerSearchResponse;
-};
+  return { data, status: res.status, headers: res.headers } as makerSearchResponse
+}
+
+
 
 /**
  * DMM商品のシリーズ情報を検索するAPI。フロア別のシリーズ一覧を取得できます。
  * @summary シリーズ検索API
  */
 export type seriesSearchResponse200 = {
-  data: SeriesSearch200;
-  status: 200;
-};
-
+  data: SeriesSearch200
+  status: 200
+}
+    
 export type seriesSearchResponseComposite = seriesSearchResponse200;
-
+    
 export type seriesSearchResponse = seriesSearchResponseComposite & {
   headers: Headers;
-};
+}
 
-export const getSeriesSearchUrl = (params: SeriesSearchParams) => {
+export const getSeriesSearchUrl = (params: SeriesSearchParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString());
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
   });
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `https://api.dmm.com/affiliate/v3/SeriesSearch?${stringifiedParams}`
-    : `https://api.dmm.com/affiliate/v3/SeriesSearch`;
-};
+  return stringifiedParams.length > 0 ? `https://api.dmm.com/affiliate/v3/SeriesSearch?${stringifiedParams}` : `https://api.dmm.com/affiliate/v3/SeriesSearch`
+}
 
-export const seriesSearch = async (
-  params: SeriesSearchParams,
-  options?: RequestInit,
-): Promise<seriesSearchResponse> => {
-  const res = await fetch(getSeriesSearchUrl(params), {
+export const seriesSearch = async (params: SeriesSearchParams, options?: RequestInit): Promise<seriesSearchResponse> => {
+  
+  const res = await fetch(getSeriesSearchUrl(params),
+  {      
     ...options,
-    method: "GET",
-  });
+    method: 'GET'
+    
+    
+  }
+)
 
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  const data: seriesSearchResponse["data"] = body ? JSON.parse(body) : {};
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: seriesSearchResponse['data'] = body ? JSON.parse(body) : {}
 
-  return {
-    data,
-    status: res.status,
-    headers: res.headers,
-  } as seriesSearchResponse;
-};
+  return { data, status: res.status, headers: res.headers } as seriesSearchResponse
+}
