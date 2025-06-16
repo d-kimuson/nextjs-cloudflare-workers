@@ -1,0 +1,12 @@
+extends:
+  - recommended
+
+apis:
+  dmm@v3.0:
+    root: ./schema/out/@typespec/openapi3/openapi.yaml
+    rules:
+      operation-operationId: off
+
+theme:
+  openapi:
+    schemasExpansionLevel: 2

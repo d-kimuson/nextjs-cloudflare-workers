@@ -1,0 +1,2221 @@
+openapi: 3.0.0
+info:
+  title: DMM API
+  version: '3.0'
+  description: DMM API methods for IoT devices
+externalDocs:
+  url: https://affiliate.dmm.com/api/
+tags: []
+paths:
+  /ActressSearch:
+    get:
+      operationId: actressSearch
+      summary: 女優検索API
+      description: DMM女優情報を検索するAPI。名前、身体的特徴、生年月日等で絞り込み検索が可能です。
+      parameters:
+        - name: api_id
+          in: query
+          required: true
+          description: 登録時に割り振られたAPIID
+          schema:
+            type: string
+          explode: false
+        - name: affiliate_id
+          in: query
+          required: true
+          description: 登録時に割り振られた990～999までのアフィリエイトID
+          schema:
+            type: string
+          explode: false
+        - name: initial
+          in: query
+          required: false
+          description: 頭文字（50音をUTF-8で指定）
+          schema:
+            type: string
+          explode: false
+        - name: actress_id
+          in: query
+          required: false
+          description: 女優ID
+          schema:
+            type: integer
+            format: int32
+          explode: false
+        - name: keyword
+          in: query
+          required: false
+          description: 検索キーワード（UTF-8で指定）
+          schema:
+            type: string
+          explode: false
+        - name: gte_bust
+          in: query
+          required: false
+          description: バスト下限（cm）
+          schema:
+            type: integer
+            format: int32
+          explode: false
+        - name: lte_bust
+          in: query
+          required: false
+          description: バスト上限（cm）
+          schema:
+            type: integer
+            format: int32
+          explode: false
+        - name: gte_waist
+          in: query
+          required: false
+          description: ウエスト下限（cm）
+          schema:
+            type: integer
+            format: int32
+          explode: false
+        - name: lte_waist
+          in: query
+          required: false
+          description: ウエスト上限（cm）
+          schema:
+            type: integer
+            format: int32
+          explode: false
+        - name: gte_hip
+          in: query
+          required: false
+          description: ヒップ下限（cm）
+          schema:
+            type: integer
+            format: int32
+          explode: false
+        - name: lte_hip
+          in: query
+          required: false
+          description: ヒップ上限（cm）
+          schema:
+            type: integer
+            format: int32
+          explode: false
+        - name: gte_height
+          in: query
+          required: false
+          description: 身長下限（cm）
+          schema:
+            type: integer
+            format: int32
+          explode: false
+        - name: lte_height
+          in: query
+          required: false
+          description: 身長上限（cm）
+          schema:
+            type: integer
+            format: int32
+          explode: false
+        - name: gte_birthday
+          in: query
+          required: false
+          description: 生年月日下限（yyyy-mm-dd形式）
+          schema:
+            type: string
+          explode: false
+        - name: lte_birthday
+          in: query
+          required: false
+          description: 生年月日上限（yyyy-mm-dd形式）
+          schema:
+            type: string
+          explode: false
+        - name: hits
+          in: query
+          required: false
+          description: 取得件数（初期値：20、最大：100）
+          schema:
+            type: integer
+            format: int32
+            default: 20
+          explode: false
+        - name: offset
+          in: query
+          required: false
+          description: 検索開始位置（初期値：1）
+          schema:
+            type: integer
+            format: int32
+            default: 1
+          explode: false
+        - name: sort
+          in: query
+          required: false
+          description: ソート順
+          schema:
+            type: string
+            enum:
+              - name
+              - -name
+              - bust
+              - -bust
+              - waist
+              - -waist
+              - hip
+              - -hip
+              - height
+              - -height
+              - birthday
+              - -birthday
+              - id
+              - -id
+          explode: false
+        - name: output
+          in: query
+          required: false
+          description: 出力形式
+          schema:
+            type: string
+            enum:
+              - json
+              - xml
+            default: json
+          explode: false
+        - name: callback
+          in: query
+          required: false
+          description: JSONP形式で出力する場合のコールバック関数名
+          schema:
+            type: string
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - request
+                  - result
+                properties:
+                  request:
+                    type: object
+                    properties:
+                      parameters:
+                        type: object
+                        properties:
+                          api_id:
+                            type: string
+                            description: リクエストパラメータ
+                          affiliate_id:
+                            type: string
+                          initial:
+                            type: string
+                          actress_id:
+                            type: integer
+                            format: int32
+                          keyword:
+                            type: string
+                          gte_bust:
+                            type: integer
+                            format: int32
+                          lte_bust:
+                            type: integer
+                            format: int32
+                          gte_waist:
+                            type: integer
+                            format: int32
+                          lte_waist:
+                            type: integer
+                            format: int32
+                          gte_hip:
+                            type: integer
+                            format: int32
+                          lte_hip:
+                            type: integer
+                            format: int32
+                          gte_height:
+                            type: integer
+                            format: int32
+                          lte_height:
+                            type: integer
+                            format: int32
+                          gte_birthday:
+                            type: string
+                          lte_birthday:
+                            type: string
+                          hits:
+                            type: integer
+                            format: int32
+                          offset:
+                            type: integer
+                            format: int32
+                          sort:
+                            type: string
+                          output:
+                            type: string
+                          callback:
+                            type: string
+                        required:
+                          - api_id
+                          - affiliate_id
+                    required:
+                      - parameters
+                  result:
+                    $ref: '#/components/schemas/Actress.ActressSearchResponse'
+  /AuthorSearch:
+    get:
+      operationId: authorSearch
+      summary: 作者検索API
+      description: DMM商品の作者情報を検索するAPI。フロア別の作者一覧を取得できます。
+      parameters:
+        - name: api_id
+          in: query
+          required: true
+          description: 登録時に割り振られたAPIID
+          schema:
+            type: string
+          explode: false
+        - name: affiliate_id
+          in: query
+          required: true
+          description: 登録時に割り振られた990～999までのアフィリエイトID
+          schema:
+            type: string
+          explode: false
+        - name: floor_id
+          in: query
+          required: true
+          description: フロア検索APIから取得可能なフロアID
+          schema:
+            type: integer
+            format: int32
+          explode: false
+        - name: initial
+          in: query
+          required: false
+          description: 読み仮名（作者名読み仮名をUTF-8で指定、前方一致検索）
+          schema:
+            type: string
+          explode: false
+        - name: hits
+          in: query
+          required: false
+          description: 取得件数（初期値：100、最大：500）
+          schema:
+            type: integer
+            format: int32
+            default: 100
+          explode: false
+        - name: offset
+          in: query
+          required: false
+          description: 検索開始位置（初期値：1）
+          schema:
+            type: integer
+            format: int32
+            default: 1
+          explode: false
+        - name: output
+          in: query
+          required: false
+          description: 出力形式
+          schema:
+            type: string
+            enum:
+              - json
+              - xml
+            default: json
+          explode: false
+        - name: callback
+          in: query
+          required: false
+          description: JSONP形式で出力する場合のコールバック関数名
+          schema:
+            type: string
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - request
+                  - result
+                properties:
+                  request:
+                    type: object
+                    properties:
+                      parameters:
+                        type: object
+                        properties:
+                          api_id:
+                            type: string
+                            description: リクエストパラメータ
+                          affiliate_id:
+                            type: string
+                          floor_id:
+                            type: integer
+                            format: int32
+                          initial:
+                            type: string
+                          hits:
+                            type: integer
+                            format: int32
+                          offset:
+                            type: integer
+                            format: int32
+                          output:
+                            type: string
+                          callback:
+                            type: string
+                        required:
+                          - api_id
+                          - affiliate_id
+                          - floor_id
+                    required:
+                      - parameters
+                  result:
+                    $ref: '#/components/schemas/Author.AuthorSearchResponse'
+  /FloorList:
+    get:
+      operationId: floorList
+      summary: フロア情報API
+      description: DMM APIで利用可能なサイト、サービス、フロア情報を取得するAPI。商品検索時のパラメータ指定に使用します。
+      parameters:
+        - name: api_id
+          in: query
+          required: true
+          description: 登録時に割り振られたAPIID
+          schema:
+            type: string
+          explode: false
+        - name: affiliate_id
+          in: query
+          required: true
+          description: 登録時に割り振られた990～999までのアフィリエイトID
+          schema:
+            type: string
+          explode: false
+        - name: output
+          in: query
+          required: false
+          description: 出力形式
+          schema:
+            type: string
+            enum:
+              - json
+              - xml
+            default: json
+          explode: false
+        - name: callback
+          in: query
+          required: false
+          description: JSONP形式で出力する場合のコールバック関数名
+          schema:
+            type: string
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - request
+                  - result
+                properties:
+                  request:
+                    type: object
+                    properties:
+                      parameters:
+                        type: object
+                        properties:
+                          api_id:
+                            type: string
+                            description: リクエストパラメータ
+                          affiliate_id:
+                            type: string
+                          output:
+                            type: string
+                          callback:
+                            type: string
+                        required:
+                          - api_id
+                          - affiliate_id
+                    required:
+                      - parameters
+                  result:
+                    $ref: '#/components/schemas/Floor.FloorListResponse'
+  /GenreSearch:
+    get:
+      operationId: genreSearch
+      summary: ジャンル検索API
+      description: DMM商品のジャンル情報を検索するAPI。フロア別のジャンル一覧を取得できます。
+      parameters:
+        - name: api_id
+          in: query
+          required: true
+          description: 登録時に割り振られたAPIID
+          schema:
+            type: string
+          explode: false
+        - name: affiliate_id
+          in: query
+          required: true
+          description: 登録時に割り振られた990～999までのアフィリエイトID
+          schema:
+            type: string
+          explode: false
+        - name: floor_id
+          in: query
+          required: true
+          description: フロア検索APIから取得可能なフロアID
+          schema:
+            type: integer
+            format: int32
+          explode: false
+        - name: initial
+          in: query
+          required: false
+          description: 頭文字（50音をUTF-8で指定）
+          schema:
+            type: string
+          explode: false
+        - name: hits
+          in: query
+          required: false
+          description: 取得件数（初期値：100、最大：500）
+          schema:
+            type: integer
+            format: int32
+            default: 100
+          explode: false
+        - name: offset
+          in: query
+          required: false
+          description: 検索開始位置（初期値：1）
+          schema:
+            type: integer
+            format: int32
+            default: 1
+          explode: false
+        - name: output
+          in: query
+          required: false
+          description: 出力形式
+          schema:
+            type: string
+            enum:
+              - json
+              - xml
+            default: json
+          explode: false
+        - name: callback
+          in: query
+          required: false
+          description: JSONP形式で出力する場合のコールバック関数名
+          schema:
+            type: string
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - request
+                  - result
+                properties:
+                  request:
+                    type: object
+                    properties:
+                      parameters:
+                        type: object
+                        properties:
+                          api_id:
+                            type: string
+                            description: リクエストパラメータ
+                          affiliate_id:
+                            type: string
+                          floor_id:
+                            type: integer
+                            format: int32
+                          initial:
+                            type: string
+                          hits:
+                            type: integer
+                            format: int32
+                          offset:
+                            type: integer
+                            format: int32
+                          output:
+                            type: string
+                          callback:
+                            type: string
+                        required:
+                          - api_id
+                          - affiliate_id
+                          - floor_id
+                    required:
+                      - parameters
+                  result:
+                    $ref: '#/components/schemas/Genre.GenreSearchResponse'
+  /ItemList:
+    get:
+      operationId: itemList
+      summary: 商品情報API
+      description: DMM商品情報を取得するAPI。キーワード検索、カテゴリ絞り込み、ソート機能を提供します。
+      parameters:
+        - name: api_id
+          in: query
+          required: true
+          description: 登録時に割り振られたAPIID
+          schema:
+            type: string
+          explode: false
+        - name: affiliate_id
+          in: query
+          required: true
+          description: 登録時に割り振られた990～999までのアフィリエイトID
+          schema:
+            type: string
+          explode: false
+        - name: site
+          in: query
+          required: true
+          description: 一般（DMM.com）かアダルト（FANZA）かを指定
+          schema:
+            type: string
+            enum:
+              - DMM.com
+              - FANZA
+          explode: false
+        - name: service
+          in: query
+          required: false
+          description: フロアAPIから取得できるサービスコードを指定
+          schema:
+            type: string
+          explode: false
+        - name: floor
+          in: query
+          required: false
+          description: フロアAPIから取得できるフロアコードを指定
+          schema:
+            type: string
+          explode: false
+        - name: hits
+          in: query
+          required: false
+          description: 取得件数（初期値：20、最大：100）
+          schema:
+            type: integer
+            format: int32
+            default: 20
+          explode: false
+        - name: offset
+          in: query
+          required: false
+          description: 検索開始位置（初期値：1、最大：50000）
+          schema:
+            type: integer
+            format: int32
+            default: 1
+          explode: false
+        - name: sort
+          in: query
+          required: false
+          description: ソート順（初期値：rank）
+          schema:
+            type: string
+            enum:
+              - rank
+              - price
+              - -price
+              - date
+              - review
+              - match
+            default: rank
+          explode: false
+        - name: keyword
+          in: query
+          required: false
+          description: 検索キーワード（UTF-8で指定）
+          schema:
+            type: string
+          explode: false
+        - name: cid
+          in: query
+          required: false
+          description: 商品に振られているcontent_id
+          schema:
+            type: string
+          explode: false
+        - name: article
+          in: query
+          required: false
+          description: 絞り込み項目（女優：actress、作者：author、ジャンル：genre、シリーズ：series、メーカー：maker）
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - actress
+                - author
+                - genre
+                - series
+                - maker
+          explode: false
+        - name: article_id
+          in: query
+          required: false
+          description: 絞り込み項目のID（各検索APIから取得可能）
+          schema:
+            type: array
+            items:
+              type: string
+          explode: false
+        - name: gte_date
+          in: query
+          required: false
+          description: このパラメータで指定した日付以降に発売された商品を絞り込み（ISO8601形式）
+          schema:
+            type: string
+          explode: false
+        - name: lte_date
+          in: query
+          required: false
+          description: このパラメータで指定した日付以前に発売された商品を絞り込み（ISO8601形式）
+          schema:
+            type: string
+          explode: false
+        - name: mono_stock
+          in: query
+          required: false
+          description: 在庫絞り込み（通販サービスのみ指定可能）
+          schema:
+            type: string
+            enum:
+              - stock
+              - reserve
+              - reserve_empty
+              - mono
+              - dmp
+          explode: false
+        - name: output
+          in: query
+          required: false
+          description: 出力形式
+          schema:
+            type: string
+            enum:
+              - json
+              - xml
+            default: json
+          explode: false
+        - name: callback
+          in: query
+          required: false
+          description: JSONP形式で出力する場合のコールバック関数名
+          schema:
+            type: string
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - request
+                  - result
+                properties:
+                  request:
+                    type: object
+                    properties:
+                      parameters:
+                        type: object
+                        properties:
+                          api_id:
+                            type: string
+                            description: リクエストパラメータ
+                          affiliate_id:
+                            type: string
+                          site:
+                            type: string
+                          service:
+                            type: string
+                          floor:
+                            type: string
+                          hits:
+                            type: integer
+                            format: int32
+                          offset:
+                            type: integer
+                            format: int32
+                          sort:
+                            type: string
+                          keyword:
+                            type: string
+                          cid:
+                            type: string
+                          article:
+                            type: array
+                            items:
+                              type: string
+                          article_id:
+                            type: array
+                            items:
+                              type: string
+                          gte_date:
+                            type: string
+                          lte_date:
+                            type: string
+                          mono_stock:
+                            type: string
+                          output:
+                            type: string
+                          callback:
+                            type: string
+                        required:
+                          - api_id
+                          - affiliate_id
+                          - site
+                    required:
+                      - parameters
+                  result:
+                    $ref: '#/components/schemas/Item.ItemListResponse'
+  /MakerSearch:
+    get:
+      operationId: makerSearch
+      summary: メーカー検索API
+      description: DMM商品のメーカー情報を検索するAPI。フロア別のメーカー一覧を取得できます。
+      parameters:
+        - name: api_id
+          in: query
+          required: true
+          description: 登録時に割り振られたAPIID
+          schema:
+            type: string
+          explode: false
+        - name: affiliate_id
+          in: query
+          required: true
+          description: 登録時に割り振られた990～999までのアフィリエイトID
+          schema:
+            type: string
+          explode: false
+        - name: floor_id
+          in: query
+          required: true
+          description: フロア検索APIから取得可能なフロアID
+          schema:
+            type: integer
+            format: int32
+          explode: false
+        - name: initial
+          in: query
+          required: false
+          description: 頭文字（50音をUTF-8で指定）
+          schema:
+            type: string
+          explode: false
+        - name: hits
+          in: query
+          required: false
+          description: 取得件数（初期値：100、最大：500）
+          schema:
+            type: integer
+            format: int32
+            default: 100
+          explode: false
+        - name: offset
+          in: query
+          required: false
+          description: 検索開始位置（初期値：1）
+          schema:
+            type: integer
+            format: int32
+            default: 1
+          explode: false
+        - name: output
+          in: query
+          required: false
+          description: 出力形式
+          schema:
+            type: string
+            enum:
+              - json
+              - xml
+            default: json
+          explode: false
+        - name: callback
+          in: query
+          required: false
+          description: JSONP形式で出力する場合のコールバック関数名
+          schema:
+            type: string
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - request
+                  - result
+                properties:
+                  request:
+                    type: object
+                    properties:
+                      parameters:
+                        type: object
+                        properties:
+                          api_id:
+                            type: string
+                            description: リクエストパラメータ
+                          affiliate_id:
+                            type: string
+                          floor_id:
+                            type: integer
+                            format: int32
+                          initial:
+                            type: string
+                          hits:
+                            type: integer
+                            format: int32
+                          offset:
+                            type: integer
+                            format: int32
+                          output:
+                            type: string
+                          callback:
+                            type: string
+                        required:
+                          - api_id
+                          - affiliate_id
+                          - floor_id
+                    required:
+                      - parameters
+                  result:
+                    $ref: '#/components/schemas/Maker.MakerSearchResponse'
+  /SeriesSearch:
+    get:
+      operationId: seriesSearch
+      summary: シリーズ検索API
+      description: DMM商品のシリーズ情報を検索するAPI。フロア別のシリーズ一覧を取得できます。
+      parameters:
+        - name: api_id
+          in: query
+          required: true
+          description: 登録時に割り振られたAPIID
+          schema:
+            type: string
+          explode: false
+        - name: affiliate_id
+          in: query
+          required: true
+          description: 登録時に割り振られた990～999までのアフィリエイトID
+          schema:
+            type: string
+          explode: false
+        - name: floor_id
+          in: query
+          required: true
+          description: フロア検索APIから取得可能なフロアID
+          schema:
+            type: integer
+            format: int32
+          explode: false
+        - name: initial
+          in: query
+          required: false
+          description: 頭文字（50音をUTF-8で指定）
+          schema:
+            type: string
+          explode: false
+        - name: hits
+          in: query
+          required: false
+          description: 取得件数（初期値：100、最大：500）
+          schema:
+            type: integer
+            format: int32
+            default: 100
+          explode: false
+        - name: offset
+          in: query
+          required: false
+          description: 検索開始位置（初期値：1）
+          schema:
+            type: integer
+            format: int32
+            default: 1
+          explode: false
+        - name: output
+          in: query
+          required: false
+          description: 出力形式
+          schema:
+            type: string
+            enum:
+              - json
+              - xml
+            default: json
+          explode: false
+        - name: callback
+          in: query
+          required: false
+          description: JSONP形式で出力する場合のコールバック関数名
+          schema:
+            type: string
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - request
+                  - result
+                properties:
+                  request:
+                    type: object
+                    properties:
+                      parameters:
+                        type: object
+                        properties:
+                          api_id:
+                            type: string
+                            description: リクエストパラメータ
+                          affiliate_id:
+                            type: string
+                          floor_id:
+                            type: integer
+                            format: int32
+                          initial:
+                            type: string
+                          hits:
+                            type: integer
+                            format: int32
+                          offset:
+                            type: integer
+                            format: int32
+                          output:
+                            type: string
+                          callback:
+                            type: string
+                        required:
+                          - api_id
+                          - affiliate_id
+                          - floor_id
+                    required:
+                      - parameters
+                  result:
+                    $ref: '#/components/schemas/Series.SeriesSearchResponse'
+components:
+  schemas:
+    Actress.Actress:
+      type: object
+      required:
+        - id
+        - name
+        - ruby
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: 女優ID
+          example: 15365
+        name:
+          type: string
+          description: 女優名
+          example: 麻美ゆま
+        ruby:
+          type: string
+          description: 女優名（読み仮名）
+          example: あさみゆま
+        bust:
+          type: integer
+          format: int32
+          description: バスト（cm）
+          example: 96
+        cup:
+          type: string
+          description: カップ数
+          example: H
+        waist:
+          type: integer
+          format: int32
+          description: ウェスト（cm）
+          example: 58
+        hip:
+          type: integer
+          format: int32
+          description: ヒップ（cm）
+          example: 88
+        height:
+          type: integer
+          format: int32
+          description: 身長（cm）
+          example: 158
+        birthday:
+          type: string
+          description: 生年月日
+          example: '1987-03-24'
+        blood_type:
+          type: string
+          description: 血液型
+          example: AB
+        hobby:
+          type: string
+          description: 趣味
+          example: 香水集め、英会話、ピアノ
+        prefectures:
+          type: string
+          description: 出身地
+          example: 東京都
+        imageURL:
+          allOf:
+            - $ref: '#/components/schemas/Actress.ActressImageURL'
+          description: 画像URL情報
+        listURL:
+          allOf:
+            - $ref: '#/components/schemas/Actress.ActressListURL'
+          description: リストページURL情報（アフィリエイトID付き）
+      description: 女優情報
+    Actress.ActressImageURL:
+      type: object
+      required:
+        - small
+        - large
+      properties:
+        small:
+          type: string
+          description: 画像（小）URL
+          example: http://pics.dmm.co.jp/mono/actjpgs/thumbnail/asami_yuma.jpg
+        large:
+          type: string
+          description: 画像（大）URL
+          example: http://pics.dmm.co.jp/mono/actjpgs/asami_yuma.jpg
+      description: 女優画像URL情報
+    Actress.ActressListURL:
+      type: object
+      required:
+        - digital
+        - monthly_premium
+        - mono
+      properties:
+        digital:
+          type: string
+          description: 動画リストページURL
+          example: https://al.dmm.co.jp/?lurl=http%3A%2F%2Fwww.dmm.co.jp%2Fdigital%2Fvideoa%2F-%2Flist%2F%3D%2Farticle%3Dactress%2Fid%3D15365%2F&af_id=affiliate-001&ch=api
+        monthly_premium:
+          type: string
+          description: 月額動画 見放題chデラックスリストページURL
+          example: https://al.dmm.co.jp/?lurl=http%3A%2F%2Fwww.dmm.co.jp%2Fmonthly%2Fpremium%2F-%2Flist%2F%3D%2Farticle%3Dactress%2Fid%3D15365%2F&af_id=affiliate-001&ch=api
+        mono:
+          type: string
+          description: DVD通販リストページURL
+          example: https://al.dmm.co.jp/?lurl=http%3A%2F%2Fwww.dmm.co.jp%2Fmono%2Fdvd%2F-%2Flist%2F%3D%2Farticle%3Dactress%2Fid%3D15365%2F&af_id=affiliate-001&ch=api
+      description: 女優リストページURL情報（アフィリエイトID付き）
+    Actress.ActressSearchResponse:
+      type: object
+      required:
+        - status
+        - result_count
+        - total_count
+        - first_position
+        - actress
+      properties:
+        status:
+          type: integer
+          format: int32
+          description: ステータスコード
+          example: 200
+        result_count:
+          type: integer
+          format: int32
+          description: 取得件数
+          example: 20
+        total_count:
+          type: integer
+          format: int32
+          description: 全体件数
+          example: 64964
+        first_position:
+          type: integer
+          format: int32
+          description: 検索開始位置
+          example: 1
+        actress:
+          type: array
+          items:
+            $ref: '#/components/schemas/Actress.Actress'
+          description: 女優情報リスト
+      description: 女優検索レスポンス
+    Author.Author:
+      type: object
+      required:
+        - author_id
+        - name
+        - ruby
+        - list_url
+      properties:
+        author_id:
+          type: integer
+          format: int32
+          description: 作者ID
+          example: 21414
+        name:
+          type: string
+          description: 作者名
+          example: ヴィクトル・ユゴー
+        ruby:
+          type: string
+          description: 作者名（読み仮名）
+          example: う゛ぃくとるゆごー
+        another_name:
+          type: string
+          description: 作者別名
+          example: ヴィクトル・ユーゴー/ヴィクトル=ユーゴー
+        list_url:
+          type: string
+          description: リストページURL（アフィリエイトID付き）
+          example: https://al.dmm.com/?lurl=http%3A%2F%2Fwww.dmm.com%2Fmono%2Fbook%2F-%2Flist%2F%3D%2Farticle%3Dauthor%2Fid%3D21414%2F&af_id=affiliate-990&ch=api
+      description: 作者情報
+    Author.AuthorSearchResponse:
+      type: object
+      required:
+        - status
+        - result_count
+        - total_count
+        - first_position
+        - site_name
+        - site_code
+        - service_name
+        - service_code
+        - floor_id
+        - floor_name
+        - floor_code
+        - author
+      properties:
+        status:
+          type: integer
+          format: int32
+          description: ステータスコード
+          example: 200
+        result_count:
+          type: integer
+          format: int32
+          description: 取得件数
+          example: 100
+        total_count:
+          type: integer
+          format: int32
+          description: 全体件数
+          example: 1000
+        first_position:
+          type: integer
+          format: int32
+          description: 検索開始位置
+          example: 1
+        site_name:
+          type: string
+          description: サイト名
+          example: DMM.com（一般）
+        site_code:
+          type: string
+          description: サイトコード
+          example: DMM.com
+        service_name:
+          type: string
+          description: サービス名
+          example: 通販
+        service_code:
+          type: string
+          description: サービスコード
+          example: mono
+        floor_id:
+          type: integer
+          format: int32
+          description: フロアID
+          example: 24
+        floor_name:
+          type: string
+          description: フロア名
+          example: 本・コミック
+        floor_code:
+          type: string
+          description: フロアコード
+          example: book
+        author:
+          type: array
+          items:
+            $ref: '#/components/schemas/Author.Author'
+          description: 作者情報リスト
+      description: 作者検索レスポンス
+    Floor.Floor:
+      type: object
+      required:
+        - id
+        - name
+        - code
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: フロアID
+          example: 6
+        name:
+          type: string
+          description: フロア名
+          example: 映画・ドラマ
+        code:
+          type: string
+          description: フロアコード
+          example: cinema
+      description: フロア情報
+    Floor.FloorListResponse:
+      type: object
+      required:
+        - site
+      properties:
+        site:
+          type: array
+          items:
+            $ref: '#/components/schemas/Floor.Site'
+          description: サイト情報リスト
+      description: フロアリストレスポンス
+    Floor.Service:
+      type: object
+      required:
+        - name
+        - code
+        - floor
+      properties:
+        name:
+          type: string
+          description: サービス名
+          example: 動画
+        code:
+          type: string
+          description: サービスコード
+          example: digital
+        floor:
+          type: array
+          items:
+            $ref: '#/components/schemas/Floor.Floor'
+          description: フロア情報リスト
+      description: サービス情報
+    Floor.Site:
+      type: object
+      required:
+        - name
+        - code
+        - service
+      properties:
+        name:
+          type: string
+          description: サイト名
+          example: DMM.com（一般）
+        code:
+          type: string
+          description: サイトコード
+          example: DMM.com
+        service:
+          type: array
+          items:
+            $ref: '#/components/schemas/Floor.Service'
+          description: サービス情報リスト
+      description: サイト情報
+    Genre.Genre:
+      type: object
+      required:
+        - genre_id
+        - name
+        - ruby
+        - list_url
+      properties:
+        genre_id:
+          type: integer
+          format: int32
+          description: ジャンルID
+          example: 2001
+        name:
+          type: string
+          description: ジャンル名
+          example: 巨乳
+        ruby:
+          type: string
+          description: ジャンル名（読み仮名）
+          example: きょにゅう
+        list_url:
+          type: string
+          description: リストページURL（アフィリエイトID付き）
+          example: https://al.dmm.co.jp/?lurl=http%3A%2F%2Fwww.dmm.co.jp%2Fdigital%2Fvideoa%2F-%2Flist%2F%3D%2Farticle%3Dkeyword%2Fid%3D2001%2F&af_id=affiliate-001&ch=api
+      description: ジャンル情報
+    Genre.GenreSearchResponse:
+      type: object
+      required:
+        - status
+        - result_count
+        - total_count
+        - first_position
+        - site_name
+        - site_code
+        - service_name
+        - service_code
+        - floor_id
+        - floor_name
+        - floor_code
+        - genre
+      properties:
+        status:
+          type: integer
+          format: int32
+          description: ステータスコード
+          example: 200
+        result_count:
+          type: integer
+          format: int32
+          description: 取得件数
+          example: 100
+        total_count:
+          type: integer
+          format: int32
+          description: 全体件数
+          example: 1000
+        first_position:
+          type: integer
+          format: int32
+          description: 検索開始位置
+          example: 1
+        site_name:
+          type: string
+          description: サイト名
+          example: FANZA（アダルト）
+        site_code:
+          type: string
+          description: サイトコード
+          example: FANZA
+        service_name:
+          type: string
+          description: サービス名
+          example: 動画
+        service_code:
+          type: string
+          description: サービスコード
+          example: digital
+        floor_id:
+          type: integer
+          format: int32
+          description: フロアID
+          example: 40
+        floor_name:
+          type: string
+          description: フロア名
+          example: ビデオ
+        floor_code:
+          type: string
+          description: フロアコード
+          example: videoa
+        genre:
+          type: array
+          items:
+            $ref: '#/components/schemas/Genre.Genre'
+          description: ジャンル情報リスト
+      description: ジャンル検索レスポンス
+    Item.Actor:
+      type: object
+      required:
+        - name
+        - id
+      properties:
+        name:
+          type: string
+          description: 出演者名
+        id:
+          type: integer
+          format: int32
+          description: 出演者ID
+      description: 出演者情報（一般作品のみ）
+    Item.Actress:
+      type: object
+      required:
+        - name
+        - id
+      properties:
+        name:
+          type: string
+          description: 女優名
+          example: 小澤マリア
+        id:
+          type: integer
+          format: int32
+          description: 女優ID
+          example: 15187
+      description: 女優情報（アダルト作品のみ）
+    Item.Author:
+      type: object
+      required:
+        - name
+        - id
+      properties:
+        name:
+          type: string
+          description: 作家・原作者・著者名
+        id:
+          type: integer
+          format: int32
+          description: 作家・原作者・著者ID
+      description: 作家・原作者・著者情報
+    Item.CDInfo:
+      type: object
+      required:
+        - kind
+      properties:
+        kind:
+          type: string
+          description: アルバム、シングル
+      description: CD情報
+    Item.Campaign:
+      type: object
+      required:
+        - date_begin
+        - date_end
+        - title
+      properties:
+        date_begin:
+          type: string
+          description: キャンペーン開始日時
+          example: '2023-05-01 10:00:00'
+        date_end:
+          type: string
+          description: キャンペーン終了日時
+          example: '2023-05-31 23:59:59'
+        title:
+          type: string
+          description: キャンペーンタイトル
+      description: キャンペーン情報
+    Item.Color:
+      type: object
+      required:
+        - name
+        - id
+      properties:
+        name:
+          type: string
+          description: カラー名
+        id:
+          type: integer
+          format: int32
+          description: カラーID
+      description: カラー情報
+    Item.Delivery:
+      type: object
+      required:
+        - type
+        - price
+      properties:
+        type:
+          type: string
+          description: 配信タイプ
+          example: stream
+        price:
+          type: integer
+          format: int32
+          description: 配信価格
+          example: 300
+      description: 配信情報
+    Item.Director:
+      type: object
+      required:
+        - name
+        - id
+      properties:
+        name:
+          type: string
+          description: 監督名
+        id:
+          type: integer
+          format: int32
+          description: 監督ID
+      description: 監督情報
+    Item.Directory:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: パンくずID
+          example: 783
+        name:
+          type: string
+          description: パンくず名
+          example: J-POP等
+      description: パンくずリスト情報
+    Item.Genre:
+      type: object
+      required:
+        - name
+        - id
+      properties:
+        name:
+          type: string
+          description: ジャンル名
+          example: ベスト・総集編
+        id:
+          type: integer
+          format: int32
+          description: ジャンルID
+          example: 6003
+      description: ジャンル情報
+    Item.ImageURL:
+      type: object
+      required:
+        - list
+        - small
+        - large
+      properties:
+        list:
+          type: string
+          description: リストページ用画像URL
+          example: http://pics.dmm.co.jp/digital/video/15dss00145/15dss00145pt.jpg
+        small:
+          type: string
+          description: 末端用（小）画像URL
+          example: http://pics.dmm.co.jp/digital/video/15dss00145/15dss00145ps.jpg
+        large:
+          type: string
+          description: 末端用（大）画像URL
+          example: http://pics.dmm.co.jp/digital/video/15dss00145/15dss00145pl.jpg
+      description: 画像URL情報
+    Item.Item:
+      type: object
+      required:
+        - service_code
+        - service_name
+        - floor_code
+        - floor_name
+        - category_name
+        - content_id
+        - product_id
+        - title
+        - URL
+        - affiliateURL
+        - date
+      properties:
+        service_code:
+          type: string
+          description: サービスコード
+          example: digital
+        service_name:
+          type: string
+          description: サービス名
+          example: 動画
+        floor_code:
+          type: string
+          description: フロアコード
+          example: videoa
+        floor_name:
+          type: string
+          description: フロア名
+          example: ビデオ
+        category_name:
+          type: string
+          description: カテゴリ名
+          example: ビデオ (動画)
+        content_id:
+          type: string
+          description: 商品ID
+          example: 15dss00145
+        product_id:
+          type: string
+          description: 品番
+          example: 15dss00145dl
+        title:
+          type: string
+          description: タイトル
+          example: GET！！ 素人ナンパ Best100！！ 街角女子ベスト100人 8時間
+        volume:
+          type: integer
+          format: int32
+          description: 収録時間 or ページ数
+          example: 350
+        number:
+          type: integer
+          format: int32
+          description: 巻数
+          example: 3
+        review:
+          allOf:
+            - $ref: '#/components/schemas/Item.Review'
+          description: レビュー情報
+        URL:
+          type: string
+          description: 商品ページURL
+          example: http://www.dmm.co.jp/digital/videoa/-/detail/=/cid=15dss00145/
+        affiliateURL:
+          type: string
+          description: アフィリエイトリンクURL
+          example: https://al.dmm.co.jp/?lurl=http%3A%2F%2Fwww.dmm.co.jp%2Fdigital%2Fvideoa%2F-%2Fdetail%2F%3D%2Fcid%3D15dss00145%2F&af_id=affiliate-990&ch=api
+        imageURL:
+          allOf:
+            - $ref: '#/components/schemas/Item.ImageURL'
+          description: 画像URL情報
+        tachiyomi:
+          allOf:
+            - $ref: '#/components/schemas/Item.Tachiyomi'
+          description: 立ち読み情報
+        sampleImageURL:
+          allOf:
+            - $ref: '#/components/schemas/Item.SampleImageURL'
+          description: サンプル画像URL情報
+        sampleMovieURL:
+          allOf:
+            - $ref: '#/components/schemas/Item.SampleMovieURL'
+          description: サンプル動画URL情報
+        prices:
+          allOf:
+            - $ref: '#/components/schemas/Item.Prices'
+          description: 価格情報
+        date:
+          type: string
+          description: 発売日、配信開始日、貸出開始日
+          example: 2012/8/3 10:00
+        iteminfo:
+          allOf:
+            - $ref: '#/components/schemas/Item.ItemInfo'
+          description: 商品詳細情報
+        cdinfo:
+          allOf:
+            - $ref: '#/components/schemas/Item.CDInfo'
+          description: CD情報
+        jancode:
+          type: string
+          description: JANコード
+          example: '4988135965905'
+        maker_product:
+          type: string
+          description: メーカー品番
+          example: 10003-54653
+        isbn:
+          type: string
+          description: ISBN
+        stock:
+          type: string
+          description: 在庫状況
+          example: reserve
+        directory:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item.Directory'
+          description: パンくずリスト
+        campaign:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item.Campaign'
+          description: キャンペーン情報
+      description: 商品情報
+    Item.ItemInfo:
+      type: object
+      properties:
+        genre:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item.Genre'
+          description: ジャンル情報
+        series:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item.Series'
+          description: シリーズ情報
+        maker:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item.Maker'
+          description: メーカー情報
+        actor:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item.Actor'
+          description: 出演者情報（一般作品のみ）
+        actress:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item.Actress'
+          description: 女優情報（アダルト作品のみ）
+        director:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item.Director'
+          description: 監督情報
+        author:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item.Author'
+          description: 作家・原作者・著者情報
+        label:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item.Label'
+          description: レーベル情報
+        type:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item.Type'
+          description: タイプ情報
+        color:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item.Color'
+          description: カラー情報
+        size:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item.Size'
+          description: サイズ情報
+      description: 商品詳細情報
+    Item.ItemListResponse:
+      type: object
+      required:
+        - status
+        - result_count
+        - total_count
+        - first_position
+        - items
+      properties:
+        status:
+          type: integer
+          format: int32
+          description: ステータスコード
+          example: 200
+        result_count:
+          type: integer
+          format: int32
+          description: 取得件数
+          example: 20
+        total_count:
+          type: integer
+          format: int32
+          description: 全体件数
+          example: 50000
+        first_position:
+          type: integer
+          format: int32
+          description: 検索開始位置
+          example: 1
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item.Item'
+          description: 商品情報リスト
+      description: 商品リストレスポンス
+    Item.Label:
+      type: object
+      required:
+        - name
+        - id
+      properties:
+        name:
+          type: string
+          description: レーベル名
+          example: LADY HUNTERS
+        id:
+          type: integer
+          format: int32
+          description: レーベルID
+          example: 76
+      description: レーベル情報
+    Item.Maker:
+      type: object
+      required:
+        - name
+        - id
+      properties:
+        name:
+          type: string
+          description: メーカー名
+          example: 桃太郎映像出版
+        id:
+          type: integer
+          format: int32
+          description: メーカーID
+          example: 40016
+      description: メーカー情報
+    Item.Prices:
+      type: object
+      required:
+        - price
+      properties:
+        price:
+          type: string
+          description: 金額
+          example: 300～
+        list_price:
+          type: string
+          description: 定価
+        deliveries:
+          type: array
+          items:
+            type: object
+            properties:
+              delivery:
+                allOf:
+                  - $ref: '#/components/schemas/Item.Delivery'
+                description: 配信情報
+            required:
+              - delivery
+          description: 配信リスト
+      description: 価格情報
+    Item.Review:
+      type: object
+      required:
+        - count
+        - average
+      properties:
+        count:
+          type: integer
+          format: int32
+          description: レビュー数
+          example: 8
+        average:
+          type: number
+          format: float
+          description: レビュー平均点
+          example: 3.13
+      description: レビュー情報
+    Item.SampleImageURL:
+      type: object
+      required:
+        - sample_s
+        - sample_l
+      properties:
+        sample_s:
+          type: array
+          items:
+            type: object
+            properties:
+              image:
+                type: string
+                description: サンプル画像（小）URL
+                example: http://pics.dmm.co.jp/digital/video/15dss00145/15dss00145-1.jpg
+            required:
+              - image
+          description: サンプル（小）画像リスト
+        sample_l:
+          type: array
+          items:
+            type: object
+            properties:
+              image:
+                type: string
+                description: サンプル画像（大）URL
+                example: http://pics.dmm.co.jp/digital/video/15dss00145/15dss00145jp-1.jpg
+            required:
+              - image
+          description: サンプル（大）画像リスト
+      description: サンプル画像URL情報
+    Item.SampleMovieURL:
+      type: object
+      required:
+        - pc_flag
+        - sp_flag
+      properties:
+        size_476_306:
+          type: string
+          description: 476×306サイズ動画URL
+          example: http://www.dmm.co.jp/litevideo/-/part/=/cid=15dss145/size=476_306/affi_id=affiliate-990/
+        size_560_360:
+          type: string
+          description: 560×360サイズ動画URL
+          example: http://www.dmm.co.jp/litevideo/-/part/=/cid=15dss145/size=560_360/affi_id=affiliate-990/
+        size_644_414:
+          type: string
+          description: 644×414サイズ動画URL
+          example: http://www.dmm.co.jp/litevideo/-/part/=/cid=15dss145/size=644_414/affi_id=affiliate-990/
+        size_720_480:
+          type: string
+          description: 720×480サイズ動画URL
+          example: http://www.dmm.co.jp/litevideo/-/part/=/cid=15dss145/size=720_480/affi_id=affiliate-990/
+        pc_flag:
+          type: integer
+          format: int32
+          description: 'PC対応フラグ（1: 対応、0: 非対応）'
+          example: 1
+        sp_flag:
+          type: integer
+          format: int32
+          description: 'スマホ対応フラグ（1: 対応、0: 非対応）'
+          example: 1
+      description: サンプル動画URL情報
+    Item.Series:
+      type: object
+      required:
+        - name
+        - id
+      properties:
+        name:
+          type: string
+          description: シリーズ名
+          example: GETシリーズ
+        id:
+          type: integer
+          format: int32
+          description: シリーズID
+          example: 1006
+      description: シリーズ情報
+    Item.Size:
+      type: object
+      required:
+        - name
+        - id
+      properties:
+        name:
+          type: string
+          description: サイズ名
+        id:
+          type: integer
+          format: int32
+          description: サイズID
+      description: サイズ情報
+    Item.Tachiyomi:
+      type: object
+      required:
+        - URL
+        - affilaiteURL
+      properties:
+        URL:
+          type: string
+          description: 立ち読みページURL
+          example: http://book.dmm.co.jp/tachiyomi/?product_id=b468acown00017&item_id=b468acown00017&shop=digital_book
+        affilaiteURL:
+          type: string
+          description: 立ち読みアフィリエイトリンクURL
+          example: https://al.dmm.co.jp/?lurl=http%3A%2F%2Fbook.dmm.co.jp%2Ftachiyomi%2F%3Fproduct_id%3Db468acown00017%26item_id%3Db468acown00017%26shop%3Ddigital_book&af_id=affiliate-990&ch=api
+      description: 立ち読み情報
+    Item.Type:
+      type: object
+      required:
+        - name
+        - id
+      properties:
+        name:
+          type: string
+          description: タイプ名
+        id:
+          type: integer
+          format: int32
+          description: タイプID
+      description: タイプ情報
+    Maker.Maker:
+      type: object
+      required:
+        - maker_id
+        - name
+        - ruby
+        - list_url
+      properties:
+        maker_id:
+          type: integer
+          format: int32
+          description: メーカーID
+          example: 1509
+        name:
+          type: string
+          description: メーカー名
+          example: ムーディーズ
+        ruby:
+          type: string
+          description: メーカー名（読み仮名）
+          example: むーでぃーず
+        list_url:
+          type: string
+          description: リストページURL（アフィリエイトID付き）
+          example: https://al.dmm.co.jp/?lurl=http%3A%2F%2Fwww.dmm.co.jp%2Fdigital%2Fvideoa%2F-%2Flist%2F%3D%2Farticle%3Dmaker%2Fid%3D1509%2F&af_id=affiliate-990&ch=api
+      description: メーカー情報
+    Maker.MakerSearchResponse:
+      type: object
+      required:
+        - status
+        - result_count
+        - total_count
+        - first_position
+        - site_name
+        - site_code
+        - service_name
+        - service_code
+        - floor_id
+        - floor_name
+        - floor_code
+        - maker
+      properties:
+        status:
+          type: integer
+          format: int32
+          description: ステータスコード
+          example: 200
+        result_count:
+          type: integer
+          format: int32
+          description: 取得件数
+          example: 100
+        total_count:
+          type: integer
+          format: int32
+          description: 全体件数
+          example: 1000
+        first_position:
+          type: integer
+          format: int32
+          description: 検索開始位置
+          example: 1
+        site_name:
+          type: string
+          description: サイト名
+          example: FANZA（アダルト）
+        site_code:
+          type: string
+          description: サイトコード
+          example: FANZA
+        service_name:
+          type: string
+          description: サービス名
+          example: 動画
+        service_code:
+          type: string
+          description: サービスコード
+          example: digital
+        floor_id:
+          type: integer
+          format: int32
+          description: フロアID
+          example: 40
+        floor_name:
+          type: string
+          description: フロア名
+          example: ビデオ
+        floor_code:
+          type: string
+          description: フロアコード
+          example: videoa
+        maker:
+          type: array
+          items:
+            $ref: '#/components/schemas/Maker.Maker'
+          description: メーカー情報リスト
+      description: メーカー検索レスポンス
+    Series.Series:
+      type: object
+      required:
+        - series_id
+        - name
+        - ruby
+        - list_url
+      properties:
+        series_id:
+          type: integer
+          format: int32
+          description: シリーズID
+          example: 62226
+        name:
+          type: string
+          description: シリーズ名
+          example: ARIA
+        ruby:
+          type: string
+          description: シリーズ名（読み仮名）
+          example: ありあ
+        list_url:
+          type: string
+          description: リストページURL（アフィリエイトID付き）
+          example: https://al.dmm.com/?lurl=http%3A%2F%2Fwww.dmm.com%2Fmono%2Fbook%2F-%2Flist%2F%3D%2Farticle%3Dseries%2Fid%3D62226%2F&af_id=affiliate-001&ch=api
+      description: シリーズ情報
+    Series.SeriesSearchResponse:
+      type: object
+      required:
+        - status
+        - result_count
+        - total_count
+        - first_position
+        - site_name
+        - site_code
+        - service_name
+        - service_code
+        - floor_id
+        - floor_name
+        - floor_code
+        - series
+      properties:
+        status:
+          type: integer
+          format: int32
+          description: ステータスコード
+          example: 200
+        result_count:
+          type: integer
+          format: int32
+          description: 取得件数
+          example: 100
+        total_count:
+          type: integer
+          format: int32
+          description: 全体件数
+          example: 1000
+        first_position:
+          type: integer
+          format: int32
+          description: 検索開始位置
+          example: 1
+        site_name:
+          type: string
+          description: サイト名
+          example: DMM.com（一般）
+        site_code:
+          type: string
+          description: サイトコード
+          example: DMM.com
+        service_name:
+          type: string
+          description: サービス名
+          example: 通販
+        service_code:
+          type: string
+          description: サービスコード
+          example: mono
+        floor_id:
+          type: integer
+          format: int32
+          description: フロアID
+          example: 24
+        floor_name:
+          type: string
+          description: フロア名
+          example: 本・コミック
+        floor_code:
+          type: string
+          description: フロアコード
+          example: book
+        series:
+          type: array
+          items:
+            $ref: '#/components/schemas/Series.Series'
+          description: シリーズ情報リスト
+      description: シリーズ検索レスポンス
+servers:
+  - url: https://api.dmm.com/affiliate/v3
+    description: DMM API v3
+    variables: {}
