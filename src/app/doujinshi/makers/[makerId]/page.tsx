@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Badge } from "../../../../components/ui/badge";
 import { Card, CardContent, CardHeader } from "../../../../components/ui/card";
+import { pagesPath } from "../../../../lib/$path";
 import { getDb } from "../../../../server/db/client";
 import { makersRepository } from "../../../../server/repositories/makers.repository";
 
@@ -58,12 +59,12 @@ export default async function MakerPage({ params }: MakerPageProps) {
               {maker.works
                 .map((workRelation) => workRelation.work)
                 .filter(
-                  (work): work is NonNullable<typeof work> => work != null
+                  (work): work is NonNullable<typeof work> => work != null,
                 )
                 .map((work) => (
                   <Link
                     key={work.id}
-                    href={`/doujinshi/works/${work.id}`}
+                    href={pagesPath.doujinshi.works._workId(work.id).$url()}
                     className="group"
                   >
                     <Card className="transition-all duration-200 hover:shadow-lg hover:scale-105">

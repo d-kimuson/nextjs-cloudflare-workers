@@ -10,6 +10,7 @@ import {
 import { AlertTriangle, Home, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { type FC, useCallback } from "react";
+import { pagesPath } from "../lib/$path";
 
 type ErrorPageProps = {
   statusCode: number;
@@ -65,7 +66,7 @@ export const ErrorPage: FC<ErrorPageProps> = ({
             )}
             {showHome && (
               <Button asChild variant="outline" className="w-full">
-                <Link href="/">
+                <Link href={pagesPath.$url()}>
                   <Home className="mr-2 h-4 w-4" />
                   ホームに戻る
                 </Link>

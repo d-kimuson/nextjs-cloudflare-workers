@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Badge } from "../../../../components/ui/badge";
 import { Button } from "../../../../components/ui/button";
 import { Card, CardContent, CardHeader } from "../../../../components/ui/card";
+import { pagesPath } from "../../../../lib/$path";
 import { getDb } from "../../../../server/db/client";
 import { worksRepository } from "../../../../server/repositories/works.repository";
 
@@ -147,14 +148,17 @@ export default async function WorkPage({ params }: WorkPageProps) {
                   <p className="font-semibold mb-2">制作者:</p>
                   <div className="space-y-1">
                     {work.makers
-                      .filter((maker) => maker.maker)
+                      .map(({ maker }) => maker)
+                      .filter((maker) => maker !== null)
                       .map((maker) => (
-                        <div key={maker.makerId}>
+                        <div key={maker.id}>
                           <Link
-                            href={`/doujinshi/makers/${maker.makerId}`}
+                            href={pagesPath.doujinshi.makers
+                              ._makerId(maker.id)
+                              .$url()}
                             className="text-blue-600 hover:text-blue-800 hover:underline"
                           >
-                            {maker.maker?.name}
+                            {maker.name}
                           </Link>
                         </div>
                       ))}
@@ -168,15 +172,20 @@ export default async function WorkPage({ params }: WorkPageProps) {
                   <p className="font-semibold mb-2">シリーズ:</p>
                   <div className="space-y-1">
                     {work.series
-                      .filter((series) => series.series)
+                      .map(({ series }) => series)
+                      .filter((series) => series !== null)
                       .map((series) => (
-                        <div key={series.seriesId}>
-                          <Link href={`/doujinshi/series/${series.seriesId}`}>
+                        <div key={series.id}>
+                          <Link
+                            href={pagesPath.doujinshi.series
+                              ._seriesId(series.id)
+                              .$url()}
+                          >
                             <Badge
                               variant="outline"
                               className="cursor-pointer hover:bg-gray-100"
                             >
-                              {series.series?.name}
+                              {series.name}
                             </Badge>
                           </Link>
                         </div>
@@ -224,7 +233,7 @@ export async function generateMetadata({ params }: WorkPageProps) {
     title: `(同人誌) ${work.title}`,
     description: `${work.title}の詳細ページ。価格${new Intl.NumberFormat(
       "ja-JP",
-      { style: "currency", currency: "JPY" }
+      { style: "currency", currency: "JPY" },
     ).format(work.price)}。試し読み・購入はこちらから。`,
   };
 }

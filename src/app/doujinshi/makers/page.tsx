@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Card, CardContent, CardHeader } from "../../../components/ui/card";
+import { pagesPath } from "../../../lib/$path";
 import { getDb } from "../../../server/db/client";
 import { makersRepository } from "../../../server/repositories/makers.repository";
 
@@ -26,7 +27,7 @@ export default async function MakersPage() {
             {makers.map((maker) => (
               <Link
                 key={maker.id}
-                href={`/doujinshi/makers/${maker.id}`}
+                href={pagesPath.doujinshi.makers._makerId(maker.id).$url()}
                 className="group"
               >
                 <Card className="h-full transition-all duration-200 hover:shadow-lg hover:scale-105">
@@ -101,7 +102,7 @@ export default async function MakersPage() {
                     {Math.round(
                       (makers.reduce((sum, maker) => sum + maker.workCount, 0) /
                         makers.length) *
-                        10
+                        10,
                     ) / 10}
                   </p>
                   <p className="text-sm text-gray-500">平均作品数</p>

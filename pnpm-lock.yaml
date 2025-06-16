@@ -138,6 +138,9 @@ importers:
       orval:
         specifier: ^7.10.0
         version: 7.10.0(openapi-types@12.1.3)
+      pathpida:
+        specifier: ^0.25.0
+        version: 0.25.0
       tailwindcss:
         specifier: ^4
         version: 4.1.7
@@ -4797,6 +4800,10 @@ packages:
 
   pathe@2.0.3:
     resolution: {integrity: sha512-WUjGcAqP1gQacoQe+OBJsFA7Ld4DyXuUIjZ5cc75cLHvJ7dtNsTugphxIADwspS+AraAUePCKrSVtPLFj/F88w==}
+
+  pathpida@0.25.0:
+    resolution: {integrity: sha512-GS0nxTBO2vDcNsZMoBJu3kURSzB55jkAEH+XzFbfIFg8f93WKPUnhAru+VcFXKcXPIkljSM3zYw9TX9cyAP+og==}
+    hasBin: true
 
   pathval@2.0.0:
     resolution: {integrity: sha512-vE7JKRyES09KiunauX7nd2Q9/L7lhok4smP9RZTDeD4MVs72Dp2qNFVz39Nz5a0FVEW0BJR6C0DYrq6unoziZA==}
@@ -11293,6 +11300,12 @@ snapshots:
   path-type@6.0.0: {}
 
   pathe@2.0.3: {}
+
+  pathpida@0.25.0:
+    dependencies:
+      chokidar: 4.0.3
+      ignore: 7.0.5
+      minimist: 1.2.8
 
   pathval@2.0.0: {}
 

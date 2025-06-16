@@ -8,6 +8,7 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import Link from "next/link";
+import { pagesPath } from "../lib/$path";
 
 export default async function Home() {
   return (
@@ -27,7 +28,7 @@ export default async function Home() {
             <NavigationMenuList className="flex space-x-4">
               <NavigationMenuItem>
                 <NavigationMenuLink asChild>
-                  <Link href="/">
+                  <Link href={pagesPath.$url()}>
                     <Button variant="default" className="w-full">
                       ホーム
                     </Button>
@@ -36,7 +37,7 @@ export default async function Home() {
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavigationMenuLink asChild>
-                  <Link href="/doujinshi/daily-ranking">
+                  <Link href={pagesPath.doujinshi.daily_ranking.$url()}>
                     <Button variant="outline" className="w-full">
                       同人ランキング
                     </Button>
@@ -45,7 +46,7 @@ export default async function Home() {
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavigationMenuLink asChild>
-                  <Link href="/doujinshi/makers">
+                  <Link href={pagesPath.doujinshi.makers.$url()}>
                     <Button variant="outline" className="w-full">
                       作者一覧
                     </Button>
@@ -55,31 +56,6 @@ export default async function Home() {
             </NavigationMenuList>
           </NavigationMenu>
         </nav>
-
-        <main className="text-center">
-          <div className="max-w-2xl mx-auto">
-            <p className="text-muted-foreground mb-8">
-              最新の同人ランキングをチェックして、お気に入りの作品を見つけましょう。
-              人気作者の作品や試し読みも充実しています。
-            </p>
-            <div className="flex gap-4 justify-center">
-              <Link href="/doujinshi/daily-ranking">
-                <Button size="lg" className="text-lg px-8 py-4">
-                  ランキングを見る
-                </Button>
-              </Link>
-              <Link href="/authors">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="text-lg px-8 py-4"
-                >
-                  作者一覧
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </main>
       </div>
     </div>
   );

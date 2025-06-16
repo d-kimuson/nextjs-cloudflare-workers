@@ -1,0 +1,63 @@
+const buildSuffix = (url?: {
+  query?: Record<string, string | number | boolean | Array<string | number | boolean>>,
+  hash?: string
+}) => {
+  const query = url?.query;
+  const hash = url?.hash;
+  if (!query && !hash) return '';
+  const search = (() => {
+    if (!query) return '';
+
+    const params = new URLSearchParams();
+
+    Object.entries(query).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((item) =>
+          params.append(key, String(item))
+        );
+      } else {
+        params.set(key, String(value));
+      }
+    });
+
+    return `?${params.toString()}`;
+  })();
+  return `${search}${hash ? `#${hash}` : ''}`;
+};
+
+export const pagesPath = {
+  'doujinshi': {
+    'daily_ranking': {
+      $url: (url?: { hash?: string }) => ({ pathname: '/doujinshi/daily-ranking' as const, hash: url?.hash, path: `/doujinshi/daily-ranking${buildSuffix(url)}` })
+    },
+    'makers': {
+      _makerId: (makerId: string | number) => ({
+        $url: (url?: { hash?: string }) => ({ pathname: '/doujinshi/makers/[makerId]' as const, query: { makerId }, hash: url?.hash, path: `/doujinshi/makers/${makerId}${buildSuffix(url)}` })
+      }),
+      $url: (url?: { hash?: string }) => ({ pathname: '/doujinshi/makers' as const, hash: url?.hash, path: `/doujinshi/makers${buildSuffix(url)}` })
+    },
+    'series': {
+      _seriesId: (seriesId: string | number) => ({
+        $url: (url?: { hash?: string }) => ({ pathname: '/doujinshi/series/[seriesId]' as const, query: { seriesId }, hash: url?.hash, path: `/doujinshi/series/${seriesId}${buildSuffix(url)}` })
+      })
+    },
+    'works': {
+      _workId: (workId: string | number) => ({
+        $url: (url?: { hash?: string }) => ({ pathname: '/doujinshi/works/[workId]' as const, query: { workId }, hash: url?.hash, path: `/doujinshi/works/${workId}${buildSuffix(url)}` })
+      })
+    }
+  },
+  $url: (url?: { hash?: string }) => ({ pathname: '/' as const, hash: url?.hash, path: `/${buildSuffix(url)}` })
+};
+
+export type PagesPath = typeof pagesPath;
+
+export const staticPath = {
+  file_svg: '/file.svg',
+  globe_svg: '/globe.svg',
+  next_svg: '/next.svg',
+  vercel_svg: '/vercel.svg',
+  window_svg: '/window.svg'
+} as const;
+
+export type StaticPath = typeof staticPath;

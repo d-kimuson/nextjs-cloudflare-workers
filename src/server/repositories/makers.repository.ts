@@ -45,7 +45,7 @@ export const makersRepository = (db: DB) => {
         createdAt: makersTable.createdAt,
         updatedAt: makersTable.updatedAt,
         workCount: sql<number>`count(${workMakerTable.workId})`.as(
-          "work_count"
+          "work_count",
         ),
       })
       .from(makersTable)

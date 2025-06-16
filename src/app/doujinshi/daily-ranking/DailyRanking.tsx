@@ -5,6 +5,7 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { ItemItem } from "@/lib/api/dmmApi.generated";
 import Link from "next/link";
+import { pagesPath } from "../../../lib/$path";
 
 type Props = {
   doujinList: ItemItem[];
@@ -16,7 +17,7 @@ export const DailyRanking: React.FC<Props> = ({ doujinList }) => {
       <div className="max-w-6xl mx-auto">
         <header className="text-center mb-8">
           <div className="flex justify-center mb-4">
-            <Link href="/">
+            <Link href={pagesPath.$url()}>
               <Button variant="outline" size="sm">
                 ← ホームに戻る
               </Button>

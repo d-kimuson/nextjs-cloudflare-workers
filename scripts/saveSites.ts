@@ -9,6 +9,11 @@ const main = async () => {
     api_id: getRequiredEnv("DMM_API_ID"),
   });
 
+  if (result.status !== 200) {
+    console.error(result.data.result);
+    throw new Error(`Failed to fetch sites: ${result.status}`);
+  }
+
   await writeFile(
     resolve(process.cwd(), "src", "lib", "api", "sites.generated.json"),
     JSON.stringify(
