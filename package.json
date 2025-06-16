@@ -19,6 +19,7 @@
     "migrate:local": "wrangler d1 migrations apply nextjs-cloudflare-workers-db --local",
     "migrate:prod": "wrangler d1 migrations apply nextjs-cloudflare-workers-db --remote",
     "schema:generate": "tsp compile ./schema --output-dir ./schema/out --emit=@typespec/openapi3 && orval --config orval.config.ts",
+    "meta:generate": "pnpm tsx ./scripts/saveSites.ts",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts"
@@ -47,6 +48,7 @@
     "npm-run-all2": "^8.0.1",
     "orval": "^7.10.0",
     "tailwindcss": "^4",
+    "tsx": "^4.20.3",
     "typescript": "^5",
     "wrangler": "^4.15.2"
   }
