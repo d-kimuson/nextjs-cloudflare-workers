@@ -3,22 +3,24 @@ import { notFound } from "next/navigation";
 import { Badge } from "../../../../components/ui/badge";
 import { Card, CardContent, CardHeader } from "../../../../components/ui/card";
 import { getDb } from "../../../../server/db/client";
-import { makersRepository } from "../../../../server/repositories/makers.repository";
+import { seriesRepository } from "../../../../server/repositories/series.repository";
 
-type MakerPageProps = {
+type SeriesPageProps = {
   params: Promise<{
-    makerId: string;
+    seriesId: string;
   }>;
 };
 
-export default async function MakerPage({ params }: MakerPageProps) {
-  const { makerId } = await params;
+export default async function SeriesPage({ params }: SeriesPageProps) {
+  const { seriesId } = await params;
   const db = getDb();
-  const makersRepo = makersRepository(db);
+  const seriesRepo = seriesRepository(db);
 
-  const maker = await makersRepo.findById(Number.parseInt(makerId, 10));
+  const series = await seriesRepo.findByIdWithWorks(
+    Number.parseInt(seriesId, 10)
+  );
 
-  if (!maker) {
+  if (!series) {
     notFound();
   }
 
@@ -36,15 +38,15 @@ export default async function MakerPage({ params }: MakerPageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="space-y-8">
-        {/* 作者情報ヘッダー */}
+        {/* シリーズ情報ヘッダー */}
         <Card>
           <CardHeader>
-            <h1 className="text-3xl font-bold">{maker.name}</h1>
+            <h1 className="text-3xl font-bold">{series.name}</h1>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <p className="text-lg text-gray-600">
-                作品数: {maker.works.length}作品
+                作品数: {series.works.length}作品
               </p>
             </div>
           </CardContent>
@@ -53,9 +55,9 @@ export default async function MakerPage({ params }: MakerPageProps) {
         {/* 作品一覧 */}
         <div>
           <h2 className="text-2xl font-semibold mb-6">作品一覧</h2>
-          {maker.works.length > 0 ? (
+          {series.works.length > 0 ? (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {maker.works
+              {series.works
                 .map((workRelation) => workRelation.work)
                 .filter(
                   (work): work is NonNullable<typeof work> => work != null
@@ -114,7 +116,7 @@ export default async function MakerPage({ params }: MakerPageProps) {
             <Card>
               <CardContent className="p-8 text-center">
                 <p className="text-gray-500">
-                  この作者の作品はまだありません。
+                  このシリーズの作品はまだありません。
                 </p>
               </CardContent>
             </Card>
@@ -125,20 +127,20 @@ export default async function MakerPage({ params }: MakerPageProps) {
   );
 }
 
-export async function generateMetadata({ params }: MakerPageProps) {
-  const { makerId } = await params;
+export async function generateMetadata({ params }: SeriesPageProps) {
+  const { seriesId } = await params;
   const db = getDb();
-  const makersRepo = makersRepository(db);
-  const maker = await makersRepo.findById(Number.parseInt(makerId, 10));
+  const seriesRepo = seriesRepository(db);
+  const series = await seriesRepo.findById(Number.parseInt(seriesId, 10));
 
-  if (!maker) {
+  if (!series) {
     return {
-      title: "作者が見つかりません",
+      title: "シリーズが見つかりません",
     };
   }
 
   return {
-    title: `${maker.name} - 作者ページ`,
-    description: `${maker.name}の作品一覧ページ。${maker.works.length}作品を掲載中。`,
+    title: `${series.name} - シリーズページ`,
+    description: `${series.name}の作品一覧ページ。シリーズ作品を掲載中。`,
   };
 }

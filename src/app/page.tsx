@@ -45,7 +45,7 @@ export default async function Home() {
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavigationMenuLink asChild>
-                  <Link href="/authors">
+                  <Link href="/doujinshi/makers">
                     <Button variant="outline" className="w-full">
                       作者一覧
                     </Button>

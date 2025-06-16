@@ -16,6 +16,19 @@ export const seriesRepository = (db: DB) => {
     });
   };
 
+  const findByIdWithWorks = async (id: number) => {
+    return await db.query.seriesTable.findFirst({
+      where: eq(seriesTable.id, id),
+      with: {
+        works: {
+          with: {
+            work: true,
+          },
+        },
+      },
+    });
+  };
+
   const createIfNotExists = async (series: CreateSeriesInput) => {
     const currentTime = getCurrentDate().toISOString();
 
@@ -31,6 +44,7 @@ export const seriesRepository = (db: DB) => {
   return {
     createIfNotExists,
     findById,
+    findByIdWithWorks,
   };
 };
 
