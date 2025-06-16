@@ -26,6 +26,8 @@
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.0.2",
+    "@radix-ui/react-navigation-menu": "^1.2.13",
+    "@radix-ui/react-slot": "^1.2.3",
     "@typespec/best-practices": "0.46.0-dev.0",
     "@typespec/compiler": "^1.1.0",
     "@typespec/http": "^1.1.0",
