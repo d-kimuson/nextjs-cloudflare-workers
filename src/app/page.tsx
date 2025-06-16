@@ -36,7 +36,7 @@ export default async function Home() {
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavigationMenuLink asChild>
-                  <Link href="/tmp">
+                  <Link href="/doujinshi/daily-ranking">
                     <Button variant="outline" className="w-full">
                       同人ランキング
                     </Button>

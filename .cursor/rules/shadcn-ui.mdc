@@ -1,0 +1,16 @@
+---
+description: UI を実装する場合に利用する shadcn-ui のガイドライン。UI 実装を行う場合は必ず読んでください。
+globs: 
+alwaysApply: false
+---
+shadcn-ui はコピー可能なコレクションを CLI で利用する形式の UI ライブラリです。
+
+追加済みのコンポーネント:
+src/components/ui を参照
+
+追加することで利用できるコンポーネント:
+@https://ui.shadcn.com/docs/components
+
+追加する場合は pnpm dlx shadcn@latest add accordion の形で追加して利用します。
+
+shadcn-ui に存在するコンポーネントは可能な限りそちらを利用し、自前の実装を増やさないようにする。
