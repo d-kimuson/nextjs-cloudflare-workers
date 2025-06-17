@@ -6,7 +6,7 @@ describe("DailyRanking", () => {
   it("ランキングタイトルが表示される", async () => {
     render(<DailyRanking doujinList={[]} />);
     expect(
-      await screen.findByText("同人ランキング（24時間以内）"),
+      await screen.findByRole("heading", { name: "デイリーランキング" })
     ).toBeInTheDocument();
   });
 });

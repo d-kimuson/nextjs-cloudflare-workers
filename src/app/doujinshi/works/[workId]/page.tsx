@@ -1,8 +1,23 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import {
+  Star,
+  Download,
+  Eye,
+  Calendar,
+  Hash,
+  ExternalLink,
+} from "lucide-react";
 import { Badge } from "../../../../components/ui/badge";
 import { Button } from "../../../../components/ui/button";
-import { Card, CardContent, CardHeader } from "../../../../components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../../../components/ui/card";
+import { Separator } from "../../../../components/ui/separator";
+import { Alert, AlertDescription } from "../../../../components/ui/alert";
 import { pagesPath } from "../../../../lib/$path";
 import { urlObjectToString } from "../../../../lib/path/urlObjectToString";
 import { getWorkById } from "../../../../server/actions/works";
@@ -30,189 +45,335 @@ export default async function WorkPage({ params }: WorkPageProps) {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("ja-JP");
+    return new Date(dateString).toLocaleDateString("ja-JP", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
   };
 
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="grid gap-8 lg:grid-cols-3">
-        {/* メイン画像エリア */}
-        <div className="lg:col-span-2">
-          <div className="space-y-6">
-            {/* 作品画像 */}
-            <div className="flex flex-col items-center space-y-4">
-              <img
-                src={work.largeImageUrl}
-                alt={work.title}
-                className="max-w-full h-auto rounded-lg shadow-lg"
-              />
+  const discountRate =
+    work.listPrice !== work.price
+      ? Math.round(((work.listPrice - work.price) / work.listPrice) * 100)
+      : 0;
 
-              {/* アフィリエイトボタン */}
-              <div className="flex flex-col items-center space-y-2">
-                <Button size="lg" asChild className="w-full max-w-sm">
-                  <a
-                    href={work.affiliateUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg text-lg"
-                  >
-                    {formatPrice(work.price)}で購入する
-                  </a>
-                </Button>
-                {work.listPrice !== work.price && (
-                  <p className="text-sm text-gray-500 line-through">
-                    定価: {formatPrice(work.listPrice)}
-                  </p>
+  const ratingStars = work.reviewAverageScore
+    ? Math.round(work.reviewAverageScore)
+    : 0;
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
+        {/* ヘッダー部分 */}
+        <div className="mb-8">
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* 左側：画像とアクション */}
+            <div className="lg:w-1/2">
+              <div className="relative">
+                <img
+                  src={work.largeImageUrl}
+                  alt={work.title}
+                  className="w-full h-auto"
+                />
+                {discountRate > 0 && (
+                  <div className="absolute top-4 left-4">
+                    <Badge
+                      variant="destructive"
+                      className="bg-red-500 text-white font-bold text-lg px-3 py-1"
+                    >
+                      {discountRate}% OFF
+                    </Badge>
+                  </div>
                 )}
               </div>
             </div>
 
-            {/* 試し読み画像 */}
-            {work.sampleLargeImages.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <h2 className="text-2xl font-semibold">試し読み</h2>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid gap-4">
-                    {work.sampleLargeImages
-                      .sort((a, b) => a.order - b.order)
-                      .map((image, index) => (
-                        <img
-                          key={`${image.workId}-${image.order}`}
-                          src={image.imageUrl}
-                          alt={`${work.title} サンプル ${index + 1}`}
-                          className="w-full rounded border"
-                        />
-                      ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+            {/* 右側：作品情報 */}
+            <div className="lg:w-1/2">
+              <div className="space-y-6">
+                {/* タイトルと評価 */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-2xl font-bold leading-tight">
+                      {work.title}
+                    </CardTitle>
+                    {work.reviewCount && work.reviewAverageScore && (
+                      <div className="flex items-center space-x-2 text-sm">
+                        <div className="flex space-x-1">
+                          <Star
+                            className={`w-4 h-4 ${
+                              ratingStars >= 1
+                                ? "text-yellow-400 fill-current"
+                                : "text-gray-300"
+                            }`}
+                          />
+                          <Star
+                            className={`w-4 h-4 ${
+                              ratingStars >= 2
+                                ? "text-yellow-400 fill-current"
+                                : "text-gray-300"
+                            }`}
+                          />
+                          <Star
+                            className={`w-4 h-4 ${
+                              ratingStars >= 3
+                                ? "text-yellow-400 fill-current"
+                                : "text-gray-300"
+                            }`}
+                          />
+                          <Star
+                            className={`w-4 h-4 ${
+                              ratingStars >= 4
+                                ? "text-yellow-400 fill-current"
+                                : "text-gray-300"
+                            }`}
+                          />
+                          <Star
+                            className={`w-4 h-4 ${
+                              ratingStars >= 5
+                                ? "text-yellow-400 fill-current"
+                                : "text-gray-300"
+                            }`}
+                          />
+                        </div>
+                        <span className="font-semibold">
+                          {work.reviewAverageScore.toFixed(1)}
+                        </span>
+                        <span className="text-gray-500">
+                          ({work.reviewCount}件のレビュー)
+                        </span>
+                      </div>
+                    )}
+                  </CardHeader>
+
+                  <CardContent className="space-y-4">
+                    {/* 基本情報 */}
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div className="flex items-center space-x-2">
+                        <Calendar className="w-4 h-4 text-gray-500" />
+                        <span className="text-gray-600">発売日:</span>
+                        <span className="font-medium">
+                          {formatDate(work.releaseDate)}
+                        </span>
+                      </div>
+
+                      {work.volume && (
+                        <div className="flex items-center space-x-2">
+                          <Hash className="w-4 h-4 text-gray-500" />
+                          <span className="text-gray-600">ページ数:</span>
+                          <span className="font-medium">
+                            {work.volume}ページ
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    <Separator />
+
+                    {/* 制作者情報 */}
+                    {work.makers.length > 0 && (
+                      <div>
+                        <h3 className="font-semibold text-gray-700 mb-2">
+                          制作者
+                        </h3>
+                        <div className="space-y-2">
+                          {work.makers
+                            .map(({ maker }) => maker)
+                            .filter((maker) => maker !== null)
+                            .map((maker) => (
+                              <div
+                                key={maker.id}
+                                className="flex items-center space-x-2"
+                              >
+                                <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                                  {maker.name.charAt(0)}
+                                </div>
+                                <Link
+                                  href={urlObjectToString(
+                                    pagesPath.doujinshi.makers
+                                      ._makerId(maker.id)
+                                      .$url()
+                                  )}
+                                  className="text-blue-600 hover:text-blue-800 hover:underline font-medium"
+                                >
+                                  {maker.name}
+                                </Link>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <Separator />
+
+                    {/* レビュー情報 */}
+                    {work.reviewCount && work.reviewAverageScore && (
+                      <div>
+                        <h3 className="font-semibold text-gray-700 mb-2">
+                          レビュー情報
+                        </h3>
+                        <div className="space-y-2">
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">レビュー数:</span>
+                            <span>{work.reviewCount}件</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">平均評価:</span>
+                            <span className="flex items-center space-x-1">
+                              <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                              <span>{work.reviewAverageScore.toFixed(1)}</span>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <Separator />
+
+                    {/* ジャンル */}
+                    {work.genres.length > 0 && (
+                      <div>
+                        <h3 className="font-semibold text-gray-700 mb-2">
+                          ジャンル・タグ
+                        </h3>
+                        <div className="flex flex-wrap gap-2">
+                          {work.genres
+                            .filter((genre) => genre.genre)
+                            .map((genre) => (
+                              <Badge
+                                key={genre.genreId}
+                                variant="secondary"
+                                className="hover:bg-gray-300 cursor-pointer transition-colors"
+                              >
+                                {genre.genre?.name}
+                              </Badge>
+                            ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* シリーズ */}
+                    {work.series.length > 0 && (
+                      <div>
+                        <h3 className="font-semibold text-gray-700 mb-2">
+                          シリーズ
+                        </h3>
+                        <div className="space-y-2">
+                          {work.series
+                            .map(({ series }) => series)
+                            .filter((series) => series !== null)
+                            .map((series) => (
+                              <Link
+                                key={series.id}
+                                href={urlObjectToString(
+                                  pagesPath.doujinshi.series
+                                    ._seriesId(series.id)
+                                    .$url()
+                                )}
+                              >
+                                <Badge
+                                  variant="outline"
+                                  className="cursor-pointer hover:bg-gray-100 border-blue-300 text-blue-700"
+                                >
+                                  📚 {series.name}
+                                </Badge>
+                              </Link>
+                            ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <Separator />
+
+                    {/* 購入ボタン */}
+                    <div>
+                      <Button
+                        size="lg"
+                        asChild
+                        className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold"
+                      >
+                        <a
+                          href={work.affiliateUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center space-x-2"
+                        >
+                          <Download className="w-5 h-5" />
+                          <span>{formatPrice(work.price)}で購入する</span>
+                          <ExternalLink className="w-4 h-4" />
+                        </a>
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* サイドバー情報 */}
-        <div className="space-y-6">
-          {/* 作品情報 */}
-          <Card>
-            <CardHeader>
-              <h1 className="text-2xl font-bold">{work.title}</h1>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {/* 基本情報 */}
-              <div className="space-y-2">
-                <p>
-                  <span className="font-semibold">価格:</span>{" "}
-                  {formatPrice(work.price)}
-                </p>
-                <p>
-                  <span className="font-semibold">発売日:</span>{" "}
-                  {formatDate(work.releaseDate)}
-                </p>
-                {work.volume && (
-                  <p>
-                    <span className="font-semibold">ページ数:</span>{" "}
-                    {work.volume}ページ
-                  </p>
-                )}
-                {work.reviewCount && work.reviewAverageScore && (
-                  <p>
-                    <span className="font-semibold">評価:</span>★
-                    {work.reviewAverageScore.toFixed(1)} ({work.reviewCount}件)
-                  </p>
-                )}
+        {/* 試し読みセクション */}
+        <div className="mb-12">
+          {work.sampleLargeImages.length > 0 ? (
+            <div className="space-y-4">
+              <div className="flex items-center space-x-2 mb-6">
+                <Eye className="w-5 h-5" />
+                <span className="text-lg font-semibold">
+                  試し読み ({work.sampleLargeImages.length}枚)
+                </span>
               </div>
 
-              {/* ジャンル */}
-              {work.genres.length > 0 && (
-                <div>
-                  <p className="font-semibold mb-2">ジャンル:</p>
-                  <div className="flex flex-wrap gap-1">
-                    {work.genres
-                      .filter((genre) => genre.genre)
-                      .map((genre) => (
-                        <Badge key={genre.genreId} variant="secondary">
-                          {genre.genre?.name}
-                        </Badge>
-                      ))}
-                  </div>
-                </div>
-              )}
+              <div className="space-y-2">
+                {work.sampleLargeImages
+                  .sort((a, b) => a.order - b.order)
+                  .map((image, index) => (
+                    <div
+                      key={`${image.workId}-${image.order}`}
+                      className="w-full"
+                    >
+                      <img
+                        src={image.imageUrl}
+                        alt={`${work.title} サンプル ${index + 1}`}
+                        className="w-full h-auto rounded-lg border shadow-sm"
+                      />
+                    </div>
+                  ))}
+              </div>
+            </div>
+          ) : (
+            <Card>
+              <CardContent className="text-center py-12">
+                <Eye className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-500">試し読み画像はありません</p>
+              </CardContent>
+            </Card>
+          )}
+        </div>
 
-              {/* 制作者 */}
-              {work.makers.length > 0 && (
-                <div>
-                  <p className="font-semibold mb-2">制作者:</p>
-                  <div className="space-y-1">
-                    {work.makers
-                      .map(({ maker }) => maker)
-                      .filter((maker) => maker !== null)
-                      .map((maker) => (
-                        <div key={maker.id}>
-                          <Link
-                            href={urlObjectToString(
-                              pagesPath.doujinshi.makers
-                                ._makerId(maker.id)
-                                .$url(),
-                            )}
-                            className="text-blue-600 hover:text-blue-800 hover:underline"
-                          >
-                            {maker.name}
-                          </Link>
-                        </div>
-                      ))}
-                  </div>
-                </div>
-              )}
-
-              {/* シリーズ */}
-              {work.series.length > 0 && (
-                <div>
-                  <p className="font-semibold mb-2">シリーズ:</p>
-                  <div className="space-y-1">
-                    {work.series
-                      .map(({ series }) => series)
-                      .filter((series) => series !== null)
-                      .map((series) => (
-                        <div key={series.id}>
-                          <Link
-                            href={urlObjectToString(
-                              pagesPath.doujinshi.series
-                                ._seriesId(series.id)
-                                .$url(),
-                            )}
-                          >
-                            <Badge
-                              variant="outline"
-                              className="cursor-pointer hover:bg-gray-100"
-                            >
-                              {series.name}
-                            </Badge>
-                          </Link>
-                        </div>
-                      ))}
-                  </div>
-                </div>
-              )}
+        {/* 関連作品セクション */}
+        <div className="mb-12">
+          <Card>
+            <CardHeader>
+              <CardTitle>関連作品</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center py-12">
+                <p className="text-gray-500">関連作品機能は準備中です</p>
+                <p className="text-sm text-gray-400 mt-2">
+                  同じ制作者の作品やシリーズ作品を表示予定です
+                </p>
+              </div>
             </CardContent>
           </Card>
+        </div>
 
-          {/* 購入ボタン（モバイル用） */}
-          <Card className="lg:hidden">
-            <CardContent className="pt-6">
-              <Button size="lg" asChild className="w-full">
-                <a
-                  href={work.affiliateUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-red-600 hover:bg-red-700"
-                >
-                  {formatPrice(work.price)}で購入する
-                </a>
-              </Button>
-            </CardContent>
-          </Card>
+        {/* フッター注意書き */}
+        <div className="mt-12 text-center text-sm text-gray-500 space-y-2">
+          <Alert className="border-gray-200 bg-gray-50">
+            <AlertDescription>
+              ⚠️
+              この作品の著作権は制作者に帰属します。正規の販売サイトからのみご購入ください。
+            </AlertDescription>
+          </Alert>
         </div>
       </div>
     </div>
@@ -230,11 +391,32 @@ export async function generateMetadata({ params }: WorkPageProps) {
     };
   }
 
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat("ja-JP", {
+      style: "currency",
+      currency: "JPY",
+    }).format(price);
+  };
+
   return {
-    title: `(同人誌) ${work.title}`,
-    description: `${work.title}の詳細ページ。価格${new Intl.NumberFormat(
-      "ja-JP",
-      { style: "currency", currency: "JPY" },
-    ).format(work.price)}。試し読み・購入はこちらから。`,
+    title: `【同人誌】${work.title} - ${formatPrice(work.price)}`,
+    description: `${work.title}の詳細ページ。価格${formatPrice(work.price)}${
+      work.listPrice !== work.price
+        ? `（定価${formatPrice(work.listPrice)}から${Math.round(
+            ((work.listPrice - work.price) / work.listPrice) * 100
+          )}%OFF）`
+        : ""
+    }。試し読み・安全な購入はこちらから。${
+      work.reviewCount && work.reviewAverageScore
+        ? `評価★${work.reviewAverageScore.toFixed(1)}（${work.reviewCount}件）`
+        : ""
+    }`,
+    openGraph: {
+      title: `【同人誌】${work.title}`,
+      description: `${formatPrice(
+        work.price
+      )}で販売中。試し読み・購入はこちらから。`,
+      images: [work.largeImageUrl],
+    },
   };
 }
