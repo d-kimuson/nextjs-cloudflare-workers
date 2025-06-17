@@ -3,8 +3,8 @@ import { notFound } from "next/navigation";
 import { Badge } from "../../../../components/ui/badge";
 import { Card, CardContent, CardHeader } from "../../../../components/ui/card";
 import { pagesPath } from "../../../../lib/$path";
-import { getDb } from "../../../../server/db/client";
-import { makersRepository } from "../../../../server/repositories/makers.repository";
+import { urlObjectToString } from "../../../../lib/path/urlObjectToString";
+import { getMakerById } from "../../../../server/actions/makers";
 
 type MakerPageProps = {
   params: Promise<{
@@ -14,10 +14,8 @@ type MakerPageProps = {
 
 export default async function MakerPage({ params }: MakerPageProps) {
   const { makerId } = await params;
-  const db = getDb();
-  const makersRepo = makersRepository(db);
 
-  const maker = await makersRepo.findById(Number.parseInt(makerId, 10));
+  const maker = await getMakerById(Number.parseInt(makerId, 10));
 
   if (!maker) {
     notFound();
@@ -64,7 +62,9 @@ export default async function MakerPage({ params }: MakerPageProps) {
                 .map((work) => (
                   <Link
                     key={work.id}
-                    href={pagesPath.doujinshi.works._workId(work.id).$url()}
+                    href={urlObjectToString(
+                      pagesPath.doujinshi.works._workId(work.id).$url(),
+                    )}
                     className="group"
                   >
                     <Card className="transition-all duration-200 hover:shadow-lg hover:scale-105">
@@ -128,9 +128,8 @@ export default async function MakerPage({ params }: MakerPageProps) {
 
 export async function generateMetadata({ params }: MakerPageProps) {
   const { makerId } = await params;
-  const db = getDb();
-  const makersRepo = makersRepository(db);
-  const maker = await makersRepo.findById(Number.parseInt(makerId, 10));
+
+  const maker = await getMakerById(Number.parseInt(makerId, 10));
 
   if (!maker) {
     return {

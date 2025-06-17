@@ -4,8 +4,8 @@ import { Badge } from "../../../../components/ui/badge";
 import { Button } from "../../../../components/ui/button";
 import { Card, CardContent, CardHeader } from "../../../../components/ui/card";
 import { pagesPath } from "../../../../lib/$path";
-import { getDb } from "../../../../server/db/client";
-import { worksRepository } from "../../../../server/repositories/works.repository";
+import { urlObjectToString } from "../../../../lib/path/urlObjectToString";
+import { getWorkById } from "../../../../server/actions/works";
 
 type WorkPageProps = {
   params: Promise<{
@@ -15,10 +15,8 @@ type WorkPageProps = {
 
 export default async function WorkPage({ params }: WorkPageProps) {
   const { workId } = await params;
-  const db = getDb();
-  const workRepo = worksRepository(db);
 
-  const work = await workRepo.findById(workId);
+  const work = await getWorkById(workId);
 
   if (!work) {
     notFound();
@@ -153,9 +151,11 @@ export default async function WorkPage({ params }: WorkPageProps) {
                       .map((maker) => (
                         <div key={maker.id}>
                           <Link
-                            href={pagesPath.doujinshi.makers
-                              ._makerId(maker.id)
-                              .$url()}
+                            href={urlObjectToString(
+                              pagesPath.doujinshi.makers
+                                ._makerId(maker.id)
+                                .$url(),
+                            )}
                             className="text-blue-600 hover:text-blue-800 hover:underline"
                           >
                             {maker.name}
@@ -177,9 +177,11 @@ export default async function WorkPage({ params }: WorkPageProps) {
                       .map((series) => (
                         <div key={series.id}>
                           <Link
-                            href={pagesPath.doujinshi.series
-                              ._seriesId(series.id)
-                              .$url()}
+                            href={urlObjectToString(
+                              pagesPath.doujinshi.series
+                                ._seriesId(series.id)
+                                .$url(),
+                            )}
                           >
                             <Badge
                               variant="outline"
@@ -219,9 +221,8 @@ export default async function WorkPage({ params }: WorkPageProps) {
 
 export async function generateMetadata({ params }: WorkPageProps) {
   const { workId } = await params;
-  const db = getDb();
-  const workRepo = worksRepository(db);
-  const work = await workRepo.findById(workId);
+
+  const work = await getWorkById(workId);
 
   if (!work) {
     return {

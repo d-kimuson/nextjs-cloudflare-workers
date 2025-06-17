@@ -3,8 +3,11 @@ import { notFound } from "next/navigation";
 import { Badge } from "../../../../components/ui/badge";
 import { Card, CardContent, CardHeader } from "../../../../components/ui/card";
 import { pagesPath } from "../../../../lib/$path";
-import { getDb } from "../../../../server/db/client";
-import { seriesRepository } from "../../../../server/repositories/series.repository";
+import { urlObjectToString } from "../../../../lib/path/urlObjectToString";
+import {
+  getSeriesBasicById,
+  getSeriesById,
+} from "../../../../server/actions/series";
 
 type SeriesPageProps = {
   params: Promise<{
@@ -14,12 +17,8 @@ type SeriesPageProps = {
 
 export default async function SeriesPage({ params }: SeriesPageProps) {
   const { seriesId } = await params;
-  const db = getDb();
-  const seriesRepo = seriesRepository(db);
 
-  const series = await seriesRepo.findByIdWithWorks(
-    Number.parseInt(seriesId, 10),
-  );
+  const series = await getSeriesById(Number.parseInt(seriesId, 10));
 
   if (!series) {
     notFound();
@@ -66,7 +65,9 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
                 .map((work) => (
                   <Link
                     key={work.id}
-                    href={pagesPath.doujinshi.works._workId(work.id).$url()}
+                    href={urlObjectToString(
+                      pagesPath.doujinshi.works._workId(work.id).$url(),
+                    )}
                     className="group"
                   >
                     <Card className="transition-all duration-200 hover:shadow-lg hover:scale-105">
@@ -130,9 +131,8 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
 
 export async function generateMetadata({ params }: SeriesPageProps) {
   const { seriesId } = await params;
-  const db = getDb();
-  const seriesRepo = seriesRepository(db);
-  const series = await seriesRepo.findById(Number.parseInt(seriesId, 10));
+
+  const series = await getSeriesBasicById(Number.parseInt(seriesId, 10));
 
   if (!series) {
     return {

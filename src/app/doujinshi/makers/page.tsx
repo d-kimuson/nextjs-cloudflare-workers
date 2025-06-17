@@ -1,14 +1,11 @@
 import Link from "next/link";
 import { Card, CardContent, CardHeader } from "../../../components/ui/card";
 import { pagesPath } from "../../../lib/$path";
-import { getDb } from "../../../server/db/client";
-import { makersRepository } from "../../../server/repositories/makers.repository";
+import { urlObjectToString } from "../../../lib/path/urlObjectToString";
+import { getAllMakers } from "../../../server/actions/makers";
 
 export default async function MakersPage() {
-  const db = getDb();
-  const makersRepo = makersRepository(db);
-
-  const makers = await makersRepo.findAll(100); // 最大100作者を取得
+  const makers = await getAllMakers(100); // 最大100作者を取得
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -27,7 +24,9 @@ export default async function MakersPage() {
             {makers.map((maker) => (
               <Link
                 key={maker.id}
-                href={pagesPath.doujinshi.makers._makerId(maker.id).$url()}
+                href={urlObjectToString(
+                  pagesPath.doujinshi.makers._makerId(maker.id).$url(),
+                )}
                 className="group"
               >
                 <Card className="h-full transition-all duration-200 hover:shadow-lg hover:scale-105">
@@ -117,9 +116,7 @@ export default async function MakersPage() {
 }
 
 export async function generateMetadata() {
-  const db = getDb();
-  const makersRepo = makersRepository(db);
-  const makers = await makersRepo.findAll(5); // メタデータ用に少数取得
+  const makers = await getAllMakers(5); // メタデータ用に少数取得
 
   return {
     title: "作者一覧 - 同人誌アフィリエイトサイト",

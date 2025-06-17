@@ -5,11 +5,9 @@
   "scripts": {
     "dev": "run-p 'dev:*'",
     "dev:next": "next dev --turbopack",
-    "dev:path": "pnpm build:path --watch",
+    "dev:path": "pathpida --ignorePath .gitignore --watch --enableStatic",
     "dev:docs": "redocly preview-docs",
-    "build": "pnpm build:path && pnpm build:next",
-    "build:next": "next build",
-    "build:path": "pathpida --ignorePath .gitignore --enableStatic",
+    "build": "next build",
     "typecheck": "tsc -p . --noEmit",
     "start": "next start",
     "lint": "run-s 'lint:*'",
