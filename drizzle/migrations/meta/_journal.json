@@ -8,6 +8,13 @@
       "when": 1750099714707,
       "tag": "0000_fair_jigsaw",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1750220815532,
+      "tag": "0001_stale_magus",
+      "breakpoints": true
     }
   ]
 }

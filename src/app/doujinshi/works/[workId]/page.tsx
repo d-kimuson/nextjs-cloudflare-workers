@@ -69,8 +69,16 @@ export default async function WorkPage({ params }: WorkPageProps) {
           <div className="flex flex-col lg:flex-row gap-8">
             {/* 左側：画像とアクション */}
             <div className="lg:w-1/2">
-              {/* 画像上の購入リンク */}
-              <div className="mb-3">
+              <div className="relative">
+                <img
+                  src={work.largeImageUrl}
+                  alt={work.title}
+                  className="w-full h-auto"
+                />
+              </div>
+
+              {/* 画像下の購入リンク */}
+              <div className="mt-3">
                 <Button
                   asChild
                   className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold"
@@ -82,44 +90,6 @@ export default async function WorkPage({ params }: WorkPageProps) {
                     className="flex items-center justify-center space-x-2"
                   >
                     <span>この作品を今すぐ入手</span>
-                    <ExternalLink className="w-4 h-4" />
-                  </a>
-                </Button>
-              </div>
-
-              <div className="relative">
-                <img
-                  src={work.largeImageUrl}
-                  alt={work.title}
-                  className="w-full h-auto"
-                />
-                {discountRate > 0 && (
-                  <div className="absolute top-4 left-4">
-                    <Badge
-                      variant="destructive"
-                      className="bg-red-500 text-white font-bold text-lg px-3 py-1"
-                    >
-                      {discountRate}% OFF
-                    </Badge>
-                  </div>
-                )}
-              </div>
-
-              {/* 画像下の購入リンク */}
-              <div className="mt-3">
-                <Button
-                  variant="outline"
-                  asChild
-                  className="w-full border-orange-300 text-orange-600 hover:bg-orange-50"
-                >
-                  <a
-                    href={work.affiliateUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center space-x-2"
-                  >
-                    <Download className="w-4 h-4" />
-                    <span>FANZA で購入</span>
                     <ExternalLink className="w-4 h-4" />
                   </a>
                 </Button>
@@ -322,70 +292,6 @@ export default async function WorkPage({ params }: WorkPageProps) {
                         </div>
                       </div>
                     )}
-
-                    <Separator />
-
-                    {/* 価格・購入情報 */}
-                    <div className="space-y-4">
-                      {/* 価格表示 */}
-                      <Card className="bg-blue-50 border-blue-200">
-                        <CardContent className="p-4">
-                          <div className="space-y-2">
-                            <div className="flex justify-between items-center">
-                              <span className="text-gray-600">FANZA価格:</span>
-                              <span className="text-2xl font-bold text-blue-600">
-                                {formatPrice(work.price)}
-                              </span>
-                            </div>
-                            {discountRate > 0 && (
-                              <div className="text-sm text-green-600">
-                                定価{formatPrice(work.listPrice)}から
-                                {discountRate}%OFF
-                              </div>
-                            )}
-                            <div className="text-xs text-gray-500">
-                              ※価格はキャンペーン等により変動します。
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-
-                      {/* メイン購入ボタン */}
-                      <Button
-                        size="lg"
-                        asChild
-                        className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold text-lg py-6"
-                      >
-                        <a
-                          href={work.affiliateUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center justify-center space-x-2"
-                        >
-                          <Download className="w-6 h-6" />
-                          <span>FANZA で今すぐ購入</span>
-                          <ExternalLink className="w-5 h-5" />
-                        </a>
-                      </Button>
-
-                      {/* サブ購入ボタン */}
-                      <Button
-                        variant="outline"
-                        size="lg"
-                        asChild
-                        className="w-full border-red-300 text-red-600 hover:bg-red-50"
-                      >
-                        <a
-                          href={work.affiliateUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center justify-center space-x-2"
-                        >
-                          <span>正規版を {formatPrice(work.price)} で購入</span>
-                          <ExternalLink className="w-4 h-4" />
-                        </a>
-                      </Button>
-                    </div>
                   </CardContent>
                 </Card>
               </div>
@@ -421,34 +327,88 @@ export default async function WorkPage({ params }: WorkPageProps) {
               {/* 試し読み後の購入誘導 */}
               <div className="mt-8">
                 <Card className="bg-gradient-to-r from-red-50 to-pink-50 border-red-200">
-                  <CardContent className="p-6 text-center">
-                    <h3 className="text-xl font-bold text-red-700 mb-3">
+                  <CardContent className="p-8 text-center">
+                    <h3 className="text-3xl font-bold text-red-700 mb-4">
                       続きが気になる？今すぐ正規版をダウンロード！
                     </h3>
-                    <p className="text-gray-600 mb-4">
-                      安全・確実なFANZA公式サイトでご購入いただけます
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+
+                    {/* キャンペーン情報を先に表示 */}
+                    {discountRate > 0 && (
+                      <div className="bg-gradient-to-r from-green-500 to-green-600 text-white p-4 rounded-lg mb-6 max-w-lg mx-auto">
+                        <div className="flex items-center justify-center space-x-2 mb-2">
+                          <span className="text-2xl">🎉</span>
+                          <span className="text-xl font-bold">
+                            限定キャンペーン開催中！
+                          </span>
+                        </div>
+                        <div className="text-lg font-semibold">
+                          定価{formatPrice(work.listPrice)}から{discountRate}
+                          %OFF
+                        </div>
+                      </div>
+                    )}
+
+                    {/* 価格表示 */}
+                    <Card className="bg-white border-red-200 mb-6 max-w-lg mx-auto shadow-lg">
+                      <CardContent className="p-6">
+                        <div className="space-y-3">
+                          <div className="text-center">
+                            <div className="text-2xl text-gray-600 font-medium mb-3">
+                              FANZA価格
+                            </div>
+                            {discountRate > 0 ? (
+                              <div className="space-y-2">
+                                <div className="text-xl text-gray-400 line-through">
+                                  {formatPrice(work.listPrice)}
+                                </div>
+                                <div className="text-4xl font-bold text-red-600">
+                                  {formatPrice(work.price)}
+                                </div>
+                                <div className="text-lg text-green-600 font-semibold">
+                                  {discountRate}%OFF
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="text-4xl font-bold text-red-600">
+                                {formatPrice(work.price)}
+                              </div>
+                            )}
+                          </div>
+                          <div className="text-sm text-gray-500 text-center">
+                            ※価格はキャンペーン等により変動します。
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <div className="max-w-lg mx-auto">
                       <Button
+                        size="lg"
                         asChild
-                        className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold"
+                        className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold text-xl py-8"
                       >
                         <a
                           href={work.affiliateUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center justify-center space-x-2"
+                          className="flex items-center justify-center space-x-3"
                         >
-                          <Download className="w-5 h-5" />
-                          <span>{formatPrice(work.price)}で今すぐ購入</span>
+                          <Download className="w-7 h-7" />
+                          <span>FANZA で今すぐ購入</span>
+                          <ExternalLink className="w-6 h-6" />
                         </a>
                       </Button>
+
+                      {/* 違法ダウンロード警告 */}
+                      <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                        <p className="text-sm text-red-700 text-center font-medium">
+                          ⚠️ 違法サイト利用は危険です
+                        </p>
+                        <p className="text-xs text-red-600 text-center mt-1">
+                          Torrent・割れサイトでの入手は著作権法違反で損害賠償請求のリスクがあります。正規サイトで購入しましょう！
+                        </p>
+                      </div>
                     </div>
-                    {discountRate > 0 && (
-                      <p className="text-sm text-green-600 mt-2 font-semibold">
-                        🎉 今なら{discountRate}%OFF！
-                      </p>
-                    )}
                   </CardContent>
                 </Card>
               </div>
@@ -479,51 +439,6 @@ export default async function WorkPage({ params }: WorkPageProps) {
             </CardContent>
           </Card>
         </div>
-
-        {/* 違法ダウンロード警告 */}
-        <div className="mt-12 space-y-4">
-          <Alert className="border-red-300 bg-red-50">
-            <AlertDescription className="text-center">
-              <h3 className="font-bold text-red-700 text-lg mb-2">
-                Torrentや違法サイトでの作品ダウンロードは犯罪です
-              </h3>
-              <p className="text-red-600 mb-3">
-                これらの作品を購入せずTorrentや違法ダウンロードなどの手段で入手することは明確な犯罪行為です。
-                作品を不正に入手した場合、販売者または権利者から著作権法違反で損害賠償請求を受ける場合があります。
-              </p>
-              <Button
-                asChild
-                className="bg-red-600 hover:bg-red-700 text-white font-bold"
-              >
-                <a
-                  href={work.affiliateUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center space-x-2"
-                >
-                  <span>正規版を安全に購入</span>
-                  <ExternalLink className="w-4 h-4" />
-                </a>
-              </Button>
-            </AlertDescription>
-          </Alert>
-
-          <Alert className="border-gray-200 bg-gray-50">
-            <AlertDescription className="text-center text-xs text-gray-500">
-              <p className="mb-2">
-                この作品の海賊版を正規ルート以外の方法で入手、所持した場合、作品の販売者または権利者より損害賠償請求が行われる場合があります。
-                <br />
-                販売元や行政機関より情報開示を求められた場合、プライバシーポリシーに定める範囲内でアクセス情報等を提供いたします。
-              </p>
-              <p className="mb-2">
-                当サイトは主に違法ダウンロードを行うユーザーや違法であることを知らないユーザーに対し、正規の方法での購入を促すことを目的としたサイトです。
-              </p>
-              <p>
-                ※当サイト掲載の画像やテキストは全て販売元の許可を得て引用・掲載しており、違法コンテンツや違法ダウンロードサイトへの誘導等はございません。
-              </p>
-            </AlertDescription>
-          </Alert>
-        </div>
       </div>
     </div>
   );
@@ -551,7 +466,6 @@ export async function generateMetadata({ params }: WorkPageProps) {
   const rjCode = work.id; // work.idがRJ番号
   const makerName = work.makers.length > 0 ? work.makers[0]?.name || "" : "";
 
-  // 違法サイト風のタイトル形式
   const title = `[${rjCode}][${makerName}] ${work.title}`;
 
   return {

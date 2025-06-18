@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, like, desc } from "drizzle-orm";
 import { z } from "zod";
 import { getCurrentDate } from "../../lib/date/currentDate";
 import type { DB } from "../db/client";
@@ -204,10 +204,51 @@ export const worksRepository = (db: DB) => {
     });
   };
 
+  const searchByTitle = async (
+    searchTerm: string,
+    options?: { limit?: number }
+  ) => {
+    const limit = options?.limit ?? 10;
+
+    // 検索語が空の場合は空配列を返す
+    if (!searchTerm.trim()) {
+      return [];
+    }
+
+    // パフォーマンスのため、検索語が2文字未満の場合は検索しない
+    if (searchTerm.trim().length < 2) {
+      return [];
+    }
+
+    return db.query.worksTable.findMany({
+      where: like(worksTable.title, `%${searchTerm}%`),
+      limit,
+      orderBy: [desc(worksTable.createdAt)], // 新しい順で表示
+      with: {
+        genres: {
+          with: {
+            genre: true,
+          },
+        },
+        makers: {
+          with: {
+            maker: true,
+          },
+        },
+        series: {
+          with: {
+            series: true,
+          },
+        },
+      },
+    });
+  };
+
   return {
     createOrUpdate,
     findById,
     findByGenreId,
+    searchByTitle,
   };
 };
 

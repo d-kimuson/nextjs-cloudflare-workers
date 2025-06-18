@@ -37,3 +37,17 @@ export const getWorksByGenreId = cache(
       .map((work) => transformToWorkItem(work as RawWork));
   }
 );
+
+// タイトルから作品を検索するServer Action
+export const searchWorksByTitle = cache(
+  async (
+    searchTerm: string,
+    options?: { limit?: number }
+  ): Promise<WorkItem[]> => {
+    const db = await getDb();
+    const worksRepo = worksRepository(db);
+    const rawWorks = await worksRepo.searchByTitle(searchTerm, options);
+
+    return rawWorks.map((work) => transformToWorkItem(work as RawWork));
+  }
+);

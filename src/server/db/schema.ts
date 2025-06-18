@@ -5,25 +5,33 @@ import {
   real,
   sqliteTable,
   text,
+  index,
 } from "drizzle-orm/sqlite-core";
 
 // 作品テーブル
-export const worksTable = sqliteTable("works", {
-  id: text().primaryKey(), // DMM APIのcontent_id
-  title: text().notNull(),
-  volume: int(), // ページ数
-  reviewCount: int(), // レビュー数
-  reviewAverageScore: real(), // レビュー平均スコア
-  affiliateUrl: text().notNull(), // アフィリエイトURL
-  listImageUrl: text().notNull(), // リストページ用画像URL
-  smallImageUrl: text(), // 画像URL(小)
-  largeImageUrl: text().notNull(), // 画像URL(大)
-  price: int().notNull(), // 価格
-  listPrice: int().notNull(), // 現在価格
-  releaseDate: text().notNull(), // date
-  createdAt: text().default("CURRENT_TIMESTAMP"),
-  updatedAt: text().default("CURRENT_TIMESTAMP"),
-});
+export const worksTable = sqliteTable(
+  "works",
+  {
+    id: text().primaryKey(), // DMM APIのcontent_id
+    title: text().notNull(),
+    volume: int(), // ページ数
+    reviewCount: int(), // レビュー数
+    reviewAverageScore: real(), // レビュー平均スコア
+    affiliateUrl: text().notNull(), // アフィリエイトURL
+    listImageUrl: text().notNull(), // リストページ用画像URL
+    smallImageUrl: text(), // 画像URL(小)
+    largeImageUrl: text().notNull(), // 画像URL(大)
+    price: int().notNull(), // 価格
+    listPrice: int().notNull(), // 現在価格
+    releaseDate: text().notNull(), // date
+    createdAt: text().default("CURRENT_TIMESTAMP"),
+    updatedAt: text().default("CURRENT_TIMESTAMP"),
+  },
+  (table) => [
+    index("title_search_idx").on(table.title), // タイトル検索用インデックス
+    index("created_at_idx").on(table.createdAt), // 作成日ソート用インデックス
+  ]
+);
 
 export const worksTableRelations = relations(worksTable, ({ many }) => ({
   genres: many(workGenreTable),
@@ -42,7 +50,7 @@ export const sampleSmallImagesTable = sqliteTable(
     order: int().notNull(), // 表示順序
     createdAt: text().default("CURRENT_TIMESTAMP"),
   },
-  (t) => [primaryKey({ columns: [t.workId, t.order] })],
+  (t) => [primaryKey({ columns: [t.workId, t.order] })]
 );
 
 export const sampleSmallImagesTableRelations = relations(
@@ -52,7 +60,7 @@ export const sampleSmallImagesTableRelations = relations(
       fields: [sampleSmallImagesTable.workId],
       references: [worksTable.id],
     }),
-  }),
+  })
 );
 
 // 試し読み画像(大)テーブル
@@ -64,7 +72,7 @@ export const sampleLargeImagesTable = sqliteTable(
     order: int().notNull(), // 表示順序
     createdAt: text().default("CURRENT_TIMESTAMP"),
   },
-  (t) => [primaryKey({ columns: [t.workId, t.order] })],
+  (t) => [primaryKey({ columns: [t.workId, t.order] })]
 );
 
 export const sampleLargeImagesTableRelations = relations(
@@ -74,7 +82,7 @@ export const sampleLargeImagesTableRelations = relations(
       fields: [sampleLargeImagesTable.workId],
       references: [worksTable.id],
     }),
-  }),
+  })
 );
 
 // genreテーブル
@@ -95,7 +103,7 @@ export const workGenreTable = sqliteTable(
     genreId: int().references(() => genresTable.id),
     createdAt: text().default("CURRENT_TIMESTAMP"),
   },
-  (t) => [primaryKey({ columns: [t.workId, t.genreId] })],
+  (t) => [primaryKey({ columns: [t.workId, t.genreId] })]
 );
 
 export const workGenreTableRelations = relations(workGenreTable, ({ one }) => ({
@@ -128,7 +136,7 @@ export const workMakerTable = sqliteTable(
     makerId: int().references(() => makersTable.id),
     createdAt: text().default("CURRENT_TIMESTAMP"),
   },
-  (t) => [primaryKey({ columns: [t.workId, t.makerId] })],
+  (t) => [primaryKey({ columns: [t.workId, t.makerId] })]
 );
 
 export const workMakerTableRelations = relations(workMakerTable, ({ one }) => ({
@@ -160,7 +168,7 @@ export const workSeriesTable = sqliteTable(
     seriesId: int().references(() => seriesTable.id),
     createdAt: text().default("CURRENT_TIMESTAMP"),
   },
-  (t) => [primaryKey({ columns: [t.workId, t.seriesId] })],
+  (t) => [primaryKey({ columns: [t.workId, t.seriesId] })]
 );
 
 export const workSeriesTableRelations = relations(
@@ -174,5 +182,5 @@ export const workSeriesTableRelations = relations(
       fields: [workSeriesTable.seriesId],
       references: [seriesTable.id],
     }),
-  }),
+  })
 );
