@@ -39,7 +39,7 @@ export function Footer() {
                   href="/doujinshi/makers"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  作者一覧
+                  人気作者ランキング！
                 </Link>
               </li>
             </ul>

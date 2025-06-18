@@ -23,6 +23,7 @@ import { urlObjectToString } from "../../../../lib/path/urlObjectToString";
 import {
   getWorkById,
   getRelatedWorksBySeriesIds,
+  getWorksByMakerIds,
 } from "../../../../server/actions/works";
 import { WorksList } from "../../../../components/works/WorksList";
 
@@ -46,6 +47,16 @@ export default async function WorkPage({ params }: WorkPageProps) {
   const relatedWorks =
     seriesIds.length > 0
       ? await getRelatedWorksBySeriesIds(seriesIds, {
+          limit: 6,
+          excludeWorkId: workId,
+        })
+      : [];
+
+  // 同じ作者の作品を取得
+  const makerIds = work.makers.map((m) => Number(m.id));
+  const sameAuthorWorks =
+    makerIds.length > 0
+      ? await getWorksByMakerIds(makerIds, {
           limit: 6,
           excludeWorkId: workId,
         })
@@ -447,28 +458,70 @@ export default async function WorkPage({ params }: WorkPageProps) {
           )}
         </div>
 
-        {/* 関連作品セクション */}
-        <div className="mb-12">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <span>関連作品</span>
-                {work.series.length > 0 && (
+        {/* 同じ作者の作品セクション */}
+        {sameAuthorWorks.length > 0 && (
+          <div className="mb-12">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <span>同じ作者の作品</span>
+                  <Badge variant="outline" className="text-xs">
+                    {work.makers.length > 0 ? work.makers[0]?.name : ""}
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  <WorksList
+                    works={sameAuthorWorks}
+                    layout="grid"
+                    emptyMessage="同じ作者の作品はありません"
+                  />
+                  <div className="text-center">
+                    <p className="text-sm text-gray-600 mb-4">
+                      この作者の他の作品もチェックしてみましょう
+                    </p>
+                    <div className="flex flex-wrap justify-center gap-2">
+                      {work.makers.map((maker) => (
+                        <Link
+                          key={maker.id}
+                          href={urlObjectToString(
+                            pagesPath.doujinshi.makers._makerId(maker.id).$url()
+                          )}
+                        >
+                          <Button variant="outline" size="sm">
+                            👤 {maker.name} の作品一覧を見る
+                          </Button>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* 関連作品セクション（シリーズがある場合のみ表示） */}
+        {work.series.length > 0 && (
+          <div className="mb-12">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <span>関連作品</span>
                   <Badge variant="outline" className="text-xs">
                     シリーズ作品
                   </Badge>
-                )}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {relatedWorks.length > 0 ? (
-                <div className="space-y-6">
-                  <WorksList
-                    works={relatedWorks}
-                    layout="grid"
-                    emptyMessage="関連作品はありません"
-                  />
-                  {work.series.length > 0 && (
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {relatedWorks.length > 0 ? (
+                  <div className="space-y-6">
+                    <WorksList
+                      works={relatedWorks}
+                      layout="grid"
+                      emptyMessage="関連作品はありません"
+                    />
                     <div className="text-center">
                       <p className="text-sm text-gray-600 mb-4">
                         このシリーズの他の作品も見つけてみましょう
@@ -490,39 +543,34 @@ export default async function WorkPage({ params }: WorkPageProps) {
                         ))}
                       </div>
                     </div>
-                  )}
-                </div>
-              ) : work.series.length > 0 ? (
-                <div className="text-center py-12">
-                  <p className="text-gray-500 mb-4">
-                    このシリーズの他の作品は現在登録されていません
-                  </p>
-                  <div className="flex flex-wrap justify-center gap-2">
-                    {work.series.map((series) => (
-                      <Link
-                        key={series.id}
-                        href={urlObjectToString(
-                          pagesPath.doujinshi.series._seriesId(series.id).$url()
-                        )}
-                      >
-                        <Button variant="outline" size="sm">
-                          📚 {series.name} シリーズページへ
-                        </Button>
-                      </Link>
-                    ))}
                   </div>
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <p className="text-gray-500">関連作品はありません</p>
-                  <p className="text-sm text-gray-400 mt-2">
-                    この作品はシリーズに属していません
-                  </p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <p className="text-gray-500 mb-4">
+                      このシリーズの他の作品は現在登録されていません
+                    </p>
+                    <div className="flex flex-wrap justify-center gap-2">
+                      {work.series.map((series) => (
+                        <Link
+                          key={series.id}
+                          href={urlObjectToString(
+                            pagesPath.doujinshi.series
+                              ._seriesId(series.id)
+                              .$url()
+                          )}
+                        >
+                          <Button variant="outline" size="sm">
+                            📚 {series.name} シリーズページへ
+                          </Button>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   );

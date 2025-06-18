@@ -3,19 +3,39 @@ import { Card, CardContent, CardHeader } from "../../../components/ui/card";
 import { Button } from "../../../components/ui/button";
 import { Badge } from "../../../components/ui/badge";
 import { Sidebar } from "@/components/layout/Sidebar";
-import { SiteBreadcrumb } from "@/components/layout/Breadcrumb";
-import { Users, ArrowLeft, Star, User, Award } from "lucide-react";
+import {
+  Trophy,
+  ArrowLeft,
+  Star,
+  User,
+  Award,
+  Crown,
+  Medal,
+  TrendingUp,
+} from "lucide-react";
 import { pagesPath } from "../../../lib/$path";
 import { urlObjectToString } from "../../../lib/path/urlObjectToString";
-import { getAllMakers } from "../../../server/actions/makers";
+import { getMakersRanking } from "../../../server/actions/makers";
 
 export default async function MakersPage() {
-  const makers = await getAllMakers(100); // 最大100作者を取得
+  const rankings = await getMakersRanking(100); // 最大100作者のランキングを取得
 
-  const breadcrumbItems = [
-    { label: "同人誌", href: "/doujinshi" },
-    { label: "作者一覧" },
-  ];
+  // ランキングアイコンを取得
+  const getRankIcon = (rank: number) => {
+    if (rank === 1) return <Crown className="h-5 w-5 text-yellow-500" />;
+    if (rank === 2) return <Medal className="h-5 w-5 text-gray-400" />;
+    if (rank === 3) return <Medal className="h-5 w-5 text-amber-600" />;
+    return <TrendingUp className="h-5 w-5 text-blue-500" />;
+  };
+
+  // ランクカラーを取得
+  const getRankColor = (rank: number) => {
+    if (rank === 1) return "text-yellow-600 bg-yellow-50 border-yellow-200";
+    if (rank === 2) return "text-gray-600 bg-gray-50 border-gray-200";
+    if (rank === 3) return "text-amber-600 bg-amber-50 border-amber-200";
+    if (rank <= 10) return "text-blue-600 bg-blue-50 border-blue-200";
+    return "text-slate-600 bg-slate-50 border-slate-200";
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -23,11 +43,6 @@ export default async function MakersPage() {
         <div className="flex gap-8">
           {/* メインコンテンツ */}
           <div className="flex-1 space-y-8">
-            {/* パンくずリスト */}
-            <div>
-              <SiteBreadcrumb items={breadcrumbItems} />
-            </div>
-
             {/* ページヘッダー */}
             <div className="space-y-6">
               <div className="flex items-center space-x-4">
@@ -45,83 +60,126 @@ export default async function MakersPage() {
 
               <div className="space-y-4">
                 <div className="flex items-center space-x-2">
-                  <Users className="h-6 w-6 text-blue-500" />
-                  <h1 className="text-3xl font-bold">作者一覧</h1>
+                  <Trophy className="h-6 w-6 text-yellow-500" />
+                  <h1 className="text-3xl font-bold">作者ランキング</h1>
                 </div>
                 <p className="text-muted-foreground">
-                  {makers.length}名の作者が登録されています
+                  総合スコアによる上位{rankings.length}名の作者ランキング
                 </p>
               </div>
             </div>
 
-            {/* 作者一覧 */}
-            {makers.length > 0 ? (
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {makers.map((maker) => (
+            {/* 作者ランキング */}
+            {rankings.length > 0 ? (
+              <div className="space-y-4">
+                {rankings.map((ranking, index) => (
                   <Link
-                    key={maker.id}
+                    key={ranking.id}
                     href={urlObjectToString(
-                      pagesPath.doujinshi.makers._makerId(maker.id).$url()
+                      pagesPath.doujinshi.makers._makerId(ranking.id).$url()
                     )}
                   >
-                    <Card className="h-full transition-all duration-200 hover:shadow-lg hover:scale-105 group">
-                      <CardHeader className="pb-3">
-                        <div className="flex items-start justify-between">
-                          <h3 className="font-semibold text-lg group-hover:text-primary line-clamp-2 flex-1">
-                            {maker.name}
-                          </h3>
-                          {maker.workCount >= 10 && (
-                            <Badge variant="default" className="ml-2">
-                              <Star className="h-3 w-3 mr-1" />
-                              人気
-                            </Badge>
-                          )}
-                        </div>
-                      </CardHeader>
-                      <CardContent className="pt-0">
-                        <div className="space-y-3">
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm text-muted-foreground">
-                              作品数
+                    <Card
+                      className={`transition-all duration-200 hover:shadow-lg hover:scale-[1.02] group border-2 ${getRankColor(
+                        ranking.rank
+                      )}`}
+                    >
+                      <CardContent className="p-6">
+                        <div className="flex items-center space-x-4">
+                          {/* ランキング順位 */}
+                          <div className="flex items-center space-x-2 min-w-[80px]">
+                            {getRankIcon(ranking.rank)}
+                            <span className="text-2xl font-bold">
+                              {ranking.rank}
                             </span>
-                            <Badge variant="outline" className="font-semibold">
-                              {maker.workCount}作品
-                            </Badge>
                           </div>
 
-                          {/* 作者レベル表示 */}
-                          <div className="flex items-center space-x-2">
-                            {maker.workCount >= 20 && (
-                              <>
-                                <Award className="h-4 w-4 text-yellow-500" />
-                                <span className="text-xs text-muted-foreground">
-                                  ベテラン作者
+                          {/* 作者情報 */}
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-2xl group-hover:text-primary mb-3">
+                              {ranking.name}
+                            </h3>
+
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-base">
+                              <div className="space-y-1">
+                                <span className="text-muted-foreground text-sm">
+                                  総合スコア
                                 </span>
-                              </>
+                                <div className="font-bold text-xl text-primary">
+                                  {ranking.totalScore.toFixed(1)}
+                                </div>
+                              </div>
+
+                              <div className="space-y-1">
+                                <span className="text-muted-foreground text-sm">
+                                  作品数
+                                </span>
+                                <div className="font-semibold text-lg">
+                                  {ranking.workCount}作品
+                                </div>
+                              </div>
+
+                              <div className="space-y-1">
+                                <span className="text-muted-foreground text-sm">
+                                  平均評価
+                                </span>
+                                <div className="font-semibold text-lg flex items-center space-x-1">
+                                  <Star className="h-4 w-4 text-yellow-500" />
+                                  <span>
+                                    {ranking.avgReviewScore
+                                      ? ranking.avgReviewScore.toFixed(1)
+                                      : "N/A"}
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div className="space-y-1">
+                                <span className="text-muted-foreground text-sm">
+                                  平均レビュー数
+                                </span>
+                                <div className="font-semibold text-lg">
+                                  {ranking.avgReviewCount
+                                    ? Math.round(ranking.avgReviewCount)
+                                    : "N/A"}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* 特別バッジ */}
+                          <div className="flex flex-col space-y-2">
+                            {ranking.rank === 1 && (
+                              <Badge className="bg-yellow-500 text-white text-sm px-3 py-1">
+                                <Crown className="h-4 w-4 mr-1" />
+                                チャンピオン
+                              </Badge>
                             )}
-                            {maker.workCount >= 10 && maker.workCount < 20 && (
-                              <>
-                                <Star className="h-4 w-4 text-blue-500" />
-                                <span className="text-xs text-muted-foreground">
-                                  人気作者
-                                </span>
-                              </>
+                            {ranking.rank <= 3 && ranking.rank > 1 && (
+                              <Badge
+                                variant="secondary"
+                                className="text-sm px-3 py-1"
+                              >
+                                <Medal className="h-4 w-4 mr-1" />
+                                トップ3
+                              </Badge>
                             )}
-                            {maker.workCount >= 5 && maker.workCount < 10 && (
-                              <>
-                                <User className="h-4 w-4 text-green-500" />
-                                <span className="text-xs text-muted-foreground">
-                                  活発な作者
-                                </span>
-                              </>
+                            {ranking.rank <= 10 && ranking.rank > 3 && (
+                              <Badge
+                                variant="outline"
+                                className="text-sm px-3 py-1"
+                              >
+                                <TrendingUp className="h-4 w-4 mr-1" />
+                                トップ10
+                              </Badge>
                             )}
-                            {maker.workCount < 5 && (
-                              <>
-                                <User className="h-4 w-4 text-gray-400" />
-                                <span className="text-xs text-muted-foreground">
-                                  新人作者
-                                </span>
-                              </>
+                            {ranking.workCount >= 20 && (
+                              <Badge
+                                variant="default"
+                                className="bg-purple-500 text-sm px-3 py-1"
+                              >
+                                <Award className="h-4 w-4 mr-1" />
+                                ベテラン
+                              </Badge>
                             )}
                           </div>
                         </div>
@@ -134,48 +192,65 @@ export default async function MakersPage() {
               <Card>
                 <CardContent className="p-8 text-center">
                   <p className="text-muted-foreground">
-                    作者が見つかりませんでした。
+                    ランキングデータが見つかりませんでした。
                   </p>
                 </CardContent>
               </Card>
             )}
 
-            {/* 統計情報 */}
-            {makers.length > 0 && (
+            {/* ランキング統計情報 */}
+            {rankings.length > 0 && (
               <Card>
                 <CardHeader>
-                  <h2 className="text-xl font-semibold">統計情報</h2>
+                  <h2 className="text-xl font-semibold flex items-center space-x-2">
+                    <Trophy className="h-5 w-5 text-yellow-500" />
+                    <span>ランキング統計</span>
+                  </h2>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid gap-6 md:grid-cols-3">
+                  <div className="grid gap-6 md:grid-cols-4">
                     <div className="text-center space-y-2">
-                      <p className="text-3xl font-bold text-blue-600">
-                        {makers.length}
+                      <p className="text-4xl font-bold text-blue-600">
+                        {rankings.length}
                       </p>
-                      <p className="text-sm text-muted-foreground">総作者数</p>
+                      <p className="text-base text-muted-foreground">
+                        ランクイン作者数
+                      </p>
                     </div>
                     <div className="text-center space-y-2">
-                      <p className="text-3xl font-bold text-green-600">
-                        {makers.reduce(
-                          (sum, maker) => sum + maker.workCount,
+                      <p className="text-4xl font-bold text-green-600">
+                        {rankings.reduce(
+                          (sum, ranking) => sum + ranking.workCount,
                           0
                         )}
                       </p>
-                      <p className="text-sm text-muted-foreground">総作品数</p>
+                      <p className="text-base text-muted-foreground">
+                        総作品数
+                      </p>
                     </div>
                     <div className="text-center space-y-2">
-                      <p className="text-3xl font-bold text-purple-600">
+                      <p className="text-4xl font-bold text-purple-600">
+                        {rankings.length > 0
+                          ? rankings[0]?.totalScore.toFixed(1) ?? "N/A"
+                          : "N/A"}
+                      </p>
+                      <p className="text-base text-muted-foreground">
+                        最高スコア
+                      </p>
+                    </div>
+                    <div className="text-center space-y-2">
+                      <p className="text-4xl font-bold text-orange-600">
                         {Math.round(
-                          (makers.reduce(
-                            (sum, maker) => sum + maker.workCount,
+                          (rankings.reduce(
+                            (sum, ranking) => sum + ranking.totalScore,
                             0
                           ) /
-                            makers.length) *
+                            rankings.length) *
                             10
                         ) / 10}
                       </p>
-                      <p className="text-sm text-muted-foreground">
-                        平均作品数
+                      <p className="text-base text-muted-foreground">
+                        平均スコア
                       </p>
                     </div>
                   </div>
@@ -193,10 +268,10 @@ export default async function MakersPage() {
 }
 
 export async function generateMetadata() {
-  const makers = await getAllMakers(5); // メタデータ用に少数取得
+  const rankings = await getMakersRanking(5); // メタデータ用に少数取得
 
   return {
-    title: "作者一覧 - DoujinShare",
-    description: `${makers.length}名以上の作者の作品を掲載。人気作者から新人作者まで、幅広いジャンルの同人誌をご紹介。`,
+    title: "作者ランキング - DoujinShare",
+    description: `総合スコアによる作者ランキング。トップ${rankings.length}名以上の人気作者の作品を掲載。高評価・人気作者の同人誌をランキング形式でご紹介。`,
   };
 }

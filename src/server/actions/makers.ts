@@ -46,3 +46,25 @@ export const getAllMakers = cache(async (limit = 50, offset = 0) => {
   const db = await getDb();
   return await makersRepository(db).findAll(limit, offset);
 });
+
+// 作者ランキングを取得するServer Action
+export const getMakersRanking = cache(async (limit = 50, offset = 0) => {
+  const db = await getDb();
+  const { makerScoresRepository } = await import(
+    "../repositories/makerScores.repository"
+  );
+  const makerScoresRepo = makerScoresRepository(db);
+
+  const rankings = await makerScoresRepo.findTopScored(limit, offset);
+
+  return rankings.map((ranking, index) => ({
+    id: ranking.maker?.id ?? ranking.makerId,
+    name: ranking.maker?.name ?? "不明な作者",
+    workCount: ranking.worksCount,
+    totalScore: ranking.totalScore,
+    avgReviewScore: ranking.avgReviewScore,
+    avgReviewCount: ranking.avgReviewCount,
+    scoreVariance: ranking.scoreVariance,
+    rank: offset + index + 1,
+  }));
+});

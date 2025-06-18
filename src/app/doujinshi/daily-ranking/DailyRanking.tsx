@@ -3,11 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { SiteBreadcrumb } from "@/components/layout/Breadcrumb";
-import { TrendingUp, ArrowLeft } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import type { ItemItem } from "@/lib/dmmApi/dmmApi.generated";
-import Link from "next/link";
-import { pagesPath } from "../../../lib/$path";
 
 type Props = {
   doujinList: ItemItem[];

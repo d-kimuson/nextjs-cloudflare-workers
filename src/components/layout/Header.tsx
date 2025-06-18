@@ -122,7 +122,7 @@ export function Header() {
     {
       href: pagesPath.doujinshi.makers.$url(),
       icon: Users,
-      label: "作者一覧",
+      label: "人気作者ランキング！",
     },
     {
       href: pagesPath.mypage.$url(),
@@ -188,7 +188,7 @@ export function Header() {
                         className="flex items-center space-x-1"
                       >
                         <Users className="h-4 w-4" />
-                        <span>作者一覧</span>
+                        <span>人気作者ランキング！</span>
                       </Button>
                     </Link>
                   </NavigationMenuLink>

@@ -180,40 +180,6 @@ export default async function Home() {
                 ))}
               </div>
             </section>
-
-            {/* 新着情報 */}
-            <section className="space-y-6">
-              <div className="flex items-center space-x-2">
-                <Clock className="h-6 w-6 text-blue-500" />
-                <h2 className="text-2xl font-bold">新着情報</h2>
-              </div>
-
-              <Card>
-                <CardContent className="p-6">
-                  <div className="space-y-4">
-                    {latestNews.map((news, index) => (
-                      <div key={news.title} className="space-y-2">
-                        <div className="flex items-start space-x-3">
-                          <Badge
-                            variant="outline"
-                            className="text-xs shrink-0 mt-1"
-                          >
-                            {news.date}
-                          </Badge>
-                          <div className="space-y-1">
-                            <h4 className="font-medium">{news.title}</h4>
-                            <p className="text-sm text-muted-foreground">
-                              {news.content}
-                            </p>
-                          </div>
-                        </div>
-                        {index < latestNews.length - 1 && <Separator />}
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </section>
           </div>
 
           {/* サイドバー */}

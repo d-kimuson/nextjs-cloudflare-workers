@@ -13,29 +13,23 @@ import Link from "next/link";
 import { getAllGenresWithCounts } from "@/server/actions/genres";
 import { pagesPath } from "@/lib/$path";
 import { urlObjectToString } from "@/lib/path/urlObjectToString";
+import { dmmApiClient } from "@/lib/dmmApi/client";
 
 export async function Sidebar() {
   // リアルデータを取得
   const genres = await getAllGenresWithCounts(6); // 上位6ジャンルを取得
 
-  const popularWorks = [
-    {
-      title:
-        "童貞陰キャのフリしたヤリチン転校生と学校一モテモテな超巨乳の高飛車女子",
-      price: "154円",
-      maker: "なのはなジャム",
-    },
-    {
-      title: "清楚系JKと放課後の秘密の関係",
-      price: "220円",
-      maker: "サークル名",
-    },
-    {
-      title: "隣の人妻お姉さんとの危険な関係",
-      price: "330円",
-      maker: "別のサークル",
-    },
-  ];
+  // デイリーランキングから人気作品を取得
+  const dailyRankingResult = await dmmApiClient.getDailyRankingDoujinList();
+  const popularWorks = dailyRankingResult.isOk()
+    ? dailyRankingResult.value.slice(0, 5).map((item) => ({
+        id: item.content_id,
+        title: item.title,
+        price: item.prices?.price ? `¥${item.prices.price}` : "価格未定",
+        maker: item.iteminfo?.maker?.[0]?.name || "不明",
+        affiliateURL: item.affiliateURL,
+      }))
+    : [];
 
   return (
     <aside className="w-80 space-y-6 hidden lg:block">
@@ -79,55 +73,35 @@ export async function Sidebar() {
           <CardDescription>今注目の同人作品</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            {popularWorks.map((work, index) => (
-              <div key={work.title} className="space-y-2">
-                <h4 className="font-medium text-sm leading-5 line-clamp-2">
-                  <Link
-                    href={`/works/${index + 1}`}
-                    className="hover:text-primary transition-colors"
-                  >
-                    {work.title}
-                  </Link>
-                </h4>
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>{work.maker}</span>
-                  <Badge variant="outline" className="text-xs">
-                    {work.price}
-                  </Badge>
+          {popularWorks.length > 0 ? (
+            <div className="space-y-4">
+              {popularWorks.map((work, index) => (
+                <div key={work.id} className="space-y-2">
+                  <h4 className="font-medium text-sm leading-5 line-clamp-2">
+                    <a
+                      href={work.affiliateURL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-primary transition-colors"
+                    >
+                      {work.title}
+                    </a>
+                  </h4>
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <span>{work.maker}</span>
+                    <Badge variant="outline" className="text-xs">
+                      {work.price}
+                    </Badge>
+                  </div>
+                  {index < popularWorks.length - 1 && <Separator />}
                 </div>
-                {index < popularWorks.length - 1 && <Separator />}
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* 新着情報 */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Clock className="h-5 w-5" />
-            <span>新着情報</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3 text-sm">
-            <div className="space-y-1">
-              <p className="text-muted-foreground text-xs">2024/12/20</p>
-              <p>サイトリニューアルしました</p>
+              ))}
             </div>
-            <Separator />
-            <div className="space-y-1">
-              <p className="text-muted-foreground text-xs">2024/12/19</p>
-              <p>新しいランキング機能を追加</p>
-            </div>
-            <Separator />
-            <div className="space-y-1">
-              <p className="text-muted-foreground text-xs">2024/12/18</p>
-              <p>作者ページ機能を改善</p>
-            </div>
-          </div>
+          ) : (
+            <p className="text-sm text-muted-foreground text-center">
+              データを読み込み中...
+            </p>
+          )}
         </CardContent>
       </Card>
 
@@ -135,13 +109,12 @@ export async function Sidebar() {
       <Card className="border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-900/20">
         <CardHeader>
           <CardTitle className="text-sm text-orange-800 dark:text-orange-200">
-            ⚠️ 重要なお知らせ
+            ⚠️ 違法ダウンロードは犯罪です。
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-xs text-orange-700 dark:text-orange-300 space-y-2">
-            <p>違法ダウンロードは犯罪です。</p>
-            <p>作品は必ず正規のサイトから購入してください。</p>
+          <div className="text-xs text-orange-700 dark:text-orange-300">
+            <p>作品は必ず正規のサイトから購入しましょう！</p>
           </div>
         </CardContent>
       </Card>

@@ -324,6 +324,52 @@ export const worksRepository = (db: DB) => {
     });
   };
 
+  const findByMakerIds = async (
+    makerIds: readonly number[],
+    options?: { limit?: number; excludeWorkId?: string }
+  ) => {
+    const limit = options?.limit ?? 10;
+    const excludeWorkId = options?.excludeWorkId;
+
+    if (makerIds.length === 0) {
+      return [];
+    }
+
+    const results = await db.query.workMakerTable.findMany({
+      where: excludeWorkId
+        ? and(
+            inArray(workMakerTable.makerId, [...makerIds]),
+            ne(workMakerTable.workId, excludeWorkId)
+          )
+        : inArray(workMakerTable.makerId, [...makerIds]),
+      limit,
+      with: {
+        work: {
+          with: {
+            genres: {
+              with: {
+                genre: true,
+              },
+            },
+            makers: {
+              with: {
+                maker: true,
+              },
+            },
+            series: {
+              with: {
+                series: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: [desc(workMakerTable.workId)], // 新しい順で表示
+    });
+
+    return results.filter((result) => result.work !== null);
+  };
+
   return {
     createOrUpdate,
     findById,
@@ -331,6 +377,7 @@ export const worksRepository = (db: DB) => {
     searchByTitle,
     findBySeriesIds,
     findByIds,
+    findByMakerIds,
   };
 };
 

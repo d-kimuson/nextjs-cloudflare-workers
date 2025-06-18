@@ -68,3 +68,20 @@ export const getRelatedWorksBySeriesIds = cache(
       .map((work) => transformToWorkItem(work as RawWork));
   }
 );
+
+// 制作者IDから同じ作者の作品を取得するServer Action
+export const getWorksByMakerIds = cache(
+  async (
+    makerIds: readonly number[],
+    options?: { limit?: number; excludeWorkId?: string }
+  ): Promise<WorkItem[]> => {
+    const db = await getDb();
+    const worksRepo = worksRepository(db);
+    const rawData = await worksRepo.findByMakerIds(makerIds, options);
+
+    return rawData
+      .map((item) => item.work)
+      .filter((work): work is NonNullable<typeof work> => work !== null)
+      .map((work) => transformToWorkItem(work as RawWork));
+  }
+);
