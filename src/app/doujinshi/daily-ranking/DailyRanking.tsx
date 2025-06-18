@@ -14,37 +14,12 @@ type Props = {
 };
 
 export const DailyRanking: React.FC<Props> = ({ doujinList }) => {
-  const breadcrumbItems = [
-    { label: "同人誌", href: "/doujinshi" },
-    { label: "デイリーランキング" },
-  ];
-
   return (
     <div className="flex-1">
-      {/* パンくずリスト */}
-      <div className="mb-6">
-        <SiteBreadcrumb items={breadcrumbItems} />
-      </div>
-
       <header className="mb-8">
-        <div className="flex items-center space-x-4 mb-6">
-          <Link href={pagesPath.$url()}>
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex items-center space-x-1"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              <span>ホームに戻る</span>
-            </Button>
-          </Link>
-        </div>
-
         <div className="flex items-center space-x-2 mb-4">
           <TrendingUp className="h-6 w-6 text-orange-500" />
-          <h1 className="text-3xl font-bold text-foreground">
-            デイリーランキング
-          </h1>
+          <h1 className="text-3xl font-bold text-foreground">新作ランキング</h1>
         </div>
         <p className="text-muted-foreground">
           24時間以内の人気同人作品をランキング形式でご紹介

@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
@@ -170,27 +169,14 @@ export function Header() {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="flex items-center space-x-1">
-                    <TrendingUp className="h-4 w-4" />
-                    <span>ランキング</span>
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="grid gap-3 p-4 w-[400px]">
-                      <div className="grid gap-1">
-                        <NavigationMenuLink asChild>
-                          <Link href={pagesPath.doujinshi.daily_ranking.$url()}>
-                            <Button
-                              variant="ghost"
-                              className="w-full justify-start"
-                            >
-                              <Star className="h-4 w-4 mr-2" />
-                              デイリーランキング
-                            </Button>
-                          </Link>
-                        </NavigationMenuLink>
-                      </div>
-                    </div>
-                  </NavigationMenuContent>
+                  <NavigationMenuLink asChild>
+                    <Link href={pagesPath.doujinshi.daily_ranking.$url()}>
+                      <Button variant="ghost" className="w-full justify-start">
+                        <Star className="h-4 w-4 mr-2" />
+                        公開直後！新作ランキング
+                      </Button>
+                    </Link>
+                  </NavigationMenuLink>
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>

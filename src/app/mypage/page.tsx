@@ -129,32 +129,14 @@ export default function MyPage() {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         <div className="space-y-8">
-          {/* ヘッダー */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <User className="h-6 w-6" />
-                <span>マイページ</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2">
-                  <Heart className="h-5 w-5 text-red-500" />
-                  <span className="text-lg font-semibold">
-                    お気に入り: {favoriteCount}作品
-                  </span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
           {/* お気に入り作品一覧 */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Heart className="h-5 w-5 text-red-500" />
-                <span>お気に入り作品</span>
+                <span className="text-lg font-semibold">
+                  お気に入り作品 ({favoriteCount})
+                </span>
               </CardTitle>
             </CardHeader>
             <CardContent>
