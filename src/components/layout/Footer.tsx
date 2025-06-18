@@ -8,9 +8,9 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* サイト情報 */}
           <div className="space-y-3">
-            <h3 className="font-semibold text-foreground">DoujinShare</h3>
+            <h3 className="font-semibold text-foreground">おかずNavi</h3>
             <p className="text-sm text-muted-foreground">
-              同人作品の正規購入を促進するアフィリエイトサイトです。
+              新作アダルト作品への発見体験を提供するナビゲーションサイトです。
             </p>
           </div>
 
@@ -108,7 +108,7 @@ export function Footer() {
           </div>
 
           <div className="text-center text-xs text-muted-foreground">
-            <p>&copy; 2024 DoujinShare. All rights reserved.</p>
+            <p>&copy; 2024 おかずNavi. All rights reserved.</p>
           </div>
         </div>
       </div>

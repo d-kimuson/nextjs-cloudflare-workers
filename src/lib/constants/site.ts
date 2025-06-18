@@ -1,16 +1,17 @@
 export const SITE_CONFIG = {
-  name: "DoujinShare",
-  title: "DoujinShare - 同人作品ダウンロード情報",
+  name: "おかずNavi",
+  title: "おかずNavi - アダルト作品ナビゲーションサイト",
   description:
-    "デジタル同人作品の最新ダウンロード情報を毎日更新。価格比較・言語翻訳対応。DLsite・FANZA認定サイト。",
+    "新作アダルト作品の発見体験を提供するナビゲーションサイト。同人誌からAVまで、最新コンテンツをいち早くお届け。",
   keywords: [
+    "アダルト",
     "同人",
-    "ダウンロード",
+    "新作",
+    "ナビゲーション",
     "DLsite",
     "FANZA",
-    "CG",
-    "イラスト",
-    "ゲーム",
+    "エロ",
+    "発見",
   ],
-  author: "DoujinShare",
+  author: "おかずNavi",
 } as const;

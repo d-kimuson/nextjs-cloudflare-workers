@@ -1,9 +1,9 @@
 "use server";
 
 import { cache } from "react";
+import type { WorkItem } from "../../components/works/WorksList";
 import { getDb } from "../db/client";
 import { makersRepository } from "../repositories/makers.repository";
-import type { WorkItem } from "../../components/works/WorksList";
 
 // 制作者詳細を取得するServer Action
 export const getMakerById = cache(async (makerId: number) => {
@@ -36,7 +36,7 @@ export const getMakerById = cache(async (makerId: number) => {
           genres: [], // 制作者ページでは基本情報のみ
           makers: [],
           series: [],
-        })
+        }),
       ),
   };
 });

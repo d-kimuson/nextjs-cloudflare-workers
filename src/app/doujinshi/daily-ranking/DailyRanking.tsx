@@ -3,8 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { ItemItem } from "@/server/lib/dmmApi/dmmApi.generated";
 import { TrendingUp } from "lucide-react";
-import type { ItemItem } from "@/lib/dmmApi/dmmApi.generated";
 
 type Props = {
   doujinList: ItemItem[];

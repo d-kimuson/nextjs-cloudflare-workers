@@ -2,13 +2,15 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { ErrorPage } from "../../../components/ErrorPage";
 import { getDmmDailyRanking } from "../../../server/fetchers/dmm";
 import { getAllGenresWithCounts } from "../../../server/fetchers/genres";
-import { DailyRanking } from "./DailyRanking";
+import { getRecentWorksByTopMakers } from "../../../server/fetchers/works";
+import { NewReleases } from "./NewReleases";
 
-export default async function DailyRankingPage() {
+export default async function NewReleasesPage() {
   try {
-    const [doujinList, genres] = await Promise.all([
-      getDmmDailyRanking(),
+    const [works, genres, dailyRanking] = await Promise.all([
+      getRecentWorksByTopMakers({ limit: 20, daysAgo: 7 }),
       getAllGenresWithCounts(6, 0),
+      getDmmDailyRanking(),
     ]);
 
     return (
@@ -16,16 +18,16 @@ export default async function DailyRankingPage() {
         <div className="container mx-auto px-4 py-8">
           <div className="flex gap-8">
             {/* メインコンテンツ */}
-            <DailyRanking doujinList={doujinList || []} />
+            <NewReleases works={works} loading={false} />
 
             {/* サイドバー */}
-            <Sidebar genres={genres} dailyRanking={doujinList} />
+            <Sidebar genres={genres} dailyRanking={dailyRanking} />
           </div>
         </div>
       </div>
     );
   } catch (error) {
-    console.error("Failed to fetch daily ranking:", error);
-    return <ErrorPage statusCode={500} title="データの取得に失敗しました" />;
+    console.error("Failed to fetch new releases:", error);
+    return <ErrorPage statusCode={500} title="新着作品の取得に失敗しました" />;
   }
 }

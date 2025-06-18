@@ -1,11 +1,11 @@
+import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
+import { SITE_CONFIG } from "@/lib/constants/site";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Suspense } from "react";
-import { RootErrorBoundary } from "./providers/RootErrorBoundary";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { SITE_CONFIG } from "@/lib/constants/site";
 import { QueryClientProvider } from "../lib/api/QueryClientProvider";
+import { RootErrorBoundary } from "./providers/RootErrorBoundary";
 
 import "./globals.css";
 

@@ -1,7 +1,7 @@
+import { eq, sql } from "drizzle-orm";
 import { getCurrentDate } from "../../lib/date/currentDate";
 import type { DB } from "../db/client";
 import { genresTable, workGenreTable } from "../db/schema";
-import { eq, sql } from "drizzle-orm";
 
 export interface CreateGenreInput {
   id: number;
@@ -21,7 +21,7 @@ export const genresRepository = (db: DB) => {
   };
 
   const bulkCreateIfNotExists = async (
-    genres: CreateGenreInput[]
+    genres: CreateGenreInput[],
   ): Promise<void> => {
     if (genres.length === 0) return;
 
@@ -44,7 +44,7 @@ export const genresRepository = (db: DB) => {
         name: genresTable.name,
         createdAt: genresTable.createdAt,
         workCount: sql<number>`count(${workGenreTable.workId})`.as(
-          "work_count"
+          "work_count",
         ),
       })
       .from(genresTable)

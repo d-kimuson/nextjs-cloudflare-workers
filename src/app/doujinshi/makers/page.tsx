@@ -1,24 +1,30 @@
-import Link from "next/link";
-import { Card, CardContent, CardHeader } from "../../../components/ui/card";
-import { Button } from "../../../components/ui/button";
-import { Badge } from "../../../components/ui/badge";
 import { Sidebar } from "@/components/layout/Sidebar";
 import {
-  Trophy,
   ArrowLeft,
-  Star,
-  User,
   Award,
   Crown,
   Medal,
+  Star,
   TrendingUp,
+  Trophy,
+  User,
 } from "lucide-react";
+import Link from "next/link";
+import { Badge } from "../../../components/ui/badge";
+import { Button } from "../../../components/ui/button";
+import { Card, CardContent, CardHeader } from "../../../components/ui/card";
 import { pagesPath } from "../../../lib/$path";
 import { urlObjectToString } from "../../../lib/path/urlObjectToString";
-import { getMakersRanking } from "../../../server/actions/makers";
+import { getDmmDailyRanking } from "../../../server/fetchers/dmm";
+import { getAllGenresWithCounts } from "../../../server/fetchers/genres";
+import { getMakersRanking } from "../../../server/fetchers/makers";
 
 export default async function MakersPage() {
-  const rankings = await getMakersRanking(100); // 最大100作者のランキングを取得
+  const [rankings, genres, dailyRanking] = await Promise.all([
+    getMakersRanking(100), // 最大100作者のランキングを取得
+    getAllGenresWithCounts(6, 0),
+    getDmmDailyRanking(),
+  ]);
 
   // ランキングアイコンを取得
   const getRankIcon = (rank: number) => {
@@ -260,7 +266,7 @@ export default async function MakersPage() {
           </div>
 
           {/* サイドバー */}
-          <Sidebar />
+          <Sidebar genres={genres} dailyRanking={dailyRanking} />
         </div>
       </div>
     </div>
@@ -271,7 +277,7 @@ export async function generateMetadata() {
   const rankings = await getMakersRanking(5); // メタデータ用に少数取得
 
   return {
-    title: "作者ランキング - DoujinShare",
+    title: "作者ランキング - おかずNavi",
     description: `総合スコアによる作者ランキング。トップ${rankings.length}名以上の人気作者の作品を掲載。高評価・人気作者の同人誌をランキング形式でご紹介。`,
   };
 }

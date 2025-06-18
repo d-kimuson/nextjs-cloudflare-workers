@@ -1,9 +1,9 @@
 "use server";
 
 import { cache } from "react";
+import type { WorkItem } from "../../components/works/WorksList";
 import { getDb } from "../db/client";
 import { seriesRepository } from "../repositories/series.repository";
-import type { WorkItem } from "../../components/works/WorksList";
 
 // シリーズ詳細を取得するServer Action
 export const getSeriesById = cache(async (seriesId: number) => {
@@ -36,7 +36,7 @@ export const getSeriesById = cache(async (seriesId: number) => {
           genres: [], // シリーズページでは基本情報のみ
           makers: [],
           series: [],
-        })
+        }),
       ),
   };
 });

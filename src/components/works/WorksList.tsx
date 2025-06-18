@@ -1,12 +1,12 @@
+import { Calendar, ExternalLink, Star } from "lucide-react";
 import Link from "next/link";
+import { pagesPath } from "../../lib/$path";
+import { urlObjectToString } from "../../lib/path/urlObjectToString";
+import { FavoriteButton } from "../favorite-button";
+import { Alert, AlertDescription } from "../ui/alert";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
-import { Alert, AlertDescription } from "../ui/alert";
-import { FavoriteButton } from "../favorite-button";
-import { pagesPath } from "../../lib/$path";
-import { urlObjectToString } from "../../lib/path/urlObjectToString";
-import { ExternalLink, Calendar, Star } from "lucide-react";
 
 // 作品の型定義（クリーンなインターフェース）
 export interface WorkItem {
@@ -87,7 +87,7 @@ export function WorksList({
             const discountRate =
               work.listPrice !== work.price
                 ? Math.round(
-                    ((work.listPrice - work.price) / work.listPrice) * 100
+                    ((work.listPrice - work.price) / work.listPrice) * 100,
                   )
                 : 0;
 
@@ -95,7 +95,7 @@ export function WorksList({
               <Link
                 key={work.id}
                 href={urlObjectToString(
-                  pagesPath.doujinshi.works._workId(work.id).$url()
+                  pagesPath.doujinshi.works._workId(work.id).$url(),
                 )}
                 className="group"
               >
@@ -181,7 +181,7 @@ export function WorksList({
           const discountRate =
             work.listPrice !== work.price
               ? Math.round(
-                  ((work.listPrice - work.price) / work.listPrice) * 100
+                  ((work.listPrice - work.price) / work.listPrice) * 100,
                 )
               : 0;
 
@@ -220,7 +220,7 @@ export function WorksList({
                       <h3 className="font-semibold text-xl leading-tight">
                         <Link
                           href={urlObjectToString(
-                            pagesPath.doujinshi.works._workId(work.id).$url()
+                            pagesPath.doujinshi.works._workId(work.id).$url(),
                           )}
                           className="hover:text-primary transition-colors"
                         >
@@ -257,7 +257,7 @@ export function WorksList({
                                 href={urlObjectToString(
                                   pagesPath.doujinshi.makers
                                     ._makerId(maker.id)
-                                    .$url()
+                                    .$url(),
                                 )}
                               >
                                 <Badge
@@ -283,7 +283,7 @@ export function WorksList({
                               .filter(
                                 (genre) =>
                                   !currentGenreId ||
-                                  Number(genre.id) !== currentGenreId
+                                  Number(genre.id) !== currentGenreId,
                               )
                               .slice(0, 5)
                               .map((genre) => (
@@ -292,7 +292,7 @@ export function WorksList({
                                   href={urlObjectToString(
                                     pagesPath.doujinshi.genres
                                       ._genreId(genre.id)
-                                      .$url()
+                                      .$url(),
                                   )}
                                 >
                                   <Badge
@@ -324,7 +324,7 @@ export function WorksList({
                       <div className="flex items-center space-x-2">
                         <Link
                           href={urlObjectToString(
-                            pagesPath.doujinshi.works._workId(work.id).$url()
+                            pagesPath.doujinshi.works._workId(work.id).$url(),
                           )}
                         >
                           <Button variant="outline" size="sm">

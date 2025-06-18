@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
 import { Card, CardContent, CardHeader } from "../../../../components/ui/card";
+import { WorksList } from "../../../../components/works/WorksList";
 import {
   getSeriesBasicById,
   getSeriesById,
-} from "../../../../server/actions/series";
-import { WorksList } from "../../../../components/works/WorksList";
+} from "../../../../server/fetchers/series";
 
 type SeriesPageProps = {
   params: Promise<{

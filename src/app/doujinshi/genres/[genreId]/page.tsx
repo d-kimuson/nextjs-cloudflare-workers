@@ -1,11 +1,11 @@
+import { Tag } from "lucide-react";
 import { notFound } from "next/navigation";
+import { Alert, AlertDescription } from "../../../../components/ui/alert";
 import { Badge } from "../../../../components/ui/badge";
 import { Separator } from "../../../../components/ui/separator";
-import { Alert, AlertDescription } from "../../../../components/ui/alert";
-import { getGenreById } from "../../../../server/actions/genres";
-import { getWorksByGenreId } from "../../../../server/actions/works";
 import { WorksList } from "../../../../components/works/WorksList";
-import { Tag } from "lucide-react";
+import { getGenreById } from "../../../../server/fetchers/genres";
+import { getWorksByGenreId } from "../../../../server/fetchers/works";
 
 type GenrePageProps = {
   params: Promise<{

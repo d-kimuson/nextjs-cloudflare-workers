@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
-import { registerRoutes } from "../../../server/hono/route";
 import { honoApp } from "../../../server/hono/app";
+import { registerRoutes } from "../../../server/hono/route";
 
 export const runtime = "edge";
 

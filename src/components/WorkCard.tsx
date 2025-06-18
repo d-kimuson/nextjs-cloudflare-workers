@@ -1,7 +1,7 @@
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Star, ExternalLink } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { ExternalLink, Star } from "lucide-react";
 import Link from "next/link";
 
 interface Work {

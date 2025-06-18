@@ -1,5 +1,12 @@
 "use client";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
   NavigationMenu,
@@ -8,6 +15,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
   SheetContent,
@@ -15,31 +23,24 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import type { WorkItem } from "@/components/works/WorksList";
+import { pagesPath } from "@/lib/$path";
+import { searchWorksByTitle } from "@/server/fetchers/works";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import {
-  Search,
-  Home,
-  TrendingUp,
-  Users,
+  Award,
   Book,
-  Star,
-  Menu,
-  X,
+  Home,
   Loader2,
+  Menu,
+  Search,
+  Star,
+  TrendingUp,
   User,
+  Users,
+  X,
 } from "lucide-react";
 import Link from "next/link";
-import { pagesPath } from "@/lib/$path";
-import { useState, useEffect, useRef } from "react";
-import { searchWorksByTitle } from "@/server/actions/works";
-import type { WorkItem } from "@/components/works/WorksList";
+import { useEffect, useRef, useState } from "react";
 import { urlObjectToString } from "../../lib/path/urlObjectToString";
 
 export function Header() {
@@ -120,6 +121,11 @@ export function Header() {
       label: "デイリーランキング",
     },
     {
+      href: "/doujinshi/new-releases",
+      icon: Award,
+      label: "高評価作者の新作",
+    },
+    {
       href: pagesPath.doujinshi.makers.$url(),
       icon: Users,
       label: "人気作者ランキング！",
@@ -142,7 +148,7 @@ export function Header() {
               className="flex items-center space-x-2"
             >
               <Book className="h-6 w-6 text-primary" />
-              <span className="font-bold text-xl">DoujinShare</span>
+              <span className="font-bold text-xl">おかずNavi</span>
             </Link>
             <Badge variant="secondary" className="text-xs">
               18+
@@ -174,6 +180,17 @@ export function Header() {
                       <Button variant="ghost" className="w-full justify-start">
                         <Star className="h-4 w-4 mr-2" />
                         公開直後！新作ランキング
+                      </Button>
+                    </Link>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                  <NavigationMenuLink asChild>
+                    <Link href="/doujinshi/new-releases">
+                      <Button variant="ghost" className="w-full justify-start">
+                        <Award className="h-4 w-4 mr-2" />
+                        高評価作者の新作
                       </Button>
                     </Link>
                   </NavigationMenuLink>
@@ -370,7 +387,7 @@ export function Header() {
                   <SheetHeader>
                     <SheetTitle className="flex items-center space-x-2">
                       <Book className="h-5 w-5 text-primary" />
-                      <span>DoujinShare</span>
+                      <span>おかずNavi</span>
                     </SheetTitle>
                   </SheetHeader>
 

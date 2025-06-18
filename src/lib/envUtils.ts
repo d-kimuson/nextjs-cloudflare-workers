@@ -12,15 +12,15 @@ type OptionalEnvKeys = (typeof optionalEnvKeys)[number];
 
 const typedIncludes = <const T>(
   array: readonly T[],
-  value: unknown
+  value: unknown,
 ): value is T => (array as unknown[]).includes(value);
 
 export const envUtils = {
   getEnv: <
     K extends RequiredEnvKeys | OptionalEnvKeys,
-    Ret = K extends RequiredEnvKeys ? string : string | undefined
+    Ret = K extends RequiredEnvKeys ? string : string | undefined,
   >(
-    key: K
+    key: K,
   ): Ret => {
     const value = process.env[key];
     if (typedIncludes(requiredEnvKeys, key)) {

@@ -1,17 +1,17 @@
 "use client";
 
 import { Heart, User } from "lucide-react";
-import { WorksList } from "../../components/works/WorksList";
+import { useState } from "react";
+import { CookieConsent } from "../../components/cookie-consent";
+import { Button } from "../../components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
+import { WorksList } from "../../components/works/WorksList";
 import { useFavoriteWorks, useSession } from "../../lib/session/useSession";
-import { CookieConsent } from "../../components/cookie-consent";
-import { useState } from "react";
-import { Button } from "../../components/ui/button";
 
 export default function MyPage() {
   const { session } = useSession();

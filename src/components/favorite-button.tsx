@@ -1,9 +1,9 @@
 "use client";
 
-import { type FC, useCallback, useMemo, useState } from "react";
-import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Heart } from "lucide-react";
+import { type FC, useCallback, useMemo, useState } from "react";
 import { useSession } from "../lib/session/useSession";
 import { CookieConsent } from "./cookie-consent";
 
@@ -35,12 +35,12 @@ export const FavoriteButton: FC<FavoriteButtonProps> = ({
   const { updateSession, session } = useSession();
   const [showConsentModal, setShowConsentModal] = useState(false);
   const [pendingAction, setPendingAction] = useState<"add" | "remove" | null>(
-    null
+    null,
   );
 
   const isFavorite = useMemo(
     () => session.data?.favorite.works.includes(itemId) ?? false,
-    [session.data, itemId]
+    [session.data, itemId],
   );
 
   const executeToggle = useCallback(
@@ -71,7 +71,7 @@ export const FavoriteButton: FC<FavoriteButtonProps> = ({
         });
       }
     },
-    [itemId, session, updateSession, onToggle]
+    [itemId, session, updateSession, onToggle],
   );
 
   const handleToggle = useCallback(
@@ -93,7 +93,7 @@ export const FavoriteButton: FC<FavoriteButtonProps> = ({
       const action = isFavorite ? "remove" : "add";
       executeToggle(action);
     },
-    [isFavorite, session.status, executeToggle]
+    [isFavorite, session.status, executeToggle],
   );
 
   const handleConsentComplete = useCallback(() => {
@@ -118,7 +118,7 @@ export const FavoriteButton: FC<FavoriteButtonProps> = ({
             ? "text-red-500 hover:text-red-600"
             : "text-gray-400 hover:text-red-500",
           session.status === "loading" && "opacity-50",
-          className
+          className,
         )}
         aria-label={isFavorite ? "お気に入りから削除" : "お気に入りに追加"}
       >
@@ -126,7 +126,7 @@ export const FavoriteButton: FC<FavoriteButtonProps> = ({
           className={cn(
             iconSizes[size],
             "transition-all duration-200",
-            isFavorite ? "fill-current" : "fill-none"
+            isFavorite ? "fill-current" : "fill-none",
           )}
         />
       </Button>

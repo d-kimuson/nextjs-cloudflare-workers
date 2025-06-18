@@ -1,3 +1,5 @@
+import { Sidebar } from "@/components/layout/Sidebar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -6,14 +8,25 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Sidebar } from "@/components/layout/Sidebar";
-import { TrendingUp, Clock, Star, ExternalLink, Heart } from "lucide-react";
+import {
+  Award,
+  Clock,
+  ExternalLink,
+  Heart,
+  Star,
+  TrendingUp,
+} from "lucide-react";
 import Link from "next/link";
 import { pagesPath } from "../lib/$path";
+import { getDmmDailyRanking } from "../server/fetchers/dmm";
+import { getAllGenresWithCounts } from "../server/fetchers/genres";
 
 export default async function Home() {
+  const [genres, dailyRanking] = await Promise.all([
+    getAllGenresWithCounts(6, 0),
+    getDmmDailyRanking(),
+  ]);
   // サンプルデータ
   const featuredWorks = [
     {
@@ -79,17 +92,25 @@ export default async function Home() {
           <div className="flex-1 space-y-8">
             {/* ヒーローセクション */}
             <section className="text-center space-y-4 py-12 bg-gradient-to-b from-primary/10 to-background rounded-lg">
-              <h1 className="text-4xl font-bold text-foreground">
-                DoujinShare
-              </h1>
+              <h1 className="text-4xl font-bold text-foreground">おかずNavi</h1>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                人気同人作品を安全・正規に購入できるリンクをご紹介
+                新作アダルト作品の発見体験を提供するナビゲーションサイト
               </p>
-              <div className="flex justify-center gap-4 mt-6">
+              <div className="flex justify-center gap-4 mt-6 flex-wrap">
                 <Link href={pagesPath.doujinshi.daily_ranking.$url()}>
                   <Button size="lg" className="flex items-center space-x-2">
                     <TrendingUp className="h-5 w-5" />
                     <span>今日のランキング</span>
+                  </Button>
+                </Link>
+                <Link href="/doujinshi/new-releases">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="flex items-center space-x-2"
+                  >
+                    <Award className="h-5 w-5" />
+                    <span>高評価作者の新作</span>
                   </Button>
                 </Link>
                 <Link href={pagesPath.doujinshi.makers.$url()}>
@@ -183,7 +204,7 @@ export default async function Home() {
           </div>
 
           {/* サイドバー */}
-          <Sidebar />
+          <Sidebar genres={genres} dailyRanking={dailyRanking} />
         </div>
       </div>
     </div>

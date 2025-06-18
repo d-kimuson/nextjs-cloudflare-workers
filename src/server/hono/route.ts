@@ -1,15 +1,15 @@
+import { zValidator } from "@hono/zod-validator";
+import { ulid } from "ulid";
+import { z } from "zod";
+import { getDb } from "../db/client";
+import { worksRepository } from "../repositories/works.repository";
+import { type RawWork, transformToWorkItem } from "../utils/transformWorkItem";
 import type { HonoAppType } from "./app";
 import {
   sessionBodySchema,
   sessionHandler,
   sessionMiddleware,
 } from "./middleware/session.middleware";
-import { zValidator } from "@hono/zod-validator";
-import { z } from "zod";
-import { ulid } from "ulid";
-import { getDb } from "../db/client";
-import { worksRepository } from "../repositories/works.repository";
-import { transformToWorkItem, type RawWork } from "../utils/transformWorkItem";
 
 export const registerRoutes = (app: HonoAppType) => {
   app.use(sessionMiddleware);
@@ -42,7 +42,7 @@ export const registerRoutes = (app: HonoAppType) => {
         if (session === null) {
           return c.json(
             { success: false, error: "User not allowed using Cookie" },
-            403
+            403,
           );
         }
 
@@ -67,7 +67,7 @@ export const registerRoutes = (app: HonoAppType) => {
         if (session === null) {
           return c.json(
             { success: false, error: "User not allowed using Cookie" },
-            403
+            403,
           );
         }
 
@@ -79,7 +79,7 @@ export const registerRoutes = (app: HonoAppType) => {
 
         // WorkItem形式に変換
         const works = rawWorks.map((rawWork) =>
-          transformToWorkItem(rawWork as RawWork)
+          transformToWorkItem(rawWork as RawWork),
         );
 
         return c.json({

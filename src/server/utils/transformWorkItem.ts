@@ -57,11 +57,11 @@ export const transformToWorkItem = (rawWork: RawWork): WorkItem => {
     genres: rawWork.genres
       .filter(
         (
-          g
+          g,
         ): g is typeof g & {
           genreId: number;
           genre: NonNullable<typeof g.genre>;
-        } => g.genreId !== null && g.genre !== null
+        } => g.genreId !== null && g.genre !== null,
       )
       .map((g) => ({
         id: String(g.genreId),
@@ -70,11 +70,11 @@ export const transformToWorkItem = (rawWork: RawWork): WorkItem => {
     makers: rawWork.makers
       .filter(
         (
-          m
+          m,
         ): m is typeof m & {
           makerId: number;
           maker: NonNullable<typeof m.maker>;
-        } => m.makerId !== null && m.maker !== null
+        } => m.makerId !== null && m.maker !== null,
       )
       .map((m) => ({
         id: String(m.makerId),
@@ -83,11 +83,11 @@ export const transformToWorkItem = (rawWork: RawWork): WorkItem => {
     series: rawWork.series
       .filter(
         (
-          s
+          s,
         ): s is typeof s & {
           seriesId: number;
           series: NonNullable<typeof s.series>;
-        } => s.seriesId !== null && s.series !== null
+        } => s.seriesId !== null && s.series !== null,
       )
       .map((s) => ({
         id: String(s.seriesId),

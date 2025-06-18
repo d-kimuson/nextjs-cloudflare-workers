@@ -1,8 +1,10 @@
-import { eq, like, desc, inArray, ne, and } from "drizzle-orm";
+import { and, desc, eq, gte, inArray, like, ne, sql } from "drizzle-orm";
 import { z } from "zod";
 import { getCurrentDate } from "../../lib/date/currentDate";
 import type { DB } from "../db/client";
 import {
+  makerScoresTable,
+  makersTable,
   sampleLargeImagesTable,
   sampleSmallImagesTable,
   workGenreTable,
@@ -43,7 +45,7 @@ export const worksRepository = (db: DB) => {
       seriesIds: readonly number[];
       sampleSmallImages: readonly string[];
       sampleLargeImages: readonly string[];
-    }> = {}
+    }> = {},
   ) => {
     const {
       makerIds = [],
@@ -84,7 +86,7 @@ export const worksRepository = (db: DB) => {
             imageUrl,
             order: index,
             createdAt: currentTime,
-          }))
+          })),
         )
         .onConflictDoNothing();
     }
@@ -99,7 +101,7 @@ export const worksRepository = (db: DB) => {
             imageUrl,
             order: index,
             createdAt: currentTime,
-          }))
+          })),
         )
         .onConflictDoNothing();
     }
@@ -112,7 +114,7 @@ export const worksRepository = (db: DB) => {
           genreIds.map((genreId) => ({
             workId: work.id,
             genreId,
-          }))
+          })),
         )
         .onConflictDoNothing();
     }
@@ -125,7 +127,7 @@ export const worksRepository = (db: DB) => {
           seriesIds.map((seriesId) => ({
             workId: work.id,
             seriesId,
-          }))
+          })),
         )
         .onConflictDoNothing();
     }
@@ -138,7 +140,7 @@ export const worksRepository = (db: DB) => {
           makerIds.map((makerId) => ({
             workId: work.id,
             makerId,
-          }))
+          })),
         )
         .onConflictDoNothing();
     }
@@ -171,7 +173,7 @@ export const worksRepository = (db: DB) => {
 
   const findByGenreId = async (
     genreId: number,
-    options?: { limit?: number; offset?: number }
+    options?: { limit?: number; offset?: number },
   ) => {
     const limit = options?.limit ?? 20;
     const offset = options?.offset ?? 0;
@@ -206,7 +208,7 @@ export const worksRepository = (db: DB) => {
 
   const searchByTitle = async (
     searchTerm: string,
-    options?: { limit?: number }
+    options?: { limit?: number },
   ) => {
     const limit = options?.limit ?? 10;
 
@@ -246,7 +248,7 @@ export const worksRepository = (db: DB) => {
 
   const findBySeriesIds = async (
     seriesIds: readonly number[],
-    options?: { limit?: number; excludeWorkId?: string }
+    options?: { limit?: number; excludeWorkId?: string },
   ) => {
     const limit = options?.limit ?? 10;
     const excludeWorkId = options?.excludeWorkId;
@@ -259,7 +261,7 @@ export const worksRepository = (db: DB) => {
       where: excludeWorkId
         ? and(
             inArray(workSeriesTable.seriesId, [...seriesIds]),
-            ne(workSeriesTable.workId, excludeWorkId)
+            ne(workSeriesTable.workId, excludeWorkId),
           )
         : inArray(workSeriesTable.seriesId, [...seriesIds]),
       limit,
@@ -292,7 +294,7 @@ export const worksRepository = (db: DB) => {
 
   const findByIds = async (
     workIds: readonly string[],
-    options?: { limit?: number }
+    options?: { limit?: number },
   ) => {
     const limit = options?.limit ?? 100;
 
@@ -326,7 +328,7 @@ export const worksRepository = (db: DB) => {
 
   const findByMakerIds = async (
     makerIds: readonly number[],
-    options?: { limit?: number; excludeWorkId?: string }
+    options?: { limit?: number; excludeWorkId?: string },
   ) => {
     const limit = options?.limit ?? 10;
     const excludeWorkId = options?.excludeWorkId;
@@ -339,7 +341,7 @@ export const worksRepository = (db: DB) => {
       where: excludeWorkId
         ? and(
             inArray(workMakerTable.makerId, [...makerIds]),
-            ne(workMakerTable.workId, excludeWorkId)
+            ne(workMakerTable.workId, excludeWorkId),
           )
         : inArray(workMakerTable.makerId, [...makerIds]),
       limit,
@@ -370,6 +372,56 @@ export const worksRepository = (db: DB) => {
     return results.filter((result) => result.work !== null);
   };
 
+  // 高スコア作者の新作（1週間以内）を取得
+  const findRecentWorksByTopScoredMakers = async (options?: {
+    limit?: number;
+    daysAgo?: number;
+  }) => {
+    const limit = options?.limit ?? 20;
+    const daysAgo = options?.daysAgo ?? 7;
+
+    // 1週間前の日付を計算
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - daysAgo);
+    const oneWeekAgoStr = oneWeekAgo.toISOString().split("T")[0]; // YYYY-MM-DD形式
+
+    // 高スコア作者の新作を取得
+    return await db
+      .select({
+        work: {
+          id: worksTable.id,
+          title: worksTable.title,
+          price: worksTable.price,
+          listPrice: worksTable.listPrice,
+          listImageUrl: worksTable.listImageUrl,
+          largeImageUrl: worksTable.largeImageUrl,
+          affiliateUrl: worksTable.affiliateUrl,
+          releaseDate: worksTable.releaseDate,
+          volume: worksTable.volume,
+          reviewCount: worksTable.reviewCount,
+          reviewAverageScore: worksTable.reviewAverageScore,
+          createdAt: worksTable.createdAt,
+          updatedAt: worksTable.updatedAt,
+        },
+        maker: {
+          id: makersTable.id,
+          name: makersTable.name,
+        },
+        score: {
+          totalScore: makerScoresTable.totalScore,
+          avgReviewScore: makerScoresTable.avgReviewScore,
+          worksCount: makerScoresTable.worksCount,
+        },
+      })
+      .from(worksTable)
+      .innerJoin(workMakerTable, eq(worksTable.id, workMakerTable.workId))
+      .innerJoin(makersTable, eq(workMakerTable.makerId, makersTable.id))
+      .innerJoin(makerScoresTable, eq(makersTable.id, makerScoresTable.makerId))
+      .where(sql`${worksTable.releaseDate} >= ${oneWeekAgoStr}`)
+      .orderBy(desc(makerScoresTable.totalScore), desc(worksTable.releaseDate))
+      .limit(limit);
+  };
+
   return {
     createOrUpdate,
     findById,
@@ -378,6 +430,7 @@ export const worksRepository = (db: DB) => {
     findBySeriesIds,
     findByIds,
     findByMakerIds,
+    findRecentWorksByTopScoredMakers,
   };
 };
 

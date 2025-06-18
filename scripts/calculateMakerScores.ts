@@ -45,12 +45,12 @@ const main = async () => {
         console.log(
           `${index + 1}位: ${entry.maker?.name} (ID: ${
             entry.makerId
-          }) - スコア: ${entry.totalScore}`
+          }) - スコア: ${entry.totalScore}`,
         );
         console.log(
           `   作品数: ${entry.worksCount}, 平均評価: ${
             entry.avgReviewScore?.toFixed(2) ?? "N/A"
-          }, 平均レビュー数: ${entry.avgReviewCount?.toFixed(0) ?? "N/A"}`
+          }, 平均レビュー数: ${entry.avgReviewCount?.toFixed(0) ?? "N/A"}`,
         );
       });
     }

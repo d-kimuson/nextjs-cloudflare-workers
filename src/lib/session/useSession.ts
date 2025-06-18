@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { honoClient } from "../api/client";
 import type { SessionBody } from "../../server/hono/middleware/session.middleware";
+import { honoClient } from "../api/client";
 
 export const useSession = () => {
   const queryClient = useQueryClient();
@@ -51,17 +51,17 @@ export const useSession = () => {
           data: undefined,
         } as const)
       : sessionResult.data === null || sessionResult.data === undefined
-      ? ({
-          status: "not-agreed",
-          data: undefined,
-        } as const)
-      : ({
-          status: "resolved",
-          data: sessionResult.data as Exclude<
-            typeof sessionResult.data,
-            undefined
-          >,
-        } as const),
+        ? ({
+            status: "not-agreed",
+            data: undefined,
+          } as const)
+        : ({
+            status: "resolved",
+            data: sessionResult.data as Exclude<
+              typeof sessionResult.data,
+              undefined
+            >,
+          } as const),
     agreeSession,
     updateSession,
     clearSession,

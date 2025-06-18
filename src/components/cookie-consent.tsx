@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,8 +8,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Cookie } from "lucide-react";
 import { useSession } from "@/lib/session/useSession";
+import { Cookie } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface CookieConsentProps {
   onConsent?: () => void;

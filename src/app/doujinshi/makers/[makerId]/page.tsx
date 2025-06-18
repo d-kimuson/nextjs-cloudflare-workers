@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Card, CardContent, CardHeader } from "../../../../components/ui/card";
-import { getMakerById } from "../../../../server/actions/makers";
 import { WorksList } from "../../../../components/works/WorksList";
+import { getMakerById } from "../../../../server/fetchers/makers";
 
 type MakerPageProps = {
   params: Promise<{

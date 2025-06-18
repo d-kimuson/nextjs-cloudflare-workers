@@ -41,6 +41,9 @@ export const pagesPath = {
       }),
       $url: (url?: { hash?: string }) => ({ pathname: '/doujinshi/makers' as const, hash: url?.hash, path: `/doujinshi/makers${buildSuffix(url)}` })
     },
+    'new_releases': {
+      $url: (url?: { hash?: string }) => ({ pathname: '/doujinshi/new-releases' as const, hash: url?.hash, path: `/doujinshi/new-releases${buildSuffix(url)}` })
+    },
     'series': {
       _seriesId: (seriesId: string | number) => ({
         $url: (url?: { hash?: string }) => ({ pathname: '/doujinshi/series/[seriesId]' as const, query: { seriesId }, hash: url?.hash, path: `/doujinshi/series/${seriesId}${buildSuffix(url)}` })

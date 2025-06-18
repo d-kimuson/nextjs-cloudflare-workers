@@ -1,9 +1,9 @@
 import { D1Database, D1DatabaseAPI } from "@miniflare/d1";
 import { createSQLiteDB } from "@miniflare/shared";
 import { drizzle } from "drizzle-orm/d1";
-import { dmmApiClient } from "../src/lib/dmmApi/client";
 import type { DB } from "../src/server/db/client";
 import * as schema from "../src/server/db/schema";
+import { dmmApiClient } from "../src/server/lib/dmmApi/client";
 import { getRequiredEnv } from "./utils/env";
 
 async function main() {
@@ -22,7 +22,7 @@ async function main() {
 
     if (rankingResult.isErr()) {
       throw new Error(
-        `Failed to fetch ranking: ${rankingResult.error.message}`
+        `Failed to fetch ranking: ${rankingResult.error.message}`,
       );
     }
 

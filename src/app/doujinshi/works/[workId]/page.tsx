@@ -1,13 +1,14 @@
+import {
+  Calendar,
+  Download,
+  ExternalLink,
+  Eye,
+  Hash,
+  Star,
+} from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  Star,
-  Download,
-  Eye,
-  Calendar,
-  Hash,
-  ExternalLink,
-} from "lucide-react";
+import { FavoriteButton } from "../../../../components/favorite-button";
 import { Badge } from "../../../../components/ui/badge";
 import { Button } from "../../../../components/ui/button";
 import {
@@ -17,15 +18,14 @@ import {
   CardTitle,
 } from "../../../../components/ui/card";
 import { Separator } from "../../../../components/ui/separator";
-import { FavoriteButton } from "../../../../components/favorite-button";
+import { WorksList } from "../../../../components/works/WorksList";
 import { pagesPath } from "../../../../lib/$path";
 import { urlObjectToString } from "../../../../lib/path/urlObjectToString";
 import {
-  getWorkById,
   getRelatedWorksBySeriesIds,
+  getWorkById,
   getWorksByMakerIds,
-} from "../../../../server/actions/works";
-import { WorksList } from "../../../../components/works/WorksList";
+} from "../../../../server/fetchers/works";
 
 type WorkPageProps = {
   params: Promise<{
@@ -234,7 +234,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
                                 href={urlObjectToString(
                                   pagesPath.doujinshi.makers
                                     ._makerId(maker.id)
-                                    .$url()
+                                    .$url(),
                                 )}
                                 className="text-blue-600 hover:text-blue-800 hover:underline font-medium"
                               >
@@ -285,7 +285,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
                               href={urlObjectToString(
                                 pagesPath.doujinshi.genres
                                   ._genreId(genre.id)
-                                  .$url()
+                                  .$url(),
                               )}
                             >
                               <Badge
@@ -313,7 +313,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
                               href={urlObjectToString(
                                 pagesPath.doujinshi.series
                                   ._seriesId(series.id)
-                                  .$url()
+                                  .$url(),
                               )}
                             >
                               <Badge
@@ -486,7 +486,9 @@ export default async function WorkPage({ params }: WorkPageProps) {
                         <Link
                           key={maker.id}
                           href={urlObjectToString(
-                            pagesPath.doujinshi.makers._makerId(maker.id).$url()
+                            pagesPath.doujinshi.makers
+                              ._makerId(maker.id)
+                              .$url(),
                           )}
                         >
                           <Button variant="outline" size="sm">
@@ -533,7 +535,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
                             href={urlObjectToString(
                               pagesPath.doujinshi.series
                                 ._seriesId(series.id)
-                                .$url()
+                                .$url(),
                             )}
                           >
                             <Button variant="outline" size="sm">
@@ -556,7 +558,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
                           href={urlObjectToString(
                             pagesPath.doujinshi.series
                               ._seriesId(series.id)
-                              .$url()
+                              .$url(),
                           )}
                         >
                           <Button variant="outline" size="sm">
@@ -603,11 +605,11 @@ export async function generateMetadata({ params }: WorkPageProps) {
   return {
     title: title,
     description: `${work.title}のダウンロード情報。価格${formatPrice(
-      work.price
+      work.price,
     )}${
       work.listPrice !== work.price
         ? `（定価${formatPrice(work.listPrice)}から${Math.round(
-            ((work.listPrice - work.price) / work.listPrice) * 100
+            ((work.listPrice - work.price) / work.listPrice) * 100,
           )}%OFF）`
         : ""
     }。正規ダウンロード・安全な購入はこちらから。${
@@ -618,7 +620,7 @@ export async function generateMetadata({ params }: WorkPageProps) {
     openGraph: {
       title: title,
       description: `${formatPrice(
-        work.price
+        work.price,
       )}で販売中。正規ダウンロード・購入はこちらから。`,
       images: [work.largeImageUrl],
     },
