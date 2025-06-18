@@ -18,6 +18,7 @@ import {
 } from "../../../../components/ui/card";
 import { Separator } from "../../../../components/ui/separator";
 import { Alert, AlertDescription } from "../../../../components/ui/alert";
+import { FavoriteButton } from "../../../../components/favorite-button";
 import { pagesPath } from "../../../../lib/$path";
 import { urlObjectToString } from "../../../../lib/path/urlObjectToString";
 import {
@@ -89,6 +90,9 @@ export default async function WorkPage({ params }: WorkPageProps) {
                   alt={work.title}
                   className="w-full h-auto"
                 />
+                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full shadow-lg">
+                  <FavoriteButton itemId={work.id} size="lg" />
+                </div>
               </div>
 
               {/* 画像下の購入リンク */}
@@ -116,11 +120,18 @@ export default async function WorkPage({ params }: WorkPageProps) {
                 {/* タイトルと評価 */}
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-2xl font-bold leading-tight">
-                      [{work.id}][
-                      {work.makers.length > 0 ? work.makers[0]?.name || "" : ""}
-                      ] {work.title}
-                    </CardTitle>
+                    <div className="flex items-start justify-between gap-4">
+                      <CardTitle className="text-2xl font-bold leading-tight flex-1">
+                        [{work.id}][
+                        {work.makers.length > 0
+                          ? work.makers[0]?.name || ""
+                          : ""}
+                        ] {work.title}
+                      </CardTitle>
+                      <div className="shrink-0">
+                        <FavoriteButton itemId={work.id} size="lg" />
+                      </div>
+                    </div>
                     {work.reviewCount && work.reviewAverageScore && (
                       <div className="flex items-center space-x-2 text-sm">
                         <div className="flex space-x-1">

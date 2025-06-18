@@ -5,6 +5,7 @@ import "./globals.css";
 import { RootErrorBoundary } from "./providers/RootErrorBoundary";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { SessionProvider } from "@/components/session-provider";
 import { SITE_CONFIG } from "@/lib/constants/site";
 
 const geistSans = Geist({
@@ -49,9 +50,11 @@ export default function RootLayout({
       >
         <Suspense fallback={<div>Loading...</div>}>
           <RootErrorBoundary>
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
+            <SessionProvider>
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </SessionProvider>
           </RootErrorBoundary>
         </Suspense>
       </body>

@@ -3,6 +3,7 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import { Alert, AlertDescription } from "../ui/alert";
+import { FavoriteButton } from "../favorite-button";
 import { pagesPath } from "../../lib/$path";
 import { urlObjectToString } from "../../lib/path/urlObjectToString";
 import { ExternalLink, Calendar, Star } from "lucide-react";
@@ -115,6 +116,9 @@ export function WorksList({
                         </Badge>
                       </div>
                     )}
+                    <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm rounded-full shadow-sm">
+                      <FavoriteButton itemId={work.id} />
+                    </div>
                   </div>
                   <CardContent className="p-4">
                     <h3 className="font-semibold text-lg mb-2 line-clamp-2 group-hover:text-blue-600">
@@ -205,6 +209,9 @@ export function WorksList({
                         </Badge>
                       </div>
                     )}
+                    <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm rounded-full shadow-sm">
+                      <FavoriteButton itemId={work.id} />
+                    </div>
                   </div>
 
                   {/* 作品情報 */}
