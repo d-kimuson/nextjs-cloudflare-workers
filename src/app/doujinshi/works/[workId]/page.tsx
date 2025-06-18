@@ -177,29 +177,26 @@ export default async function WorkPage({ params }: WorkPageProps) {
                           制作者
                         </h3>
                         <div className="space-y-2">
-                          {work.makers
-                            .map(({ maker }) => maker)
-                            .filter((maker) => maker !== null)
-                            .map((maker) => (
-                              <div
-                                key={maker.id}
-                                className="flex items-center space-x-2"
-                              >
-                                <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                                  {maker.name.charAt(0)}
-                                </div>
-                                <Link
-                                  href={urlObjectToString(
-                                    pagesPath.doujinshi.makers
-                                      ._makerId(maker.id)
-                                      .$url()
-                                  )}
-                                  className="text-blue-600 hover:text-blue-800 hover:underline font-medium"
-                                >
-                                  {maker.name}
-                                </Link>
+                          {work.makers.map((maker) => (
+                            <div
+                              key={maker.id}
+                              className="flex items-center space-x-2"
+                            >
+                              <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                                {maker.name.charAt(0)}
                               </div>
-                            ))}
+                              <Link
+                                href={urlObjectToString(
+                                  pagesPath.doujinshi.makers
+                                    ._makerId(maker.id)
+                                    .$url()
+                                )}
+                                className="text-blue-600 hover:text-blue-800 hover:underline font-medium"
+                              >
+                                {maker.name}
+                              </Link>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     )}
@@ -237,25 +234,23 @@ export default async function WorkPage({ params }: WorkPageProps) {
                           ジャンル・タグ
                         </h3>
                         <div className="flex flex-wrap gap-2">
-                          {work.genres
-                            .filter((genre) => genre.genre)
-                            .map((genre) => (
-                              <Link
-                                key={genre.genreId}
-                                href={urlObjectToString(
-                                  pagesPath.doujinshi.genres
-                                    ._genreId(String(genre.genreId))
-                                    .$url()
-                                )}
+                          {work.genres.map((genre) => (
+                            <Link
+                              key={genre.id}
+                              href={urlObjectToString(
+                                pagesPath.doujinshi.genres
+                                  ._genreId(genre.id)
+                                  .$url()
+                              )}
+                            >
+                              <Badge
+                                variant="secondary"
+                                className="hover:bg-gray-300 cursor-pointer transition-colors"
                               >
-                                <Badge
-                                  variant="secondary"
-                                  className="hover:bg-gray-300 cursor-pointer transition-colors"
-                                >
-                                  {genre.genre?.name}
-                                </Badge>
-                              </Link>
-                            ))}
+                                {genre.name}
+                              </Badge>
+                            </Link>
+                          ))}
                         </div>
                       </div>
                     )}
@@ -267,26 +262,23 @@ export default async function WorkPage({ params }: WorkPageProps) {
                           シリーズ
                         </h3>
                         <div className="space-y-2">
-                          {work.series
-                            .map(({ series }) => series)
-                            .filter((series) => series !== null)
-                            .map((series) => (
-                              <Link
-                                key={series.id}
-                                href={urlObjectToString(
-                                  pagesPath.doujinshi.series
-                                    ._seriesId(series.id)
-                                    .$url()
-                                )}
+                          {work.series.map((series) => (
+                            <Link
+                              key={series.id}
+                              href={urlObjectToString(
+                                pagesPath.doujinshi.series
+                                  ._seriesId(series.id)
+                                  .$url()
+                              )}
+                            >
+                              <Badge
+                                variant="outline"
+                                className="cursor-pointer hover:bg-gray-100 border-blue-300 text-blue-700"
                               >
-                                <Badge
-                                  variant="outline"
-                                  className="cursor-pointer hover:bg-gray-100 border-blue-300 text-blue-700"
-                                >
-                                  📚 {series.name}
-                                </Badge>
-                              </Link>
-                            ))}
+                                📚 {series.name}
+                              </Badge>
+                            </Link>
+                          ))}
                         </div>
                       </div>
                     )}
@@ -321,7 +313,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
 
         {/* 試し読みセクション */}
         <div className="mb-12">
-          {work.sampleLargeImages.length > 0 ? (
+          {work.sampleLargeImages && work.sampleLargeImages.length > 0 ? (
             <div className="space-y-4">
               <div className="flex items-center space-x-2 mb-6">
                 <Eye className="w-5 h-5" />
@@ -334,10 +326,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
                 {work.sampleLargeImages
                   .sort((a, b) => a.order - b.order)
                   .map((image, index) => (
-                    <div
-                      key={`${image.workId}-${image.order}`}
-                      className="w-full"
-                    >
+                    <div key={`${work.id}-${image.order}`} className="w-full">
                       <img
                         src={image.imageUrl}
                         alt={`${work.title} サンプル ${index + 1}`}

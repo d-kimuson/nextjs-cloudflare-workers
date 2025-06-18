@@ -7,7 +7,7 @@ import { pagesPath } from "../../lib/$path";
 import { urlObjectToString } from "../../lib/path/urlObjectToString";
 import { ExternalLink, Calendar, Star } from "lucide-react";
 
-// 作品の型定義（既存のDBスキーマに合わせる）
+// 作品の型定義（クリーンなインターフェース）
 export interface WorkItem {
   id: string;
   title: string;
@@ -20,26 +20,21 @@ export interface WorkItem {
   volume?: number | null;
   reviewCount?: number | null;
   reviewAverageScore?: number | null;
-  genres?: Array<{
-    genreId: number | null;
-    genre?: {
-      id: number;
-      name: string;
-    } | null;
+  genres: Array<{
+    id: string;
+    name: string;
   }>;
-  makers?: Array<{
-    makerId: number | null;
-    maker?: {
-      id: number;
-      name: string;
-    } | null;
+  makers: Array<{
+    id: string;
+    name: string;
   }>;
-  series?: Array<{
-    seriesId: number | null;
-    series?: {
-      id: number;
-      name: string;
-    } | null;
+  series: Array<{
+    id: string;
+    name: string;
+  }>;
+  sampleLargeImages?: Array<{
+    imageUrl: string;
+    order: number;
   }>;
 }
 
@@ -249,32 +244,23 @@ export function WorksList({
                             制作者:
                           </span>
                           <div className="flex flex-wrap gap-2">
-                            {work.makers
-                              .filter(
-                                (
-                                  m
-                                ): m is typeof m & {
-                                  makerId: number;
-                                  maker: NonNullable<typeof m.maker>;
-                                } => m.makerId !== null && m.maker !== null
-                              )
-                              .map(({ maker }) => (
-                                <Link
-                                  key={maker.id}
-                                  href={urlObjectToString(
-                                    pagesPath.doujinshi.makers
-                                      ._makerId(String(maker.id))
-                                      .$url()
-                                  )}
+                            {work.makers.map((maker) => (
+                              <Link
+                                key={maker.id}
+                                href={urlObjectToString(
+                                  pagesPath.doujinshi.makers
+                                    ._makerId(maker.id)
+                                    .$url()
+                                )}
+                              >
+                                <Badge
+                                  variant="outline"
+                                  className="cursor-pointer hover:bg-gray-100"
                                 >
-                                  <Badge
-                                    variant="outline"
-                                    className="cursor-pointer hover:bg-gray-100"
-                                  >
-                                    {maker.name}
-                                  </Badge>
-                                </Link>
-                              ))}
+                                  {maker.name}
+                                </Badge>
+                              </Link>
+                            ))}
                           </div>
                         </div>
                       )}
@@ -288,19 +274,17 @@ export function WorksList({
                           <div className="flex flex-wrap gap-1">
                             {work.genres
                               .filter(
-                                (g) =>
-                                  g.genre &&
-                                  g.genreId !== null &&
-                                  (!currentGenreId ||
-                                    g.genreId !== currentGenreId)
+                                (genre) =>
+                                  !currentGenreId ||
+                                  Number(genre.id) !== currentGenreId
                               )
                               .slice(0, 5)
-                              .map((g) => (
+                              .map((genre) => (
                                 <Link
-                                  key={g.genreId}
+                                  key={genre.id}
                                   href={urlObjectToString(
                                     pagesPath.doujinshi.genres
-                                      ._genreId(String(g.genreId))
+                                      ._genreId(genre.id)
                                       .$url()
                                   )}
                                 >
@@ -308,7 +292,7 @@ export function WorksList({
                                     variant="secondary"
                                     className="text-xs cursor-pointer hover:bg-gray-300"
                                   >
-                                    {g.genre?.name}
+                                    {genre.name}
                                   </Badge>
                                 </Link>
                               ))}

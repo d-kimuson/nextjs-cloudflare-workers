@@ -5,7 +5,6 @@ import { Alert, AlertDescription } from "../../../../components/ui/alert";
 import { getGenreById } from "../../../../server/actions/genres";
 import { getWorksByGenreId } from "../../../../server/actions/works";
 import { WorksList } from "../../../../components/works/WorksList";
-import type { WorkItem } from "../../../../components/works/WorksList";
 import { Tag } from "lucide-react";
 
 type GenrePageProps = {
@@ -22,7 +21,7 @@ export default async function GenrePage({ params }: GenrePageProps) {
     notFound();
   }
 
-  const [genre, worksData] = await Promise.all([
+  const [genre, works] = await Promise.all([
     getGenreById(genreIdNumber),
     getWorksByGenreId(genreIdNumber, { limit: 20, offset: 0 }),
   ]);
@@ -30,11 +29,6 @@ export default async function GenrePage({ params }: GenrePageProps) {
   if (!genre) {
     notFound();
   }
-
-  // WorkItem型に変換
-  const works: WorkItem[] = worksData
-    .map((item) => item.work)
-    .filter((work): work is NonNullable<typeof work> => work !== null);
 
   return (
     <div className="min-h-screen bg-background">

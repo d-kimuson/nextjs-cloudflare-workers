@@ -42,9 +42,7 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
         <div>
           <h2 className="text-2xl font-semibold mb-6">作品一覧</h2>
           <WorksList
-            works={series.works
-              .map((workRelation) => workRelation.work)
-              .filter((work): work is NonNullable<typeof work> => work != null)}
+            works={series.works}
             layout="grid"
             emptyMessage="このシリーズの作品はまだありません。"
           />

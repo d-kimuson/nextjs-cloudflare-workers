@@ -39,9 +39,7 @@ export default async function MakerPage({ params }: MakerPageProps) {
         <div>
           <h2 className="text-2xl font-semibold mb-6">作品一覧</h2>
           <WorksList
-            works={maker.works
-              .map((workRelation) => workRelation.work)
-              .filter((work): work is NonNullable<typeof work> => work != null)}
+            works={maker.works}
             layout="grid"
             emptyMessage="この作者の作品はまだありません。"
           />
