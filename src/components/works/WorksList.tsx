@@ -99,11 +99,11 @@ export function WorksList({
                 className="group"
               >
                 <Card className="transition-all duration-200 hover:shadow-lg hover:scale-105">
-                  <div className="aspect-[3/4] overflow-hidden rounded-t-lg relative">
+                  <div className="overflow-hidden rounded-t-lg relative">
                     <img
                       src={work.largeImageUrl}
                       alt={work.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-200"
+                      className="w-full h-auto object-cover"
                     />
                     {discountRate > 0 && (
                       <div className="absolute top-2 left-2">
