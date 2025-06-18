@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { type FC, useCallback, useMemo, useState } from "react";
 import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useSession } from "./session-provider";
-import type { SessionResult } from "@/lib/session";
+import { useSession } from "../lib/session/useSession";
+import { CookieConsent } from "./cookie-consent";
 
 interface FavoriteButtonProps {
   itemId: string;
@@ -14,87 +14,128 @@ interface FavoriteButtonProps {
   className?: string;
 }
 
-export function FavoriteButton({
+const sizeStyles = {
+  sm: "h-8 w-8",
+  md: "h-10 w-10",
+  lg: "h-12 w-12",
+};
+
+const iconSizes = {
+  sm: "h-4 w-4",
+  md: "h-5 w-5",
+  lg: "h-6 w-6",
+};
+
+export const FavoriteButton: FC<FavoriteButtonProps> = ({
   itemId,
   onToggle,
   size = "md",
   className,
-}: FavoriteButtonProps) {
-  const { favorites, addFavorite, removeFavorite } = useSession();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isPending, startTransition] = useTransition();
+}) => {
+  const { updateSession, session } = useSession();
+  const [showConsentModal, setShowConsentModal] = useState(false);
+  const [pendingAction, setPendingAction] = useState<"add" | "remove" | null>(
+    null
+  );
 
-  const isFavorite = favorites.includes(itemId);
+  const isFavorite = useMemo(
+    () => session.data?.favorite.works.includes(itemId) ?? false,
+    [session.data, itemId]
+  );
 
-  const handleToggle = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const executeToggle = useCallback(
+    (action: "add" | "remove") => {
+      if (session.status === "loading" || !session.data) return;
 
-    if (isLoading || isPending) return;
-
-    const newIsFavorite = !isFavorite;
-
-    startTransition(async () => {
-      setIsLoading(true);
-
-      try {
-        let result: SessionResult;
-        if (newIsFavorite) {
-          result = await addFavorite(itemId);
-        } else {
-          result = await removeFavorite(itemId);
-        }
-
-        if (result?.success) {
-          onToggle?.(itemId, newIsFavorite);
-        } else if (result?.error?.includes("Session consent required")) {
-          // Cookie許可バナーを表示するイベントを発火
-          window.dispatchEvent(new CustomEvent("show-cookie-consent"));
-        }
-      } catch (error) {
-        console.error("お気に入りの更新に失敗しました:", error);
-      } finally {
-        setIsLoading(false);
+      if (onToggle) {
+        onToggle(itemId, action === "remove");
       }
-    });
-  };
 
-  const sizeStyles = {
-    sm: "h-8 w-8",
-    md: "h-10 w-10",
-    lg: "h-12 w-12",
-  };
+      if (action === "remove") {
+        // お気に入りから削除
+        updateSession.mutate({
+          favorite: {
+            works: session.data.favorite.works.filter((id) => id !== itemId),
+            makers: session.data.favorite.makers,
+            series: session.data.favorite.series,
+          },
+        });
+      } else {
+        // お気に入りに追加
+        updateSession.mutate({
+          favorite: {
+            works: [...session.data.favorite.works, itemId],
+            makers: session.data.favorite.makers,
+            series: session.data.favorite.series,
+          },
+        });
+      }
+    },
+    [itemId, session, updateSession, onToggle]
+  );
 
-  const iconSizes = {
-    sm: "h-4 w-4",
-    md: "h-5 w-5",
-    lg: "h-6 w-6",
-  };
+  const handleToggle = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (session.status === "loading") return;
+
+      // 同意が必要な場合はモーダルを表示
+      if (session.status === "not-agreed") {
+        const action = isFavorite ? "remove" : "add";
+        setPendingAction(action);
+        setShowConsentModal(true);
+        return;
+      }
+
+      // 同意済みの場合は直接実行
+      const action = isFavorite ? "remove" : "add";
+      executeToggle(action);
+    },
+    [isFavorite, session.status, executeToggle]
+  );
+
+  const handleConsentComplete = useCallback(() => {
+    // 同意完了後、保留中のアクションを実行
+    if (pendingAction) {
+      executeToggle(pendingAction);
+      setPendingAction(null);
+    }
+  }, [pendingAction, executeToggle]);
 
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      onClick={handleToggle}
-      disabled={isLoading || isPending}
-      className={cn(
-        sizeStyles[size],
-        "rounded-full transition-all duration-200",
-        isFavorite
-          ? "text-red-500 hover:text-red-600"
-          : "text-gray-400 hover:text-red-500",
-        (isLoading || isPending) && "opacity-50",
-        className
-      )}
-      aria-label={isFavorite ? "お気に入りから削除" : "お気に入りに追加"}
-    >
-      <Heart
+    <>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={handleToggle}
+        disabled={session.status === "loading"}
         className={cn(
-          iconSizes[size],
-          "transition-all duration-200",
-          isFavorite ? "fill-current" : "fill-none"
+          sizeStyles[size],
+          "rounded-full transition-all duration-200",
+          isFavorite
+            ? "text-red-500 hover:text-red-600"
+            : "text-gray-400 hover:text-red-500",
+          session.status === "loading" && "opacity-50",
+          className
         )}
+        aria-label={isFavorite ? "お気に入りから削除" : "お気に入りに追加"}
+      >
+        <Heart
+          className={cn(
+            iconSizes[size],
+            "transition-all duration-200",
+            isFavorite ? "fill-current" : "fill-none"
+          )}
+        />
+      </Button>
+
+      <CookieConsent
+        show={showConsentModal}
+        onShow={setShowConsentModal}
+        onConsent={handleConsentComplete}
       />
-    </Button>
+    </>
   );
-}
+};

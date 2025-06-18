@@ -17,7 +17,6 @@ import {
   CardTitle,
 } from "../../../../components/ui/card";
 import { Separator } from "../../../../components/ui/separator";
-import { Alert, AlertDescription } from "../../../../components/ui/alert";
 import { FavoriteButton } from "../../../../components/favorite-button";
 import { pagesPath } from "../../../../lib/$path";
 import { urlObjectToString } from "../../../../lib/path/urlObjectToString";
