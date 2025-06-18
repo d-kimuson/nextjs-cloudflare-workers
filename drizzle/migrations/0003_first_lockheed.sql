@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `maker_scores_makerId_unique` ON `maker_scores` (`makerId`);

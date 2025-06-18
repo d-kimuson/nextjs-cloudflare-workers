@@ -15,6 +15,20 @@
       "when": 1750220815532,
       "tag": "0001_stale_magus",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1750224063530,
+      "tag": "0002_wild_deathstrike",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1750224452588,
+      "tag": "0003_first_lockheed",
+      "breakpoints": true
     }
   ]
 }

@@ -125,8 +125,9 @@ export const makersTable = sqliteTable("makers", {
   updatedAt: text().default("CURRENT_TIMESTAMP"),
 });
 
-export const makersTableRelations = relations(makersTable, ({ many }) => ({
+export const makersTableRelations = relations(makersTable, ({ many, one }) => ({
   works: many(workMakerTable),
+  score: one(makerScoresTable),
 }));
 
 export const workMakerTable = sqliteTable(
@@ -181,6 +182,33 @@ export const workSeriesTableRelations = relations(
     series: one(seriesTable, {
       fields: [workSeriesTable.seriesId],
       references: [seriesTable.id],
+    }),
+  })
+);
+
+// 作者スコアテーブル
+export const makerScoresTable = sqliteTable("maker_scores", {
+  id: int().primaryKey({ autoIncrement: true }),
+  makerId: int()
+    .references(() => makersTable.id)
+    .notNull()
+    .unique(),
+  worksCount: int().notNull().default(0), // 作品数
+  avgReviewScore: real(), // 平均レビュースコア
+  avgReviewCount: real(), // 平均レビュー数
+  scoreVariance: real(), // スコアの分散
+  totalScore: real().notNull(), // 総合スコア
+  lastCalculatedAt: text().notNull(), // 最後に計算した日時
+  createdAt: text().default("CURRENT_TIMESTAMP"),
+  updatedAt: text().default("CURRENT_TIMESTAMP"),
+});
+
+export const makerScoresTableRelations = relations(
+  makerScoresTable,
+  ({ one }) => ({
+    maker: one(makersTable, {
+      fields: [makerScoresTable.makerId],
+      references: [makersTable.id],
     }),
   })
 );
