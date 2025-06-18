@@ -1,4 +1,4 @@
-import { eq, like, desc } from "drizzle-orm";
+import { eq, like, desc, inArray, ne, and } from "drizzle-orm";
 import { z } from "zod";
 import { getCurrentDate } from "../../lib/date/currentDate";
 import type { DB } from "../db/client";
@@ -244,11 +244,58 @@ export const worksRepository = (db: DB) => {
     });
   };
 
+  const findBySeriesIds = async (
+    seriesIds: readonly number[],
+    options?: { limit?: number; excludeWorkId?: string }
+  ) => {
+    const limit = options?.limit ?? 10;
+    const excludeWorkId = options?.excludeWorkId;
+
+    if (seriesIds.length === 0) {
+      return [];
+    }
+
+    const results = await db.query.workSeriesTable.findMany({
+      where: excludeWorkId
+        ? and(
+            inArray(workSeriesTable.seriesId, [...seriesIds]),
+            ne(workSeriesTable.workId, excludeWorkId)
+          )
+        : inArray(workSeriesTable.seriesId, [...seriesIds]),
+      limit,
+      with: {
+        work: {
+          with: {
+            genres: {
+              with: {
+                genre: true,
+              },
+            },
+            makers: {
+              with: {
+                maker: true,
+              },
+            },
+            series: {
+              with: {
+                series: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: [desc(workSeriesTable.workId)], // 新しい順で表示
+    });
+
+    return results.filter((result) => result.work !== null);
+  };
+
   return {
     createOrUpdate,
     findById,
     findByGenreId,
     searchByTitle,
+    findBySeriesIds,
   };
 };
 

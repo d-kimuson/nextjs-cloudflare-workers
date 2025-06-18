@@ -39,14 +39,11 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
         </Card>
 
         {/* 作品一覧 */}
-        <div>
-          <h2 className="text-2xl font-semibold mb-6">作品一覧</h2>
-          <WorksList
-            works={series.works}
-            layout="grid"
-            emptyMessage="このシリーズの作品はまだありません。"
-          />
-        </div>
+        <WorksList
+          works={series.works}
+          layout="grid"
+          emptyMessage="このシリーズの作品はまだありません。"
+        />
       </div>
     </div>
   );

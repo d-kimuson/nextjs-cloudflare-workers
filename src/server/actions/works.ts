@@ -51,3 +51,20 @@ export const searchWorksByTitle = cache(
     return rawWorks.map((work) => transformToWorkItem(work as RawWork));
   }
 );
+
+// シリーズIDから関連作品を取得するServer Action
+export const getRelatedWorksBySeriesIds = cache(
+  async (
+    seriesIds: readonly number[],
+    options?: { limit?: number; excludeWorkId?: string }
+  ): Promise<WorkItem[]> => {
+    const db = await getDb();
+    const worksRepo = worksRepository(db);
+    const rawData = await worksRepo.findBySeriesIds(seriesIds, options);
+
+    return rawData
+      .map((item) => item.work)
+      .filter((work): work is NonNullable<typeof work> => work !== null)
+      .map((work) => transformToWorkItem(work as RawWork));
+  }
+);

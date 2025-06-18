@@ -20,7 +20,11 @@ import { Separator } from "../../../../components/ui/separator";
 import { Alert, AlertDescription } from "../../../../components/ui/alert";
 import { pagesPath } from "../../../../lib/$path";
 import { urlObjectToString } from "../../../../lib/path/urlObjectToString";
-import { getWorkById } from "../../../../server/actions/works";
+import {
+  getWorkById,
+  getRelatedWorksBySeriesIds,
+} from "../../../../server/actions/works";
+import { WorksList } from "../../../../components/works/WorksList";
 
 type WorkPageProps = {
   params: Promise<{
@@ -36,6 +40,16 @@ export default async function WorkPage({ params }: WorkPageProps) {
   if (!work) {
     notFound();
   }
+
+  // 関連作品を取得（シリーズがある場合）
+  const seriesIds = work.series.map((s) => Number(s.id));
+  const relatedWorks =
+    seriesIds.length > 0
+      ? await getRelatedWorksBySeriesIds(seriesIds, {
+          limit: 6,
+          excludeWorkId: workId,
+        })
+      : [];
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("ja-JP", {
@@ -427,15 +441,75 @@ export default async function WorkPage({ params }: WorkPageProps) {
         <div className="mb-12">
           <Card>
             <CardHeader>
-              <CardTitle>関連作品</CardTitle>
+              <CardTitle className="flex items-center space-x-2">
+                <span>関連作品</span>
+                {work.series.length > 0 && (
+                  <Badge variant="outline" className="text-xs">
+                    シリーズ作品
+                  </Badge>
+                )}
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-12">
-                <p className="text-gray-500">関連作品機能は準備中です</p>
-                <p className="text-sm text-gray-400 mt-2">
-                  同じ制作者の作品やシリーズ作品を表示予定です
-                </p>
-              </div>
+              {relatedWorks.length > 0 ? (
+                <div className="space-y-6">
+                  <WorksList
+                    works={relatedWorks}
+                    layout="grid"
+                    emptyMessage="関連作品はありません"
+                  />
+                  {work.series.length > 0 && (
+                    <div className="text-center">
+                      <p className="text-sm text-gray-600 mb-4">
+                        このシリーズの他の作品も見つけてみましょう
+                      </p>
+                      <div className="flex flex-wrap justify-center gap-2">
+                        {work.series.map((series) => (
+                          <Link
+                            key={series.id}
+                            href={urlObjectToString(
+                              pagesPath.doujinshi.series
+                                ._seriesId(series.id)
+                                .$url()
+                            )}
+                          >
+                            <Button variant="outline" size="sm">
+                              📚 {series.name} シリーズを見る
+                            </Button>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : work.series.length > 0 ? (
+                <div className="text-center py-12">
+                  <p className="text-gray-500 mb-4">
+                    このシリーズの他の作品は現在登録されていません
+                  </p>
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {work.series.map((series) => (
+                      <Link
+                        key={series.id}
+                        href={urlObjectToString(
+                          pagesPath.doujinshi.series._seriesId(series.id).$url()
+                        )}
+                      >
+                        <Button variant="outline" size="sm">
+                          📚 {series.name} シリーズページへ
+                        </Button>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <p className="text-gray-500">関連作品はありません</p>
+                  <p className="text-sm text-gray-400 mt-2">
+                    この作品はシリーズに属していません
+                  </p>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
