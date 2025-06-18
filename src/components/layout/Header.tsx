@@ -125,6 +125,11 @@ export function Header() {
       icon: Users,
       label: "作者一覧",
     },
+    {
+      href: pagesPath.mypage.$url(),
+      icon: User,
+      label: "マイページ",
+    },
   ];
 
   return (
@@ -198,6 +203,21 @@ export function Header() {
                       >
                         <Users className="h-4 w-4" />
                         <span>作者一覧</span>
+                      </Button>
+                    </Link>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                  <NavigationMenuLink asChild>
+                    <Link href={pagesPath.mypage.$url()}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="flex items-center space-x-1"
+                      >
+                        <User className="h-4 w-4" />
+                        <span>マイページ</span>
                       </Button>
                     </Link>
                   </NavigationMenuLink>

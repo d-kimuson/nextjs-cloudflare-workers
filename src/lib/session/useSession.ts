@@ -31,6 +31,7 @@ export const useSession = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["session"] });
+      queryClient.invalidateQueries({ queryKey: ["favorites", "works"] });
     },
   });
 
@@ -65,4 +66,21 @@ export const useSession = () => {
     updateSession,
     clearSession,
   };
+};
+
+export const useFavoriteWorks = () => {
+  const { session } = useSession();
+
+  return useQuery({
+    queryKey: ["favorites", "works"],
+    queryFn: async () => {
+      const response = await honoClient.api.favorites.works.$get();
+      if (!response.ok) {
+        throw new Error("Failed to fetch favorite works");
+      }
+      const body = await response.json();
+      return body.works;
+    },
+    enabled: session.status === "resolved",
+  });
 };

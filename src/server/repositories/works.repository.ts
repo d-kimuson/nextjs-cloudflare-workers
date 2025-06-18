@@ -290,12 +290,47 @@ export const worksRepository = (db: DB) => {
     return results.filter((result) => result.work !== null);
   };
 
+  const findByIds = async (
+    workIds: readonly string[],
+    options?: { limit?: number }
+  ) => {
+    const limit = options?.limit ?? 100;
+
+    if (workIds.length === 0) {
+      return [];
+    }
+
+    return db.query.worksTable.findMany({
+      where: inArray(worksTable.id, [...workIds]),
+      limit,
+      orderBy: [desc(worksTable.createdAt)], // 新しい順で表示
+      with: {
+        genres: {
+          with: {
+            genre: true,
+          },
+        },
+        makers: {
+          with: {
+            maker: true,
+          },
+        },
+        series: {
+          with: {
+            series: true,
+          },
+        },
+      },
+    });
+  };
+
   return {
     createOrUpdate,
     findById,
     findByGenreId,
     searchByTitle,
     findBySeriesIds,
+    findByIds,
   };
 };
 
