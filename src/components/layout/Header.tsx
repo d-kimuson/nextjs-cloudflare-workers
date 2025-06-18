@@ -229,14 +229,6 @@ export function Header() {
                       </h4>
                       <div className="space-y-1">
                         <a
-                          href="https://www.dlsite.com/"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="block text-sm p-2 rounded hover:bg-muted transition-colors"
-                        >
-                          DLsite
-                        </a>
-                        <a
                           href="https://www.dmm.co.jp/"
                           target="_blank"
                           rel="noopener noreferrer"

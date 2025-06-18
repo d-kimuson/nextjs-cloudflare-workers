@@ -5,6 +5,7 @@ import "./globals.css";
 import { RootErrorBoundary } from "./providers/RootErrorBoundary";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { SITE_CONFIG } from "@/lib/constants/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,25 +17,25 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "DoujinShare - 同人作品アフィリエイトサイト",
-  description: "人気同人作品をご紹介。DLsite・FANZA正規購入リンク掲載",
-  keywords: ["同人", "アフィリエイト", "DLsite", "FANZA", "二次元"],
-  authors: [{ name: "DoujinShare" }],
+export const metadata = {
+  title: SITE_CONFIG.title,
+  description: SITE_CONFIG.description,
+  keywords: SITE_CONFIG.keywords.slice(),
+  authors: [{ name: SITE_CONFIG.author }],
   robots: "index, follow",
   viewport: "width=device-width, initial-scale=1",
   openGraph: {
-    title: "DoujinShare - 同人作品アフィリエイトサイト",
-    description: "人気同人作品をご紹介。DLsite・FANZA正規購入リンク掲載",
+    title: SITE_CONFIG.title,
+    description: SITE_CONFIG.description,
     type: "website",
     locale: "ja_JP",
   },
   twitter: {
     card: "summary_large_image",
-    title: "DoujinShare - 同人作品アフィリエイトサイト",
-    description: "人気同人作品をご紹介。DLsite・FANZA正規購入リンク掲載",
+    title: SITE_CONFIG.title,
+    description: SITE_CONFIG.description,
   },
-};
+} as const satisfies Metadata;
 
 export default function RootLayout({
   children,

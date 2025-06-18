@@ -51,16 +51,6 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               <li>
                 <a
-                  href="https://www.dlsite.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  DLsite
-                </a>
-              </li>
-              <li>
-                <a
                   href="https://www.dmm.co.jp/"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -109,9 +99,6 @@ export function Footer() {
         {/* 免責事項 */}
         <div className="space-y-4">
           <div className="text-xs text-muted-foreground space-y-2">
-            <p>
-              ※当サイトはDLsiteおよびFANZAのアフィリエイトプログラムに参加しています。
-            </p>
             <p>
               ※当サイト掲載の画像やテキストは全て販売元の許可を得て引用・掲載しており、違法コンテンツや違法ダウンロードサイトへの誘導等はございません。
             </p>
