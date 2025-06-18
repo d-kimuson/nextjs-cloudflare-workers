@@ -5,7 +5,7 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SiteBreadcrumb } from "@/components/layout/Breadcrumb";
 import { TrendingUp, ArrowLeft } from "lucide-react";
-import type { ItemItem } from "@/lib/api/dmmApi.generated";
+import type { ItemItem } from "@/lib/dmmApi/dmmApi.generated";
 import Link from "next/link";
 import { pagesPath } from "../../../lib/$path";
 

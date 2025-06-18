@@ -10,7 +10,7 @@ export default defineConfig({
       client: "fetch",
       httpClient: "fetch",
       baseUrl: "https://api.dmm.com/affiliate/v3",
-      target: "src/lib/api/dmmApi.generated.ts",
+      target: "src/lib/dmmApi/dmmApi.generated.ts",
     },
   },
 });

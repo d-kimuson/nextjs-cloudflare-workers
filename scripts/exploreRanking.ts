@@ -2,7 +2,7 @@ import { D1Database, D1DatabaseAPI } from "@miniflare/d1";
 import { createSQLiteDB } from "@miniflare/shared";
 import { drizzle } from "drizzle-orm/d1";
 import { uniqBy } from "es-toolkit";
-import { dmmApiClient } from "../src/lib/api/client";
+import { dmmApiClient } from "../src/lib/dmmApi/client";
 import type { DB } from "../src/server/db/client";
 import * as schema from "../src/server/db/schema";
 import { workService } from "../src/server/service/work";
@@ -26,7 +26,7 @@ async function main() {
 
     if (rankingResult.isErr()) {
       throw new Error(
-        `Failed to fetch ranking: ${rankingResult.error.message}`,
+        `Failed to fetch ranking: ${rankingResult.error.message}`
       );
     }
 
@@ -40,12 +40,12 @@ async function main() {
 
     const makers = uniqBy(
       items.flatMap((item) => item.iteminfo?.maker ?? []),
-      (maker) => maker.id,
+      (maker) => maker.id
     );
 
     console.log(
       "fetch items by ranking makers",
-      makers.map((maker) => maker.name),
+      makers.map((maker) => maker.name)
     );
 
     for (const maker of makers) {

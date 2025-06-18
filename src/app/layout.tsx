@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Suspense } from "react";
-import "./globals.css";
 import { RootErrorBoundary } from "./providers/RootErrorBoundary";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { SessionProvider } from "@/components/session-provider";
 import { SITE_CONFIG } from "@/lib/constants/site";
+import { QueryClientProvider } from "../lib/api/QueryClientProvider";
+
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,11 +52,13 @@ export default function RootLayout({
       >
         <Suspense fallback={<div>Loading...</div>}>
           <RootErrorBoundary>
-            <SessionProvider>
-              <Header />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </SessionProvider>
+            <QueryClientProvider>
+              <SessionProvider>
+                <Header />
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </SessionProvider>
+            </QueryClientProvider>
           </RootErrorBoundary>
         </Suspense>
       </body>

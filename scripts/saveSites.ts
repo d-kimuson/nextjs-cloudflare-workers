@@ -1,6 +1,6 @@
 import { writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { floorList } from "../src/lib/api/dmmApi.generated";
+import { floorList } from "../src/lib/dmmApi/dmmApi.generated";
 import { getRequiredEnv } from "./utils/env";
 
 const main = async () => {
@@ -30,21 +30,21 @@ const main = async () => {
                       floors[floor.name] = floor;
                       return floors;
                     },
-                    {},
+                    {}
                   ),
                 };
                 return services;
               },
-              {},
+              {}
             ),
           };
           return sites;
         },
-        {},
+        {}
       ),
       null,
-      2,
-    ),
+      2
+    )
   );
 };
 

@@ -1,7 +1,7 @@
 import { D1Database, D1DatabaseAPI } from "@miniflare/d1";
 import { createSQLiteDB } from "@miniflare/shared";
 import { drizzle } from "drizzle-orm/d1";
-import { dmmApiClient } from "../src/lib/api/client";
+import { dmmApiClient } from "../src/lib/dmmApi/client";
 import type { DB } from "../src/server/db/client";
 import * as schema from "../src/server/db/schema";
 import { getRequiredEnv } from "./utils/env";

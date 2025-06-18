@@ -1,4 +1,4 @@
-import { dmmApiClient } from "@/lib/api/client";
+import { dmmApiClient } from "@/lib/dmmApi/client";
 import { ErrorPage } from "../../../components/ErrorPage";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { DailyRanking } from "./DailyRanking";

@@ -1,6 +1,6 @@
 import { ResultAsync } from "neverthrow";
-import { dmmApiClient } from "../../lib/api/client";
-import type { ItemItem, ItemMaker } from "../../lib/api/dmmApi.generated";
+import { dmmApiClient } from "../../lib/dmmApi/client";
+import type { ItemItem, ItemMaker } from "../../lib/dmmApi/dmmApi.generated";
 import { BaseError, isBaseError } from "../../lib/error/BaseError";
 import type { DB } from "../db/client";
 import { genresRepository } from "../repositories/genres.repository";
@@ -22,7 +22,7 @@ export const workService = (db: DB) => {
       console.log(
         `registerWork: ${item.title} (${
           item.iteminfo?.maker?.at(0)?.name ?? "unknown"
-        })`,
+        })`
       );
 
       // 作者情報を処理
@@ -82,7 +82,7 @@ export const workService = (db: DB) => {
       return new BaseError("UNKNOWN_ERROR", "UNHANDLED", {
         cause: error,
       });
-    },
+    }
   );
 
   const registerWorksFromMaker = ResultAsync.fromThrowable(
@@ -95,7 +95,7 @@ export const workService = (db: DB) => {
         console.error(
           "Failed to fetch maker items",
           maker.name,
-          JSON.stringify(makerItems.error, null, 2),
+          JSON.stringify(makerItems.error, null, 2)
         );
 
         return new BaseError("FAILED_TO_FETCH_MAKER_ITEMS", "BAD_REQUEST");
@@ -113,7 +113,7 @@ export const workService = (db: DB) => {
       return new BaseError("UNKNOWN_ERROR", "UNHANDLED", {
         cause: error,
       });
-    },
+    }
   );
   return {
     registerWork,

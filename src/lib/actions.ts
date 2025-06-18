@@ -29,10 +29,6 @@ export async function toggleFavoriteAction(
 export async function setConsentAction() {
   try {
     const session = await setSessionConsent();
-    console.log("[Action] Consent set, session:", {
-      consented: session.consented,
-      favoritesCount: session.favorites.length,
-    });
     return { success: true, session };
   } catch (error) {
     console.error("Cookie許可の設定に失敗しました:", error);
