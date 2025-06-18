@@ -30,6 +30,11 @@ export const pagesPath = {
     'daily_ranking': {
       $url: (url?: { hash?: string }) => ({ pathname: '/doujinshi/daily-ranking' as const, hash: url?.hash, path: `/doujinshi/daily-ranking${buildSuffix(url)}` })
     },
+    'genres': {
+      _genreId: (genreId: string | number) => ({
+        $url: (url?: { hash?: string }) => ({ pathname: '/doujinshi/genres/[genreId]' as const, query: { genreId }, hash: url?.hash, path: `/doujinshi/genres/${genreId}${buildSuffix(url)}` })
+      })
+    },
     'makers': {
       _makerId: (makerId: string | number) => ({
         $url: (url?: { hash?: string }) => ({ pathname: '/doujinshi/makers/[makerId]' as const, query: { makerId }, hash: url?.hash, path: `/doujinshi/makers/${makerId}${buildSuffix(url)}` })

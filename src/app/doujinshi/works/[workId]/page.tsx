@@ -240,13 +240,21 @@ export default async function WorkPage({ params }: WorkPageProps) {
                           {work.genres
                             .filter((genre) => genre.genre)
                             .map((genre) => (
-                              <Badge
+                              <Link
                                 key={genre.genreId}
-                                variant="secondary"
-                                className="hover:bg-gray-300 cursor-pointer transition-colors"
+                                href={urlObjectToString(
+                                  pagesPath.doujinshi.genres
+                                    ._genreId(String(genre.genreId))
+                                    .$url()
+                                )}
                               >
-                                {genre.genre?.name}
-                              </Badge>
+                                <Badge
+                                  variant="secondary"
+                                  className="hover:bg-gray-300 cursor-pointer transition-colors"
+                                >
+                                  {genre.genre?.name}
+                                </Badge>
+                              </Link>
                             ))}
                         </div>
                       </div>

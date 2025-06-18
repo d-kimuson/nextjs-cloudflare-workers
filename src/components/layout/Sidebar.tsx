@@ -10,17 +10,13 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { TrendingUp, Clock, Star, Users, Tag } from "lucide-react";
 import Link from "next/link";
+import { getAllGenresWithCounts } from "@/server/actions/genres";
+import { pagesPath } from "@/lib/$path";
+import { urlObjectToString } from "@/lib/path/urlObjectToString";
 
-export function Sidebar() {
-  // サンプルデータ
-  const categories = [
-    { name: "おっぱい", count: 2456 },
-    { name: "制服", count: 1834 },
-    { name: "中出し", count: 1623 },
-    { name: "巨乳", count: 1489 },
-    { name: "フェラチオ", count: 1256 },
-    { name: "快楽堕ち", count: 987 },
-  ];
+export async function Sidebar() {
+  // リアルデータを取得
+  const genres = await getAllGenresWithCounts(6); // 上位6ジャンルを取得
 
   const popularWorks = [
     {
@@ -48,25 +44,24 @@ export function Sidebar() {
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <Tag className="h-5 w-5" />
-            <span>人気カテゴリー</span>
+            <span>人気ジャンル</span>
           </CardTitle>
-          <CardDescription>よく検索されるジャンル</CardDescription>
+          <CardDescription>よく投稿されるジャンル</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            {categories.map((category) => (
-              <div
-                key={category.name}
-                className="flex items-center justify-between"
-              >
+            {genres.map((genre) => (
+              <div key={genre.id} className="flex items-center justify-between">
                 <Link
-                  href={`/category/${category.name}`}
-                  className="text-sm hover:text-primary transition-colors"
+                  href={urlObjectToString(
+                    pagesPath.doujinshi.genres._genreId(String(genre.id)).$url()
+                  )}
+                  className="text-sm text-gray-700 hover:text-primary transition-colors cursor-pointer"
                 >
-                  {category.name}
+                  {genre.name}
                 </Link>
                 <Badge variant="secondary" className="text-xs">
-                  {category.count.toLocaleString()}
+                  {genre.workCount.toLocaleString()}
                 </Badge>
               </div>
             ))}

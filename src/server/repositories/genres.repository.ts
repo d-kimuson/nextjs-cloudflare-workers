@@ -1,6 +1,7 @@
 import { getCurrentDate } from "../../lib/date/currentDate";
 import type { DB } from "../db/client";
-import { genresTable } from "../db/schema";
+import { genresTable, workGenreTable } from "../db/schema";
+import { eq, sql } from "drizzle-orm";
 
 export interface CreateGenreInput {
   id: number;
@@ -20,7 +21,7 @@ export const genresRepository = (db: DB) => {
   };
 
   const bulkCreateIfNotExists = async (
-    genres: CreateGenreInput[],
+    genres: CreateGenreInput[]
   ): Promise<void> => {
     if (genres.length === 0) return;
 
@@ -36,9 +37,42 @@ export const genresRepository = (db: DB) => {
       .onConflictDoNothing();
   };
 
+  const findAllWithCounts = async (limit = 50, offset = 0) => {
+    return await db
+      .select({
+        id: genresTable.id,
+        name: genresTable.name,
+        createdAt: genresTable.createdAt,
+        workCount: sql<number>`count(${workGenreTable.workId})`.as(
+          "work_count"
+        ),
+      })
+      .from(genresTable)
+      .leftJoin(workGenreTable, eq(genresTable.id, workGenreTable.genreId))
+      .groupBy(genresTable.id)
+      .orderBy(sql`work_count desc`)
+      .limit(limit)
+      .offset(offset);
+  };
+
+  const findById = async (id: number) => {
+    return db.query.genresTable.findFirst({
+      where: eq(genresTable.id, id),
+      with: {
+        works: {
+          with: {
+            work: true,
+          },
+        },
+      },
+    });
+  };
+
   return {
     createIfNotExists,
     bulkCreateIfNotExists,
+    findAllWithCounts,
+    findById,
   };
 };
 

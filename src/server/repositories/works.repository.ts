@@ -43,7 +43,7 @@ export const worksRepository = (db: DB) => {
       seriesIds: readonly number[];
       sampleSmallImages: readonly string[];
       sampleLargeImages: readonly string[];
-    }> = {},
+    }> = {}
   ) => {
     const {
       makerIds = [],
@@ -84,7 +84,7 @@ export const worksRepository = (db: DB) => {
             imageUrl,
             order: index,
             createdAt: currentTime,
-          })),
+          }))
         )
         .onConflictDoNothing();
     }
@@ -99,7 +99,7 @@ export const worksRepository = (db: DB) => {
             imageUrl,
             order: index,
             createdAt: currentTime,
-          })),
+          }))
         )
         .onConflictDoNothing();
     }
@@ -112,7 +112,7 @@ export const worksRepository = (db: DB) => {
           genreIds.map((genreId) => ({
             workId: work.id,
             genreId,
-          })),
+          }))
         )
         .onConflictDoNothing();
     }
@@ -125,7 +125,7 @@ export const worksRepository = (db: DB) => {
           seriesIds.map((seriesId) => ({
             workId: work.id,
             seriesId,
-          })),
+          }))
         )
         .onConflictDoNothing();
     }
@@ -138,7 +138,7 @@ export const worksRepository = (db: DB) => {
           makerIds.map((makerId) => ({
             workId: work.id,
             makerId,
-          })),
+          }))
         )
         .onConflictDoNothing();
     }
@@ -169,9 +169,45 @@ export const worksRepository = (db: DB) => {
     });
   };
 
+  const findByGenreId = async (
+    genreId: number,
+    options?: { limit?: number; offset?: number }
+  ) => {
+    const limit = options?.limit ?? 20;
+    const offset = options?.offset ?? 0;
+
+    return db.query.workGenreTable.findMany({
+      where: eq(workGenreTable.genreId, genreId),
+      limit,
+      offset,
+      with: {
+        work: {
+          with: {
+            genres: {
+              with: {
+                genre: true,
+              },
+            },
+            makers: {
+              with: {
+                maker: true,
+              },
+            },
+            series: {
+              with: {
+                series: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  };
+
   return {
     createOrUpdate,
     findById,
+    findByGenreId,
   };
 };
 

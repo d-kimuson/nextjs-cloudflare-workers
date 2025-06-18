@@ -1,0 +1,22 @@
+---
+description: Next.js からリンクを使う場合に必ず利用する pathpida について
+globs: 
+alwaysApply: false
+---
+Next.js で Link コンポーネントを用いてソフトナビゲーションを行う場合 pathpida によって生成された src/lib/$page.ts の pagesPath を用いて指定してください。
+
+pagesPath にはファイルベールルーティングを静的に解決するためのオブジェクトが置いてあり
+
+```typescript
+pagesPath.doujinshi.works._workId(work.id).$url()
+```
+
+のように Link を取得可能
+
+また、_workId のように dynamic params が存在する場合、AppRouter をサポートするために urlObjectToString を用いて文字列に変換すること:
+
+```typscript
+urlObjectToString(
+  pagesPath.doujinshi.makers._makerId(maker.id).$url()
+)
+```

@@ -1,5 +1,5 @@
 ---
-description: shadcn-ui の使い方
+description: shadcn-ui の使い方。スタイリング・UI 実装を行う際に必ず確認
 globs: 
 alwaysApply: false
 ---
