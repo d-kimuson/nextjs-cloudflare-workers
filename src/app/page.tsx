@@ -1,6 +1,4 @@
 import { Sidebar } from "@/components/layout/Sidebar";
-import { WorksList } from "@/components/works/WorksList";
-import { FanzaWorksList } from "@/components/works/FanzaWorksList";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,14 +9,20 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { FanzaWorksList } from "@/components/works/FanzaWorksList";
+import { WorksList } from "@/components/works/WorksList";
 import {
   Award,
+  Calendar,
+  ChevronRight,
   Clock,
+  DollarSign,
   ExternalLink,
+  Filter,
   Heart,
+  Search,
   Star,
   TrendingUp,
-  ChevronRight,
   Zap,
 } from "lucide-react";
 import Link from "next/link";
@@ -26,46 +30,58 @@ import { pagesPath } from "../lib/$path";
 import { urlObjectToString } from "../lib/path/urlObjectToString";
 import { getDmmDailyRanking } from "../server/fetchers/dmm";
 import { getAllGenresWithCounts } from "../server/fetchers/genres";
-import { getRecentWorksByTopMakers } from "../server/fetchers/works";
+import {
+  getRecentWorksByTopMakers,
+  getWorksByPriceRange,
+  getWorksByRatingOrder,
+} from "../server/fetchers/works";
 
 export default async function Home() {
-  const [genres, dailyRanking, recentWorksByTopMakers] = await Promise.all([
+  const [
+    genres,
+    dailyRanking,
+    recentWorksByTopMakers,
+    budgetWorks,
+    highRatedWorks,
+  ] = await Promise.all([
     getAllGenresWithCounts(6, 0),
     getDmmDailyRanking(),
     getRecentWorksByTopMakers({ limit: 6, daysAgo: 14 }),
+    getWorksByPriceRange(undefined, 1000, { limit: 6 }),
+    getWorksByRatingOrder(4.0, { limit: 6 }),
   ]);
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex gap-8">
+      <div className="container mx-auto px-4 py-8 max-w-none">
+        <div className="flex flex-col lg:flex-row gap-8 min-w-0">
           {/* メインコンテンツ */}
-          <div className="flex-1 space-y-8">
+          <div className="flex-1 space-y-8 min-w-0 overflow-hidden">
             {/* ヒーローセクション */}
             <section className="text-center space-y-4 py-12 bg-gradient-to-b from-primary/10 to-background rounded-lg">
-              <h1 className="text-4xl font-bold text-foreground">おかずNavi</h1>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              <h1 className="text-2xl sm:text-4xl font-bold text-foreground">おかずNavi</h1>
+              <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
                 新作アダルト作品の発見体験を提供するナビゲーションサイト
               </p>
-              <div className="flex justify-center gap-4 mt-6 flex-wrap">
+              <div className="flex justify-center gap-2 sm:gap-4 mt-6 flex-wrap px-4">
                 <Link href={pagesPath.doujinshi.daily_ranking.$url()}>
-                  <Button size="lg" className="flex items-center space-x-2">
-                    <TrendingUp className="h-5 w-5" />
+                  <Button size="sm" className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm">
+                    <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
                     <span>今日のランキング</span>
                   </Button>
                 </Link>
                 <Link href={pagesPath.doujinshi.new_releases.$url()}>
                   <Button
                     variant="outline"
-                    size="lg"
-                    className="flex items-center space-x-2"
+                    size="sm"
+                    className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm"
                   >
-                    <Zap className="h-5 w-5" />
+                    <Zap className="h-4 w-4 sm:h-5 sm:w-5" />
                     <span>人気作者の新作</span>
                   </Button>
                 </Link>
                 <Link href={pagesPath.doujinshi.makers.$url()}>
-                  <Button variant="outline" size="lg">
+                  <Button variant="outline" size="sm" className="text-xs sm:text-sm">
                     人気作者を見る
                   </Button>
                 </Link>
@@ -121,6 +137,99 @@ export default async function Home() {
                 layout="grid"
                 emptyMessage="現在、人気作者の新作はありません"
               />
+            </section>
+
+            {/* 多角的なコンテンツ発見セクション */}
+            <section className="space-y-8">
+              <div className="flex items-center space-x-2">
+                <Search className="h-6 w-6 text-blue-500" />
+                <h2 className="text-2xl font-bold">いろんな方法で作品を発見</h2>
+              </div>
+
+              <div className="space-y-6">
+                {/* お手頃価格の作品 */}
+                <Card>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <DollarSign className="h-5 w-5 text-green-500" />
+                        <CardTitle className="text-lg">
+                          お手頃価格で楽しむ
+                        </CardTitle>
+                      </div>
+                      <Link href="/doujinshi/search?maxPrice=1000">
+                        <Button variant="ghost" size="sm">
+                          <span>もっと見る</span>
+                          <ChevronRight className="h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </div>
+                    <CardDescription>
+                      1,000円以下のコスパ抜群作品
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <WorksList
+                      works={budgetWorks.data.slice(0, 3)}
+                      layout="list"
+                      emptyMessage="お手頃価格の作品がありません"
+                    />
+                  </CardContent>
+                </Card>
+
+                {/* 高評価作品 */}
+                <Card>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Star className="h-5 w-5 text-orange-500" />
+                        <CardTitle className="text-lg">高評価の名作</CardTitle>
+                      </div>
+                      <Link href="/doujinshi/search?minRating=4.0">
+                        <Button variant="ghost" size="sm">
+                          <span>もっと見る</span>
+                          <ChevronRight className="h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </div>
+                    <CardDescription>評価4.0以上の厳選作品</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <WorksList
+                      works={highRatedWorks.data.slice(0, 3)}
+                      layout="list"
+                      emptyMessage="高評価の作品がありません"
+                    />
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* 検索オプション */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Filter className="h-5 w-5 text-purple-500" />
+                    <span>詳細検索で理想の作品を見つける</span>
+                  </CardTitle>
+                  <CardDescription>
+                    価格帯・発売日・評価など、様々な条件で検索できます
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center">
+                    <Link href={urlObjectToString(pagesPath.doujinshi.search.$url())}>
+                      <Button size="lg" className="flex items-center space-x-2">
+                        <Search className="h-5 w-5" />
+                        <span>詳細検索を始める</span>
+                        <ChevronRight className="h-4 w-4" />
+                      </Button>
+                    </Link>
+                    <p className="text-sm text-muted-foreground mt-3">
+                      価格帯・発売日・評価・タイトルなど多彩な条件で絞り込み検索
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
             </section>
 
             {/* サイト案内 */}

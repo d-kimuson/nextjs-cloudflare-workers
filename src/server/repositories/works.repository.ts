@@ -1,4 +1,16 @@
-import { and, desc, eq, gte, inArray, like, ne, sql } from "drizzle-orm";
+import {
+  and,
+  between,
+  count,
+  desc,
+  eq,
+  gte,
+  inArray,
+  like,
+  lte,
+  ne,
+  sql,
+} from "drizzle-orm";
 import { z } from "zod";
 import { getCurrentDate } from "../../lib/date/currentDate";
 import type { DB } from "../db/client";
@@ -206,6 +218,15 @@ export const worksRepository = (db: DB) => {
     });
   };
 
+  const countByGenreId = async (genreId: number) => {
+    const result = await db
+      .select({ count: count() })
+      .from(workGenreTable)
+      .where(eq(workGenreTable.genreId, genreId));
+
+    return result[0]?.count ?? 0;
+  };
+
   const searchByTitle = async (
     searchTerm: string,
     options?: { limit?: number },
@@ -292,6 +313,51 @@ export const worksRepository = (db: DB) => {
     return results.filter((result) => result.work !== null);
   };
 
+  const findBySeriesId = async (
+    seriesId: number,
+    options?: { limit?: number; offset?: number },
+  ) => {
+    const limit = options?.limit ?? 20;
+    const offset = options?.offset ?? 0;
+
+    return db.query.workSeriesTable.findMany({
+      where: eq(workSeriesTable.seriesId, seriesId),
+      limit,
+      offset,
+      with: {
+        work: {
+          with: {
+            genres: {
+              with: {
+                genre: true,
+              },
+            },
+            makers: {
+              with: {
+                maker: true,
+              },
+            },
+            series: {
+              with: {
+                series: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: [desc(workSeriesTable.workId)], // 新しい順で表示
+    });
+  };
+
+  const countBySeriesId = async (seriesId: number) => {
+    const result = await db
+      .select({ count: count() })
+      .from(workSeriesTable)
+      .where(eq(workSeriesTable.seriesId, seriesId));
+
+    return result[0]?.count ?? 0;
+  };
+
   const findByIds = async (
     workIds: readonly string[],
     options?: { limit?: number },
@@ -372,6 +438,51 @@ export const worksRepository = (db: DB) => {
     return results.filter((result) => result.work !== null);
   };
 
+  const findByMakerId = async (
+    makerId: number,
+    options?: { limit?: number; offset?: number },
+  ) => {
+    const limit = options?.limit ?? 20;
+    const offset = options?.offset ?? 0;
+
+    return db.query.workMakerTable.findMany({
+      where: eq(workMakerTable.makerId, makerId),
+      limit,
+      offset,
+      with: {
+        work: {
+          with: {
+            genres: {
+              with: {
+                genre: true,
+              },
+            },
+            makers: {
+              with: {
+                maker: true,
+              },
+            },
+            series: {
+              with: {
+                series: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: [desc(workMakerTable.workId)], // 新しい順で表示
+    });
+  };
+
+  const countByMakerId = async (makerId: number) => {
+    const result = await db
+      .select({ count: count() })
+      .from(workMakerTable)
+      .where(eq(workMakerTable.makerId, makerId));
+
+    return result[0]?.count ?? 0;
+  };
+
   // 高スコア作者の新作（1週間以内）を取得
   const findRecentWorksByTopScoredMakers = async (options?: {
     limit?: number;
@@ -422,15 +533,385 @@ export const worksRepository = (db: DB) => {
       .limit(limit);
   };
 
+  // 価格帯別での作品検索
+  const findByPriceRange = async (
+    minPrice?: number,
+    maxPrice?: number,
+    options?: { limit?: number; offset?: number },
+  ) => {
+    const limit = options?.limit ?? 20;
+    const offset = options?.offset ?? 0;
+
+    let whereCondition: any = undefined;
+    if (minPrice !== undefined && maxPrice !== undefined) {
+      whereCondition = between(worksTable.price, minPrice, maxPrice);
+    } else if (minPrice !== undefined) {
+      whereCondition = gte(worksTable.price, minPrice);
+    } else if (maxPrice !== undefined) {
+      whereCondition = lte(worksTable.price, maxPrice);
+    }
+
+    return db.query.worksTable.findMany({
+      where: whereCondition,
+      limit,
+      offset,
+      orderBy: [desc(worksTable.releaseDate)],
+      with: {
+        genres: {
+          with: {
+            genre: true,
+          },
+        },
+        makers: {
+          with: {
+            maker: true,
+          },
+        },
+        series: {
+          with: {
+            series: true,
+          },
+        },
+      },
+    });
+  };
+
+  const countByPriceRange = async (minPrice?: number, maxPrice?: number) => {
+    let whereCondition: any = undefined;
+    if (minPrice !== undefined && maxPrice !== undefined) {
+      whereCondition = between(worksTable.price, minPrice, maxPrice);
+    } else if (minPrice !== undefined) {
+      whereCondition = gte(worksTable.price, minPrice);
+    } else if (maxPrice !== undefined) {
+      whereCondition = lte(worksTable.price, maxPrice);
+    }
+
+    const result = await db
+      .select({ count: count() })
+      .from(worksTable)
+      .where(whereCondition);
+
+    return result[0]?.count ?? 0;
+  };
+
+  // 発売日別での作品検索
+  const findByReleaseDateRange = async (
+    startDate?: string,
+    endDate?: string,
+    options?: { limit?: number; offset?: number },
+  ) => {
+    const limit = options?.limit ?? 20;
+    const offset = options?.offset ?? 0;
+
+    let whereCondition: any = undefined;
+    if (startDate && endDate) {
+      whereCondition = sql`${worksTable.releaseDate} >= ${startDate} AND ${worksTable.releaseDate} <= ${endDate}`;
+    } else if (startDate) {
+      whereCondition = sql`${worksTable.releaseDate} >= ${startDate}`;
+    } else if (endDate) {
+      whereCondition = sql`${worksTable.releaseDate} <= ${endDate}`;
+    }
+
+    return db.query.worksTable.findMany({
+      where: whereCondition,
+      limit,
+      offset,
+      orderBy: [desc(worksTable.releaseDate)],
+      with: {
+        genres: {
+          with: {
+            genre: true,
+          },
+        },
+        makers: {
+          with: {
+            maker: true,
+          },
+        },
+        series: {
+          with: {
+            series: true,
+          },
+        },
+      },
+    });
+  };
+
+  const countByReleaseDateRange = async (
+    startDate?: string,
+    endDate?: string,
+  ) => {
+    let whereCondition: any = undefined;
+    if (startDate && endDate) {
+      whereCondition = sql`${worksTable.releaseDate} >= ${startDate} AND ${worksTable.releaseDate} <= ${endDate}`;
+    } else if (startDate) {
+      whereCondition = sql`${worksTable.releaseDate} >= ${startDate}`;
+    } else if (endDate) {
+      whereCondition = sql`${worksTable.releaseDate} <= ${endDate}`;
+    }
+
+    const result = await db
+      .select({ count: count() })
+      .from(worksTable)
+      .where(whereCondition);
+
+    return result[0]?.count ?? 0;
+  };
+
+  // 評価順での作品検索（評価の高い順）
+  const findByRatingOrder = async (options?: {
+    limit?: number;
+    offset?: number;
+    minRating?: number;
+  }) => {
+    const limit = options?.limit ?? 20;
+    const offset = options?.offset ?? 0;
+    const minRating = options?.minRating;
+
+    let whereCondition: any = undefined;
+    if (minRating !== undefined) {
+      whereCondition = gte(worksTable.reviewAverageScore, minRating);
+    }
+
+    return db.query.worksTable.findMany({
+      where: whereCondition,
+      limit,
+      offset,
+      orderBy: [
+        desc(worksTable.reviewAverageScore),
+        desc(worksTable.reviewCount),
+      ],
+      with: {
+        genres: {
+          with: {
+            genre: true,
+          },
+        },
+        makers: {
+          with: {
+            maker: true,
+          },
+        },
+        series: {
+          with: {
+            series: true,
+          },
+        },
+      },
+    });
+  };
+
+  const countByRatingOrder = async (minRating?: number) => {
+    let whereCondition: any = undefined;
+    if (minRating !== undefined) {
+      whereCondition = gte(worksTable.reviewAverageScore, minRating);
+    }
+
+    const result = await db
+      .select({ count: count() })
+      .from(worksTable)
+      .where(whereCondition);
+
+    return result[0]?.count ?? 0;
+  };
+
+  // 高度な検索機能 - 複数条件を組み合わせて検索
+  const findWithFilters = async (filters: {
+    title?: string;
+    genreId?: number;
+    makerId?: number;
+    seriesId?: number;
+    minPrice?: number;
+    maxPrice?: number;
+    startDate?: string;
+    endDate?: string;
+    minRating?: number;
+    sortBy?:
+      | "newest"
+      | "oldest"
+      | "rating-high"
+      | "rating-low"
+      | "price-high"
+      | "price-low";
+    limit?: number;
+    offset?: number;
+  }) => {
+    const {
+      title,
+      genreId,
+      makerId,
+      seriesId,
+      minPrice,
+      maxPrice,
+      startDate,
+      endDate,
+      minRating,
+      sortBy = "newest",
+      limit = 20,
+      offset = 0,
+    } = filters;
+
+    // WHERE条件を構築
+    const conditions = [];
+
+    if (title) {
+      conditions.push(like(worksTable.title, `%${title}%`));
+    }
+
+    if (minPrice !== undefined && maxPrice !== undefined) {
+      conditions.push(between(worksTable.price, minPrice, maxPrice));
+    } else if (minPrice !== undefined) {
+      conditions.push(gte(worksTable.price, minPrice));
+    } else if (maxPrice !== undefined) {
+      conditions.push(lte(worksTable.price, maxPrice));
+    }
+
+    if (startDate && endDate) {
+      conditions.push(
+        sql`${worksTable.releaseDate} >= ${startDate} AND ${worksTable.releaseDate} <= ${endDate}`,
+      );
+    } else if (startDate) {
+      conditions.push(sql`${worksTable.releaseDate} >= ${startDate}`);
+    } else if (endDate) {
+      conditions.push(sql`${worksTable.releaseDate} <= ${endDate}`);
+    }
+
+    if (minRating !== undefined) {
+      conditions.push(gte(worksTable.reviewAverageScore, minRating));
+    }
+
+    const whereCondition =
+      conditions.length > 0 ? and(...conditions) : undefined;
+
+    // ORDER BY条件を構築
+    let orderBy: any;
+    switch (sortBy) {
+      case "oldest":
+        orderBy = [worksTable.releaseDate];
+        break;
+      case "rating-high":
+        orderBy = [
+          desc(worksTable.reviewAverageScore),
+          desc(worksTable.reviewCount),
+        ];
+        break;
+      case "rating-low":
+        orderBy = [worksTable.reviewAverageScore, worksTable.reviewCount];
+        break;
+      case "price-high":
+        orderBy = [desc(worksTable.price)];
+        break;
+      case "price-low":
+        orderBy = [worksTable.price];
+        break;
+      default:
+        orderBy = [desc(worksTable.releaseDate)];
+        break;
+    }
+
+    // ジャンル、作者、シリーズでのフィルタリングが必要な場合は、
+    // より複雑なクエリが必要になるため、基本的な検索を実装
+    return db.query.worksTable.findMany({
+      where: whereCondition,
+      limit,
+      offset,
+      orderBy,
+      with: {
+        genres: {
+          with: {
+            genre: true,
+          },
+        },
+        makers: {
+          with: {
+            maker: true,
+          },
+        },
+        series: {
+          with: {
+            series: true,
+          },
+        },
+      },
+    });
+  };
+
+  const countWithFilters = async (filters: {
+    title?: string;
+    genreId?: number;
+    makerId?: number;
+    seriesId?: number;
+    minPrice?: number;
+    maxPrice?: number;
+    startDate?: string;
+    endDate?: string;
+    minRating?: number;
+  }) => {
+    const { title, minPrice, maxPrice, startDate, endDate, minRating } =
+      filters;
+
+    // WHERE条件を構築
+    const conditions = [];
+
+    if (title) {
+      conditions.push(like(worksTable.title, `%${title}%`));
+    }
+
+    if (minPrice !== undefined && maxPrice !== undefined) {
+      conditions.push(between(worksTable.price, minPrice, maxPrice));
+    } else if (minPrice !== undefined) {
+      conditions.push(gte(worksTable.price, minPrice));
+    } else if (maxPrice !== undefined) {
+      conditions.push(lte(worksTable.price, maxPrice));
+    }
+
+    if (startDate && endDate) {
+      conditions.push(
+        sql`${worksTable.releaseDate} >= ${startDate} AND ${worksTable.releaseDate} <= ${endDate}`,
+      );
+    } else if (startDate) {
+      conditions.push(sql`${worksTable.releaseDate} >= ${startDate}`);
+    } else if (endDate) {
+      conditions.push(sql`${worksTable.releaseDate} <= ${endDate}`);
+    }
+
+    if (minRating !== undefined) {
+      conditions.push(gte(worksTable.reviewAverageScore, minRating));
+    }
+
+    const whereCondition =
+      conditions.length > 0 ? and(...conditions) : undefined;
+
+    const result = await db
+      .select({ count: count() })
+      .from(worksTable)
+      .where(whereCondition);
+
+    return result[0]?.count ?? 0;
+  };
+
   return {
     createOrUpdate,
     findById,
     findByGenreId,
+    countByGenreId,
+    findByMakerId,
+    countByMakerId,
+    findBySeriesId,
+    countBySeriesId,
     searchByTitle,
     findBySeriesIds,
     findByIds,
     findByMakerIds,
     findRecentWorksByTopScoredMakers,
+    findByPriceRange,
+    countByPriceRange,
+    findByReleaseDateRange,
+    countByReleaseDateRange,
+    findByRatingOrder,
+    countByRatingOrder,
+    findWithFilters,
+    countWithFilters,
   };
 };
 

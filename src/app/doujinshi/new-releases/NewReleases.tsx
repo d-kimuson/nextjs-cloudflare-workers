@@ -1,6 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -13,6 +14,8 @@ type Props = {
 };
 
 export const NewReleases: React.FC<Props> = ({ works, loading }) => {
+  const breadcrumbItems = [{ label: "高評価作者の新作", current: true }];
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("ja-JP", {
       style: "currency",
@@ -30,6 +33,8 @@ export const NewReleases: React.FC<Props> = ({ works, loading }) => {
 
   return (
     <div className="flex-1">
+      <Breadcrumb items={breadcrumbItems} className="mb-6" />
+
       <header className="mb-8">
         <div className="flex items-center space-x-2 mb-4">
           <Award className="h-6 w-6 text-purple-500" />

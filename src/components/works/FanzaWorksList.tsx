@@ -1,10 +1,12 @@
 import { Calendar, ExternalLink, Star } from "lucide-react";
+import type { ItemItem } from "../../server/lib/dmmApi/dmmApi.generated";
+import type { PaginationInfo } from "../../types/pagination";
 import { FavoriteButton } from "../favorite-button";
 import { Alert, AlertDescription } from "../ui/alert";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
-import type { ItemItem } from "../../server/lib/dmmApi/dmmApi.generated";
+import { Pagination } from "../ui/pagination";
 
 interface FanzaWorksListProps {
   works: ItemItem[];
@@ -12,6 +14,9 @@ interface FanzaWorksListProps {
   emptyMessage?: string;
   showPagination?: boolean;
   showRanking?: boolean;
+  pagination?: PaginationInfo;
+  onPageChange?: (page: number) => void;
+  onItemsPerPageChange?: (itemsPerPage: number) => void;
 }
 
 export function FanzaWorksList({
@@ -20,6 +25,9 @@ export function FanzaWorksList({
   emptyMessage = "作品が見つかりません",
   showPagination = false,
   showRanking = false,
+  pagination,
+  onPageChange,
+  onItemsPerPageChange,
 }: FanzaWorksListProps) {
   const formatPrice = (price: string | number) => {
     const numPrice = typeof price === "string" ? Number(price) : price;
@@ -146,15 +154,17 @@ export function FanzaWorksList({
           })}
         </div>
 
-        {showPagination && works.length >= 20 && (
-          <div className="flex justify-center mt-12">
-            <Alert className="max-w-md">
-              <AlertDescription className="text-center">
-                ページネーション機能は準備中です。
-                <br />
-                現在は最新20件のみ表示しています。
-              </AlertDescription>
-            </Alert>
+        {showPagination && pagination && onPageChange && (
+          <div className="mt-12">
+            <Pagination
+              currentPage={pagination.currentPage}
+              totalPages={pagination.totalPages}
+              totalItems={pagination.totalItems}
+              itemsPerPage={pagination.itemsPerPage}
+              onPageChange={onPageChange}
+              onItemsPerPageChange={onItemsPerPageChange}
+              showItemsPerPage={!!onItemsPerPageChange}
+            />
           </div>
         )}
       </>
@@ -331,15 +341,17 @@ export function FanzaWorksList({
         })}
       </div>
 
-      {showPagination && works.length >= 20 && (
-        <div className="flex justify-center mt-12">
-          <Alert className="max-w-md">
-            <AlertDescription className="text-center">
-              ページネーション機能は準備中です。
-              <br />
-              現在は最新20件のみ表示しています。
-            </AlertDescription>
-          </Alert>
+      {showPagination && pagination && onPageChange && (
+        <div className="mt-12">
+          <Pagination
+            currentPage={pagination.currentPage}
+            totalPages={pagination.totalPages}
+            totalItems={pagination.totalItems}
+            itemsPerPage={pagination.itemsPerPage}
+            onPageChange={onPageChange}
+            onItemsPerPageChange={onItemsPerPageChange}
+            showItemsPerPage={!!onItemsPerPageChange}
+          />
         </div>
       )}
     </>

@@ -1,0 +1,183 @@
+import { BookOpen } from "lucide-react";
+import { notFound } from "next/navigation";
+import { SeriesStats } from "../../../../components/series/SeriesStats";
+import { Alert, AlertDescription } from "../../../../components/ui/alert";
+import { Badge } from "../../../../components/ui/badge";
+import { Breadcrumb } from "../../../../components/ui/breadcrumb";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../../components/ui/card";
+import { Separator } from "../../../../components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../../components/ui/tabs";
+import { SortableWorksList } from "../../../../components/works/SortableWorksList";
+import { WorksList } from "../../../../components/works/WorksList";
+import {
+  getSeriesBasicById,
+  getSeriesById,
+} from "../../../../server/fetchers/series";
+
+type SeriesPageProps = {
+  params: Promise<{
+    seriesId: string;
+  }>;
+};
+
+export default async function SeriesPage({ params }: SeriesPageProps) {
+  const { seriesId } = await params;
+  const seriesIdNumber = Number.parseInt(seriesId, 10);
+
+  if (Number.isNaN(seriesIdNumber)) {
+    notFound();
+  }
+
+  const series = await getSeriesById(seriesIdNumber);
+
+  if (!series) {
+    notFound();
+  }
+
+  const breadcrumbItems = [
+    { href: "/doujinshi", label: "同人誌" },
+    { label: "シリーズ" },
+    { label: series.name, current: true },
+  ];
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
+        {/* パンくずナビゲーション */}
+        <Breadcrumb items={breadcrumbItems} className="mb-6" />
+
+        {/* ヘッダー部分 */}
+        <div className="mb-8">
+          <div className="flex items-center space-x-3 mb-4">
+            <BookOpen className="h-8 w-8 text-primary" />
+            <h1 className="text-3xl font-bold">{series.name}</h1>
+            <Badge variant="secondary" className="text-sm">
+              シリーズ
+            </Badge>
+          </div>
+          <p className="text-muted-foreground mb-6">
+            「{series.name}」シリーズの作品一覧です。
+          </p>
+
+          {/* 統計情報 */}
+          <SeriesStats stats={series.stats} />
+        </div>
+
+        <Separator className="mb-8" />
+
+        {/* コンテンツセクション */}
+        <Tabs defaultValue="works" className="space-y-6">
+          <TabsList>
+            <TabsTrigger value="works">作品一覧</TabsTrigger>
+            <TabsTrigger value="info">シリーズ情報</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="works" className="space-y-6">
+            {/* ソート可能な作品一覧 */}
+            <SortableWorksList
+              works={series.works}
+              layout="grid"
+              emptyMessage={`「${series.name}」シリーズの作品はまだ登録されていません。`}
+            />
+          </TabsContent>
+
+          <TabsContent value="info" className="space-y-6">
+            <div className="grid gap-6 md:grid-cols-2">
+              {/* シリーズ基本情報 */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>シリーズ情報</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">シリーズ名</span>
+                    <span className="font-medium">{series.name}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">総作品数</span>
+                    <span className="font-medium">{series.stats.totalWorks}作品</span>
+                  </div>
+                  {series.stats.latestWork && (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">最新作品発売日</span>
+                      <span className="font-medium">
+                        {new Date(series.stats.latestWork.releaseDate).toLocaleDateString("ja-JP")}
+                      </span>
+                    </div>
+                  )}
+                  {series.stats.averageRating && (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">平均評価</span>
+                      <span className="font-medium">{series.stats.averageRating.toFixed(1)} / 5.0</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">登録日</span>
+                    <span className="font-medium">
+                      {series.createdAt 
+                        ? new Date(series.createdAt).toLocaleDateString("ja-JP")
+                        : "不明"}
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* 最新作品 */}
+              {series.stats.latestWork && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>最新作品</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <WorksList
+                      works={[series.stats.latestWork]}
+                      layout="grid"
+                      emptyMessage=""
+                    />
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          </TabsContent>
+        </Tabs>
+
+        {/* フッター注意書き */}
+        <div className="mt-12 text-center">
+          <Alert className="border-gray-200 bg-gray-50">
+            <AlertDescription>
+              ⚠️ この作品の著作権は制作者に帰属します。正規の販売サイトからのみご購入ください。
+            </AlertDescription>
+          </Alert>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export async function generateMetadata({ params }: SeriesPageProps) {
+  const { seriesId } = await params;
+  const seriesIdNumber = Number.parseInt(seriesId, 10);
+
+  if (Number.isNaN(seriesIdNumber)) {
+    return {
+      title: "シリーズが見つかりません",
+    };
+  }
+
+  const series = await getSeriesBasicById(seriesIdNumber);
+
+  if (!series) {
+    return {
+      title: "シリーズが見つかりません",
+    };
+  }
+
+  return {
+    title: `【同人誌】${series.name}シリーズの作品一覧`,
+    description: `${series.name}シリーズの同人作品を一覧で表示。最新作品から人気作品まで、安全な購入リンクと共にご紹介します。`,
+    openGraph: {
+      title: `【同人誌】${series.name}シリーズ`,
+      description: `${series.name}シリーズの同人作品一覧。安全な購入はこちらから。`,
+    },
+  };
+}

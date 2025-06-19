@@ -33,7 +33,8 @@ export const pagesPath = {
     'genres': {
       _genreId: (genreId: string | number) => ({
         $url: (url?: { hash?: string }) => ({ pathname: '/doujinshi/genres/[genreId]' as const, query: { genreId }, hash: url?.hash, path: `/doujinshi/genres/${genreId}${buildSuffix(url)}` })
-      })
+      }),
+      $url: (url?: { hash?: string }) => ({ pathname: '/doujinshi/genres' as const, hash: url?.hash, path: `/doujinshi/genres${buildSuffix(url)}` })
     },
     'makers': {
       _makerId: (makerId: string | number) => ({
@@ -43,6 +44,9 @@ export const pagesPath = {
     },
     'new_releases': {
       $url: (url?: { hash?: string }) => ({ pathname: '/doujinshi/new-releases' as const, hash: url?.hash, path: `/doujinshi/new-releases${buildSuffix(url)}` })
+    },
+    'search': {
+      $url: (url?: { hash?: string }) => ({ pathname: '/doujinshi/search' as const, hash: url?.hash, path: `/doujinshi/search${buildSuffix(url)}` })
     },
     'series': {
       _seriesId: (seriesId: string | number) => ({

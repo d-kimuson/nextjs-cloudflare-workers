@@ -1,4 +1,4 @@
-import { eq, sql } from "drizzle-orm";
+import { count, eq, sql } from "drizzle-orm";
 import { getCurrentDate } from "../../lib/date/currentDate";
 import type { DB } from "../db/client";
 import { makersTable, workMakerTable } from "../db/schema";
@@ -56,10 +56,17 @@ export const makersRepository = (db: DB) => {
       .offset(offset);
   };
 
+  const countAll = async () => {
+    const result = await db.select({ count: count() }).from(makersTable);
+
+    return result[0]?.count ?? 0;
+  };
+
   return {
     createIfNotExists,
     findById,
     findAll,
+    countAll,
   };
 };
 

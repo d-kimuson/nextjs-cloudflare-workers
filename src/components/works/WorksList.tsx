@@ -2,11 +2,13 @@ import { Calendar, ExternalLink, Star } from "lucide-react";
 import Link from "next/link";
 import { pagesPath } from "../../lib/$path";
 import { urlObjectToString } from "../../lib/path/urlObjectToString";
+import type { PaginationInfo } from "../../types/pagination";
 import { FavoriteButton } from "../favorite-button";
 import { Alert, AlertDescription } from "../ui/alert";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
+import { Pagination } from "../ui/pagination";
 
 // 作品の型定義（クリーンなインターフェース）
 export interface WorkItem {
@@ -45,6 +47,9 @@ interface WorksListProps {
   emptyMessage?: string;
   showPagination?: boolean;
   currentGenreId?: number; // ジャンルページで現在のジャンルを除外するため
+  pagination?: PaginationInfo;
+  onPageChange?: (page: number) => void;
+  onItemsPerPageChange?: (itemsPerPage: number) => void;
 }
 
 export function WorksList({
@@ -53,6 +58,9 @@ export function WorksList({
   emptyMessage = "作品が見つかりません",
   showPagination = false,
   currentGenreId,
+  pagination,
+  onPageChange,
+  onItemsPerPageChange,
 }: WorksListProps) {
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("ja-JP", {
@@ -158,15 +166,17 @@ export function WorksList({
           })}
         </div>
 
-        {showPagination && works.length >= 20 && (
-          <div className="flex justify-center mt-12">
-            <Alert className="max-w-md">
-              <AlertDescription className="text-center">
-                ページネーション機能は準備中です。
-                <br />
-                現在は最新20件のみ表示しています。
-              </AlertDescription>
-            </Alert>
+        {showPagination && pagination && onPageChange && (
+          <div className="mt-12">
+            <Pagination
+              currentPage={pagination.currentPage}
+              totalPages={pagination.totalPages}
+              totalItems={pagination.totalItems}
+              itemsPerPage={pagination.itemsPerPage}
+              onPageChange={onPageChange}
+              onItemsPerPageChange={onItemsPerPageChange}
+              showItemsPerPage={!!onItemsPerPageChange}
+            />
           </div>
         )}
       </>
@@ -190,12 +200,12 @@ export function WorksList({
               key={work.id}
               className="overflow-hidden hover:shadow-lg transition-shadow"
             >
-              <CardContent className="p-6">
-                <div className="flex gap-6">
+              <CardContent className="p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                   {/* サムネイル */}
-                  <div className="w-48 h-36 shrink-0 relative">
+                  <div className="w-full sm:w-48 h-48 sm:h-36 shrink-0 relative">
                     <img
-                      src={work.listImageUrl}
+                      src={work.largeImageUrl}
                       alt={work.title}
                       className="w-full h-full object-cover rounded-lg"
                     />
@@ -215,9 +225,9 @@ export function WorksList({
                   </div>
 
                   {/* 作品情報 */}
-                  <div className="flex-1 space-y-4">
-                    <div className="space-y-3">
-                      <h3 className="font-semibold text-xl leading-tight">
+                  <div className="flex-1 space-y-3 sm:space-y-4 min-w-0">
+                    <div className="space-y-2 sm:space-y-3">
+                      <h3 className="font-semibold text-lg sm:text-xl leading-tight">
                         <Link
                           href={urlObjectToString(
                             pagesPath.doujinshi.works._workId(work.id).$url(),
@@ -229,7 +239,7 @@ export function WorksList({
                       </h3>
 
                       {/* 基本情報 */}
-                      <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-sm text-muted-foreground">
                         <div className="flex items-center space-x-1">
                           <Calendar className="w-4 h-4" />
                           <span>{formatDate(work.releaseDate)}</span>
@@ -246,11 +256,11 @@ export function WorksList({
 
                       {/* 制作者 */}
                       {work.makers && work.makers.length > 0 && (
-                        <div className="flex items-center space-x-2">
-                          <span className="text-sm text-muted-foreground">
+                        <div className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-2">
+                          <span className="text-sm text-muted-foreground shrink-0">
                             制作者:
                           </span>
-                          <div className="flex flex-wrap gap-2">
+                          <div className="flex flex-wrap gap-1 sm:gap-2 min-w-0">
                             {work.makers.map((maker) => (
                               <Link
                                 key={maker.id}
@@ -262,7 +272,7 @@ export function WorksList({
                               >
                                 <Badge
                                   variant="outline"
-                                  className="cursor-pointer hover:bg-gray-100"
+                                  className="cursor-pointer hover:bg-gray-100 text-xs"
                                 >
                                   {maker.name}
                                 </Badge>
@@ -274,11 +284,11 @@ export function WorksList({
 
                       {/* ジャンル */}
                       {work.genres && work.genres.length > 0 && (
-                        <div className="flex items-center space-x-2">
-                          <span className="text-sm text-muted-foreground">
+                        <div className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-2">
+                          <span className="text-sm text-muted-foreground shrink-0">
                             タグ:
                           </span>
-                          <div className="flex flex-wrap gap-1">
+                          <div className="flex flex-wrap gap-1 min-w-0">
                             {work.genres
                               .filter(
                                 (genre) =>
@@ -309,9 +319,9 @@ export function WorksList({
                     </div>
 
                     {/* 価格と購入ボタン */}
-                    <div className="flex items-center justify-between pt-4 border-t">
-                      <div className="flex items-center space-x-3">
-                        <div className="text-2xl font-bold text-primary">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-4 border-t">
+                      <div className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-3">
+                        <div className="text-xl sm:text-2xl font-bold text-primary">
                           {formatPrice(work.price)}
                         </div>
                         {discountRate > 0 && (
@@ -321,13 +331,13 @@ export function WorksList({
                         )}
                       </div>
 
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-2 shrink-0">
                         <Link
                           href={urlObjectToString(
                             pagesPath.doujinshi.works._workId(work.id).$url(),
                           )}
                         >
-                          <Button variant="outline" size="sm">
+                          <Button variant="outline" size="sm" className="text-xs sm:text-sm">
                             詳細を見る
                           </Button>
                         </Link>
@@ -340,10 +350,10 @@ export function WorksList({
                             href={work.affiliateUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center space-x-1"
+                            className="flex items-center space-x-1 text-xs sm:text-sm"
                           >
                             <span>購入する</span>
-                            <ExternalLink className="w-4 h-4" />
+                            <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4" />
                           </a>
                         </Button>
                       </div>
@@ -356,15 +366,17 @@ export function WorksList({
         })}
       </div>
 
-      {showPagination && works.length >= 20 && (
-        <div className="flex justify-center mt-12">
-          <Alert className="max-w-md">
-            <AlertDescription className="text-center">
-              ページネーション機能は準備中です。
-              <br />
-              現在は最新20件のみ表示しています。
-            </AlertDescription>
-          </Alert>
+      {showPagination && pagination && onPageChange && (
+        <div className="mt-12">
+          <Pagination
+            currentPage={pagination.currentPage}
+            totalPages={pagination.totalPages}
+            totalItems={pagination.totalItems}
+            itemsPerPage={pagination.itemsPerPage}
+            onPageChange={onPageChange}
+            onItemsPerPageChange={onItemsPerPageChange}
+            showItemsPerPage={!!onItemsPerPageChange}
+          />
         </div>
       )}
     </>

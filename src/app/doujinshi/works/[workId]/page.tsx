@@ -10,6 +10,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FavoriteButton } from "../../../../components/favorite-button";
 import { Badge } from "../../../../components/ui/badge";
+import { Breadcrumb } from "../../../../components/ui/breadcrumb";
 import { Button } from "../../../../components/ui/button";
 import {
   Card,
@@ -86,9 +87,23 @@ export default async function WorkPage({ params }: WorkPageProps) {
     ? Math.round(work.reviewAverageScore)
     : 0;
 
+  // パンくずナビゲーション用のアイテム
+  const breadcrumbItems = [
+    { label: "作品詳細", href: "/doujinshi/works" },
+    {
+      label:
+        work.title.length > 20
+          ? `${work.title.substring(0, 20)}...`
+          : work.title,
+      current: true,
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 max-w-6xl">
+        <Breadcrumb items={breadcrumbItems} className="mb-6" />
+
         {/* ヘッダー部分 */}
         <div className="mb-8">
           <div className="flex flex-col lg:flex-row gap-8">

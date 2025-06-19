@@ -60,26 +60,37 @@ export function Sidebar({ genres = [], dailyRanking = [] }: SidebarProps) {
         <CardContent>
           <div className="space-y-2">
             {genres.length > 0 ? (
-              (genres as Genre[]).map((genre) => (
-                <div
-                  key={genre.id}
-                  className="flex items-center justify-between"
-                >
-                  <Link
-                    href={urlObjectToString(
-                      pagesPath.doujinshi.genres
-                        ._genreId(String(genre.id))
-                        .$url(),
-                    )}
-                    className="text-sm text-gray-700 hover:text-primary transition-colors cursor-pointer"
+              <>
+                {(genres as Genre[]).map((genre) => (
+                  <div
+                    key={genre.id}
+                    className="flex items-center justify-between"
                   >
-                    {genre.name}
+                    <Link
+                      href={urlObjectToString(
+                        pagesPath.doujinshi.genres
+                          ._genreId(String(genre.id))
+                          .$url(),
+                      )}
+                      className="text-sm text-gray-700 hover:text-primary transition-colors cursor-pointer"
+                    >
+                      {genre.name}
+                    </Link>
+                    <Badge variant="secondary" className="text-xs">
+                      {genre.workCount?.toLocaleString() || "0"}
+                    </Badge>
+                  </div>
+                ))}
+                <div className="pt-3 border-t">
+                  <Link
+                    href={urlObjectToString(pagesPath.doujinshi.genres.$url())}
+                    className="text-sm text-primary hover:text-primary/80 transition-colors cursor-pointer font-medium flex items-center justify-center space-x-1"
+                  >
+                    <span>もっと見る</span>
+                    <Tag className="h-3 w-3" />
                   </Link>
-                  <Badge variant="secondary" className="text-xs">
-                    {genre.workCount?.toLocaleString() || "0"}
-                  </Badge>
                 </div>
-              ))
+              </>
             ) : (
               <p className="text-sm text-muted-foreground text-center">
                 データを読み込み中...

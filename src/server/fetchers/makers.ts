@@ -1,11 +1,16 @@
 "use server";
 
 import { cache } from "react";
+import { calculatePaginationData } from "../../lib/pagination";
 import type { WorkItem } from "../../components/works/WorksList";
+import type {
+  PaginationParams,
+  PaginationResult,
+} from "../../types/pagination";
 import { getDb } from "../db/client";
 import { makersRepository } from "../repositories/makers.repository";
 
-// 制作者詳細を取得するServer Action
+// 制作者詳細を取得するServer Action（ページネーション無し）
 export const getMakerById = cache(async (makerId: number) => {
   const db = await getDb();
   const makerRepo = makersRepository(db);
@@ -41,11 +46,87 @@ export const getMakerById = cache(async (makerId: number) => {
   };
 });
 
-// 制作者一覧を取得するServer Action
+// 制作者基本情報のみを取得するServer Action（作品一覧は含まない）
+export const getMakerByIdBasic = cache(async (makerId: number) => {
+  const db = await getDb();
+  const makerRepo = makersRepository(db);
+  const rawMaker = await makerRepo.findById(makerId);
+
+  if (!rawMaker) {
+    return null;
+  }
+
+  return {
+    id: rawMaker.id,
+    name: rawMaker.name,
+    description: null, // description field might not exist in schema
+    avatarUrl: null, // avatarUrl field might not exist in schema
+    externalUrl: null, // externalUrl field might not exist in schema
+    createdAt: rawMaker.createdAt,
+    updatedAt: rawMaker.updatedAt,
+    worksCount: rawMaker.works.length,
+  };
+});
+
+// 制作者一覧を取得するServer Action（ページネーション無し）
 export const getAllMakers = cache(async (limit = 50, offset = 0) => {
   const db = await getDb();
   return await makersRepository(db).findAll(limit, offset);
 });
+
+interface MakerWithStats {
+  id: number;
+  name: string;
+  workCount: number;
+  description?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+// 制作者一覧を取得するServer Action（ページネーション付き）
+export const getAllMakersWithPagination = cache(
+  async (
+    params: PaginationParams = {},
+  ): Promise<PaginationResult<MakerWithStats>> => {
+    const { page = 1, limit = 50 } = params;
+    const db = await getDb();
+    const makerRepo = makersRepository(db);
+
+    // 総件数を取得
+    const totalItems = await makerRepo.countAll();
+
+    // ページネーション計算
+    const paginationData = calculatePaginationData(totalItems, page, limit);
+
+    // データを取得
+    const makers = await makerRepo.findAll(
+      paginationData.itemsPerPage,
+      paginationData.offset,
+    );
+
+    // データベースの結果をMakerWithStats型に変換
+    const transformedMakers: MakerWithStats[] = makers.map((maker) => ({
+      id: maker.id,
+      name: maker.name,
+      workCount: maker.workCount,
+      description: undefined, // データベースにdescriptionがない場合
+      createdAt: maker.createdAt ? new Date(maker.createdAt) : undefined,
+      updatedAt: maker.updatedAt ? new Date(maker.updatedAt) : undefined,
+    }));
+
+    return {
+      data: transformedMakers,
+      pagination: {
+        currentPage: paginationData.currentPage,
+        totalPages: paginationData.totalPages,
+        totalItems: paginationData.totalItems,
+        itemsPerPage: paginationData.itemsPerPage,
+        hasNextPage: paginationData.hasNextPage,
+        hasPreviousPage: paginationData.hasPreviousPage,
+      },
+    };
+  },
+);
 
 // 作者ランキングを取得するServer Action
 export const getMakersRanking = cache(async (limit = 50, offset = 0) => {
