@@ -1,4 +1,5 @@
 import type { WorkItem } from "../../components/works/WorksList";
+import type { WorkItemWithMaker } from "../../types/work";
 
 // データベースの生データの型定義
 export type RawWork = {
@@ -94,5 +95,32 @@ export const transformToWorkItem = (rawWork: RawWork): WorkItem => {
         name: s.series.name,
       })),
     sampleLargeImages: rawWork.sampleLargeImages ?? [],
+  };
+};
+
+// データベースの生データをWorkItemWithMakerに変換するユーティリティ関数
+export const transformToWorkItemWithMaker = (rawData: {
+  work: RawWork;
+  maker: {
+    id: number;
+    name: string;
+  };
+  score: {
+    totalScore: number;
+    avgReviewScore: number | null;
+    worksCount: number;
+  };
+}): WorkItemWithMaker => {
+  const workItem = transformToWorkItem(rawData.work);
+
+  return {
+    ...workItem,
+    maker: {
+      id: rawData.maker.id,
+      name: rawData.maker.name,
+      totalScore: rawData.score.totalScore,
+      avgReviewScore: rawData.score.avgReviewScore,
+      worksCount: rawData.score.worksCount,
+    },
   };
 };

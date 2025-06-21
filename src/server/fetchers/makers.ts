@@ -1,8 +1,8 @@
 "use server";
 
 import { cache } from "react";
-import { calculatePaginationData } from "../../lib/pagination";
 import type { WorkItem } from "../../components/works/WorksList";
+import { calculatePaginationData } from "../../lib/pagination";
 import type {
   PaginationParams,
   PaginationResult,

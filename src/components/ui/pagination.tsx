@@ -131,11 +131,11 @@ export function Pagination({
 
           {/* Page numbers */}
           <div className="flex items-center gap-1">
-            {pageNumbers.map((page, index) => {
+            {pageNumbers.map((page) => {
               if (page === "ellipsis") {
                 return (
                   <div
-                    key={`ellipsis-${index}`}
+                    key={`ellipsis-${page}`}
                     className="flex h-8 w-8 items-center justify-center"
                   >
                     <MoreHorizontal className="h-4 w-4" />
@@ -181,7 +181,10 @@ export function Pagination({
 }
 
 // Re-export the calculatePaginationData function for client-side usage
-export { calculatePaginationData, type PaginationData } from "../../lib/pagination";
+export {
+  calculatePaginationData,
+  type PaginationData,
+} from "../../lib/pagination";
 
 // Hook for URL-based pagination state management
 export function usePagination(searchParams: URLSearchParams) {

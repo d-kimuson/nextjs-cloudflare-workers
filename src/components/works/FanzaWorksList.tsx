@@ -1,4 +1,5 @@
 import { Calendar, ExternalLink, Star } from "lucide-react";
+import Image from "next/image";
 import type { ItemItem } from "../../server/lib/dmmApi/dmmApi.generated";
 import type { PaginationInfo } from "../../types/pagination";
 import { FavoriteButton } from "../favorite-button";

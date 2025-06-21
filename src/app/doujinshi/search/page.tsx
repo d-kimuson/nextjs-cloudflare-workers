@@ -74,7 +74,7 @@ function SearchPageSkeleton() {
       {/* 作品一覧のスケルトン */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {[...Array(6)].map((_, i) => (
-          <div key={`skeleton-${i}`} className="space-y-3">
+          <div key={`skeleton-${Date.now()}-${i}`} className="space-y-3">
             <Skeleton className="h-48 w-full" />
             <Skeleton className="h-4 w-3/4" />
             <Skeleton className="h-4 w-1/2" />

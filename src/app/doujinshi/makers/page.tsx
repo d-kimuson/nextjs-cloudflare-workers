@@ -19,6 +19,9 @@ import { getDmmDailyRanking } from "../../../server/fetchers/dmm";
 import { getAllGenresWithCounts } from "../../../server/fetchers/genres";
 import { getMakersRanking } from "../../../server/fetchers/makers";
 
+// Enable ISR for makers page - revalidate every 4 hours
+export const revalidate = 14400;
+
 export default async function MakersPage() {
   const [rankings, genres, dailyRanking] = await Promise.all([
     getMakersRanking(100), // 最大100作者のランキングを取得
@@ -273,11 +276,42 @@ export default async function MakersPage() {
   );
 }
 
-export async function generateMetadata() {
-  const rankings = await getMakersRanking(5); // メタデータ用に少数取得
-
-  return {
-    title: "作者ランキング - おかずNavi",
-    description: `総合スコアによる作者ランキング。トップ${rankings.length}名以上の人気作者の作品を掲載。高評価・人気作者の同人誌をランキング形式でご紹介。`,
-  };
-}
+export const metadata = {
+  title: "作者ランキング - 人気同人誌作者一覧",
+  description:
+    "総合スコアによる人気作者ランキング。高評価・多作品を持つ優秀な同人誌・エロ漫画作者をランキング形式でご紹介。信頼できる作者の作品を安全に購入できます。",
+  keywords: [
+    "作者ランキング",
+    "人気作者",
+    "同人誌作者",
+    "サークル",
+    "制作者",
+    "優秀作者",
+    "高評価",
+    "信頼",
+    "ベテラン",
+  ],
+  openGraph: {
+    title: "作者ランキング | おかずNavi",
+    description:
+      "総合スコアによる人気作者ランキング。信頼できる作者の作品を安全に購入",
+    url: "https://okazu-navi.com/doujinshi/makers",
+    images: [
+      {
+        url: "/og-makers.jpg",
+        width: 1200,
+        height: 630,
+        alt: "作者ランキング - 人気同人誌作者一覧",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "作者ランキング | おかずNavi",
+    description: "人気作者ランキング。信頼できる作者の作品を発見",
+    images: ["/og-makers.jpg"],
+  },
+  alternates: {
+    canonical: "https://okazu-navi.com/doujinshi/makers",
+  },
+};

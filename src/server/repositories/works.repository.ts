@@ -1,4 +1,5 @@
 import {
+  type SQL,
   and,
   between,
   count,
@@ -181,6 +182,56 @@ export const worksRepository = (db: DB) => {
         },
       },
     });
+  };
+
+  const findByIdWithMaker = async (id: string) => {
+    // First get the work with all its relations
+    const work = await db.query.worksTable.findFirst({
+      where: eq(worksTable.id, id),
+      with: {
+        genres: {
+          with: {
+            genre: true,
+          },
+        },
+        makers: {
+          with: {
+            maker: true,
+          },
+        },
+        sampleLargeImages: true,
+        sampleSmallImages: true,
+        series: {
+          with: {
+            series: true,
+          },
+        },
+      },
+    });
+
+    if (!work || work.makers.length === 0) {
+      return null;
+    }
+
+    // Get the primary maker's score information
+    const primaryMaker = work.makers[0]?.maker;
+    if (!primaryMaker) {
+      return null;
+    }
+
+    const makerScore = await db.query.makerScoresTable.findFirst({
+      where: eq(makerScoresTable.makerId, primaryMaker.id),
+    });
+
+    return {
+      work,
+      maker: primaryMaker,
+      score: makerScore || {
+        totalScore: 0,
+        avgReviewScore: null,
+        worksCount: 0,
+      },
+    };
   };
 
   const findByGenreId = async (
@@ -542,7 +593,7 @@ export const worksRepository = (db: DB) => {
     const limit = options?.limit ?? 20;
     const offset = options?.offset ?? 0;
 
-    let whereCondition: any = undefined;
+    let whereCondition: SQL | undefined = undefined;
     if (minPrice !== undefined && maxPrice !== undefined) {
       whereCondition = between(worksTable.price, minPrice, maxPrice);
     } else if (minPrice !== undefined) {
@@ -577,7 +628,7 @@ export const worksRepository = (db: DB) => {
   };
 
   const countByPriceRange = async (minPrice?: number, maxPrice?: number) => {
-    let whereCondition: any = undefined;
+    let whereCondition: SQL | undefined = undefined;
     if (minPrice !== undefined && maxPrice !== undefined) {
       whereCondition = between(worksTable.price, minPrice, maxPrice);
     } else if (minPrice !== undefined) {
@@ -603,7 +654,7 @@ export const worksRepository = (db: DB) => {
     const limit = options?.limit ?? 20;
     const offset = options?.offset ?? 0;
 
-    let whereCondition: any = undefined;
+    let whereCondition: SQL | undefined = undefined;
     if (startDate && endDate) {
       whereCondition = sql`${worksTable.releaseDate} >= ${startDate} AND ${worksTable.releaseDate} <= ${endDate}`;
     } else if (startDate) {
@@ -641,7 +692,7 @@ export const worksRepository = (db: DB) => {
     startDate?: string,
     endDate?: string,
   ) => {
-    let whereCondition: any = undefined;
+    let whereCondition: SQL | undefined = undefined;
     if (startDate && endDate) {
       whereCondition = sql`${worksTable.releaseDate} >= ${startDate} AND ${worksTable.releaseDate} <= ${endDate}`;
     } else if (startDate) {
@@ -668,7 +719,7 @@ export const worksRepository = (db: DB) => {
     const offset = options?.offset ?? 0;
     const minRating = options?.minRating;
 
-    let whereCondition: any = undefined;
+    let whereCondition: SQL | undefined = undefined;
     if (minRating !== undefined) {
       whereCondition = gte(worksTable.reviewAverageScore, minRating);
     }
@@ -702,7 +753,7 @@ export const worksRepository = (db: DB) => {
   };
 
   const countByRatingOrder = async (minRating?: number) => {
-    let whereCondition: any = undefined;
+    let whereCondition: SQL | undefined = undefined;
     if (minRating !== undefined) {
       whereCondition = gte(worksTable.reviewAverageScore, minRating);
     }
@@ -784,30 +835,25 @@ export const worksRepository = (db: DB) => {
       conditions.length > 0 ? and(...conditions) : undefined;
 
     // ORDER BY条件を構築
-    let orderBy: any;
-    switch (sortBy) {
-      case "oldest":
-        orderBy = [worksTable.releaseDate];
-        break;
-      case "rating-high":
-        orderBy = [
-          desc(worksTable.reviewAverageScore),
-          desc(worksTable.reviewCount),
-        ];
-        break;
-      case "rating-low":
-        orderBy = [worksTable.reviewAverageScore, worksTable.reviewCount];
-        break;
-      case "price-high":
-        orderBy = [desc(worksTable.price)];
-        break;
-      case "price-low":
-        orderBy = [worksTable.price];
-        break;
-      default:
-        orderBy = [desc(worksTable.releaseDate)];
-        break;
-    }
+    const orderBy = (() => {
+      switch (sortBy) {
+        case "oldest":
+          return [worksTable.releaseDate];
+        case "rating-high":
+          return [
+            desc(worksTable.reviewAverageScore),
+            desc(worksTable.reviewCount),
+          ];
+        case "rating-low":
+          return [worksTable.reviewAverageScore, worksTable.reviewCount];
+        case "price-high":
+          return [desc(worksTable.price)];
+        case "price-low":
+          return [worksTable.price];
+        default:
+          return [desc(worksTable.releaseDate)];
+      }
+    })();
 
     // ジャンル、作者、シリーズでのフィルタリングが必要な場合は、
     // より複雑なクエリが必要になるため、基本的な検索を実装
@@ -893,6 +939,7 @@ export const worksRepository = (db: DB) => {
   return {
     createOrUpdate,
     findById,
+    findByIdWithMaker,
     findByGenreId,
     countByGenreId,
     findByMakerId,

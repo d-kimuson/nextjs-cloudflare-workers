@@ -1,4 +1,5 @@
 import { Calendar, ExternalLink, Star } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { pagesPath } from "../../lib/$path";
 import { urlObjectToString } from "../../lib/path/urlObjectToString";
@@ -337,7 +338,11 @@ export function WorksList({
                             pagesPath.doujinshi.works._workId(work.id).$url(),
                           )}
                         >
-                          <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-xs sm:text-sm"
+                          >
                             詳細を見る
                           </Button>
                         </Link>

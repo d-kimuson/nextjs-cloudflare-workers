@@ -1,8 +1,8 @@
 "use server";
 
 import { cache } from "react";
-import { calculatePaginationData } from "../../lib/pagination";
 import type { WorkItem } from "../../components/works/WorksList";
+import { calculatePaginationData } from "../../lib/pagination";
 import type {
   PaginationParams,
   PaginationResult,
@@ -10,20 +10,24 @@ import type {
 import type { WorkItemWithMaker } from "../../types/work";
 import { getDb } from "../db/client";
 import { worksRepository } from "../repositories/works.repository";
-import { type RawWork, transformToWorkItem } from "../utils/transformWorkItem";
+import {
+  type RawWork,
+  transformToWorkItem,
+  transformToWorkItemWithMaker,
+} from "../utils/transformWorkItem";
 
 // 作品詳細を取得するServer Action
 export const getWorkById = cache(
-  async (workId: string): Promise<WorkItem | null> => {
+  async (workId: string): Promise<WorkItemWithMaker | null> => {
     const db = await getDb();
     const worksRepo = worksRepository(db);
-    const rawWork = await worksRepo.findById(workId);
+    const rawWorkWithMaker = await worksRepo.findByIdWithMaker(workId);
 
-    if (!rawWork) {
+    if (!rawWorkWithMaker) {
       return null;
     }
 
-    return transformToWorkItem(rawWork as RawWork);
+    return transformToWorkItemWithMaker(rawWorkWithMaker);
   },
 );
 

@@ -1,0 +1,50 @@
+{
+  "name": "おかずNavi - 同人誌・エロ漫画の新作発見サイト",
+  "short_name": "おかずNavi",
+  "description": "FANZA・DLsiteの人気作品ランキング、注目作者の最新作を毎日更新。質の高いアダルト作品を安全に購入できる正規サイトへご案内します。",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#FF6B6B",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "ja",
+  "categories": ["entertainment", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-desktop.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshot-mobile.jpg",
+      "sizes": "360x640",
+      "type": "image/jpeg",
+      "form_factor": "narrow"
+    }
+  ]
+}

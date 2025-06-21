@@ -77,11 +77,12 @@ export function SeriesStats({ stats }: SeriesStatsProps) {
                 {stats.averageRating.toFixed(1)}
               </div>
               <div className="flex items-center">
-                {[...Array(5)].map((_, i) => (
+                {[...Array(5)].map((_, index) => (
                   <Star
-                    key={`star-${i}`}
+                    // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                    key={`star-${index}`}
                     className={`h-4 w-4 ${
-                      i < Math.round(stats.averageRating || 0)
+                      index < Math.round(stats.averageRating || 0)
                         ? "text-yellow-400 fill-current"
                         : "text-gray-300"
                     }`}

@@ -1,4 +1,5 @@
 import { CalendarDays, Globe, MapPin, User } from "lucide-react";
+import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 interface MakerProfileProps {
@@ -25,7 +26,7 @@ export function MakerProfile({ maker }: MakerProfileProps) {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+          <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg overflow-hidden">
             {maker.avatar ? (
               <img
                 src={maker.avatar}

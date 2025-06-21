@@ -22,6 +22,10 @@ export interface WorkItemWithMaker {
     id: string;
     name: string;
   }>;
+  sampleLargeImages?: Array<{
+    imageUrl: string;
+    order: number;
+  }>;
   maker: {
     id: number;
     name: string;

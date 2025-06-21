@@ -9,6 +9,9 @@ import { getAllGenresWithCounts } from "@/server/fetchers/genres";
 import { ArrowLeft, Hash, Tag, TrendingUp } from "lucide-react";
 import Link from "next/link";
 
+// Enable ISR for genres page - revalidate every 6 hours
+export const revalidate = 21600;
+
 export default async function GenresPage() {
   const [genres, genresForSidebar, dailyRanking] = await Promise.all([
     getAllGenresWithCounts(100, 0), // メインコンテンツ用に100件取得
@@ -219,11 +222,40 @@ export default async function GenresPage() {
   );
 }
 
-export async function generateMetadata() {
-  const genres = await getAllGenresWithCounts(5, 0); // メタデータ用に少数取得
-
-  return {
-    title: "ジャンル一覧 - おかずNavi",
-    description: `全${genres.length}ジャンル以上の同人作品ジャンルを作品数順で一覧表示。人気ジャンルから新興ジャンルまで、お好みの同人誌ジャンルを見つけられます。`,
-  };
-}
+export const metadata = {
+  title: "ジャンル一覧 - 同人誌・エロ漫画のカテゴリ",
+  description:
+    "同人誌・エロ漫画の全ジャンルを作品数順でランキング表示。人気ジャンルから新興ジャンルまで、お好みのカテゴリで作品を探せます。豊富なジャンルから理想の作品を発見。",
+  keywords: [
+    "ジャンル一覧",
+    "同人誌ジャンル",
+    "エロ漫画カテゴリ",
+    "人気ジャンル",
+    "作品分類",
+    "タグ",
+    "カテゴリ検索",
+    "ジャンル検索",
+  ],
+  openGraph: {
+    title: "ジャンル一覧 | おかずNavi",
+    description: "同人誌・エロ漫画の全ジャンルを作品数順でランキング表示",
+    url: "https://okazu-navi.com/doujinshi/genres",
+    images: [
+      {
+        url: "/og-genres.jpg",
+        width: 1200,
+        height: 630,
+        alt: "ジャンル一覧 - 同人誌・エロ漫画のカテゴリ",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ジャンル一覧 | おかずNavi",
+    description: "同人誌・エロ漫画の全ジャンルを作品数順でランキング表示",
+    images: ["/og-genres.jpg"],
+  },
+  alternates: {
+    canonical: "https://okazu-navi.com/doujinshi/genres",
+  },
+};

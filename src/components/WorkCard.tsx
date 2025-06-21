@@ -58,10 +58,9 @@ function WorkThumbnail({
           </div>
         </div>
       )}
-      <Image
+      <img
         src={src}
         alt={alt}
-        fill
         className="object-cover transition-opacity duration-300"
         style={{ opacity: imageLoading ? 0 : 1 }}
         onLoad={() => setImageLoading(false)}

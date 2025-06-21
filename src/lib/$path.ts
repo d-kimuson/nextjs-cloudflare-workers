@@ -70,7 +70,9 @@ export type PagesPath = typeof pagesPath;
 export const staticPath = {
   file_svg: '/file.svg',
   globe_svg: '/globe.svg',
+  manifest_json: '/manifest.json',
   next_svg: '/next.svg',
+  robots_txt: '/robots.txt',
   vercel_svg: '/vercel.svg',
   window_svg: '/window.svg'
 } as const;

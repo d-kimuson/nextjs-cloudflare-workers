@@ -61,37 +61,6 @@ export function Footer() {
               </li>
             </ul>
           </div>
-
-          {/* 法的情報 */}
-          <div className="space-y-3">
-            <h4 className="font-medium text-foreground">法的情報</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link
-                  href="/privacy"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  プライバシーポリシー
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/terms"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  利用規約
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/about"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  サイトについて
-                </Link>
-              </li>
-            </ul>
-          </div>
         </div>
 
         <Separator className="my-6" />

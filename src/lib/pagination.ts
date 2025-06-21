@@ -43,7 +43,7 @@ export function calculatePaginationData(
 export function validatePaginationParams(page?: number, limit?: number) {
   const validPage = Math.max(1, page || 1);
   const validLimit = Math.min(Math.max(1, limit || 20), 100); // Max 100 items per page
-  
+
   return {
     page: validPage,
     limit: validLimit,

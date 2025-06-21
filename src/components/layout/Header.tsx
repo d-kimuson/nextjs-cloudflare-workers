@@ -43,7 +43,7 @@ export function Header() {
     {
       href: pagesPath.doujinshi.new_releases.$url(),
       icon: Award,
-      label: "高評価作者の新作",
+      label: "人気作者の新作",
     },
     {
       href: pagesPath.doujinshi.makers.$url(),
@@ -97,9 +97,15 @@ export function Header() {
                 <NavigationMenuItem>
                   <NavigationMenuLink asChild>
                     <Link href={pagesPath.doujinshi.daily_ranking.$url()}>
-                      <Button variant="ghost" size="sm" className="flex items-center space-x-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="flex items-center space-x-1"
+                      >
                         <Star className="h-4 w-4" />
-                        <span className="hidden xl:inline">公開直後！新作ランキング</span>
+                        <span className="hidden xl:inline">
+                          公開直後！新作ランキング
+                        </span>
                         <span className="xl:hidden">ランキング</span>
                       </Button>
                     </Link>
@@ -109,9 +115,13 @@ export function Header() {
                 <NavigationMenuItem>
                   <NavigationMenuLink asChild>
                     <Link href={pagesPath.doujinshi.new_releases.$url()}>
-                      <Button variant="ghost" size="sm" className="flex items-center space-x-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="flex items-center space-x-1"
+                      >
                         <Award className="h-4 w-4" />
-                        <span className="hidden xl:inline">高評価作者の新作</span>
+                        <span className="hidden xl:inline">人気作者の新作</span>
                         <span className="xl:hidden">新作</span>
                       </Button>
                     </Link>
@@ -127,7 +137,9 @@ export function Header() {
                         className="flex items-center space-x-1"
                       >
                         <Users className="h-4 w-4" />
-                        <span className="hidden xl:inline">人気作者ランキング！</span>
+                        <span className="hidden xl:inline">
+                          人気作者ランキング！
+                        </span>
                         <span className="xl:hidden">作者</span>
                       </Button>
                     </Link>
