@@ -10,40 +10,12 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import { Pagination } from "../ui/pagination";
+import type { WorkItemDetail } from "../../server/features/works/works.model";
 
-// 作品の型定義（クリーンなインターフェース）
-export interface WorkItem {
-  id: string;
-  title: string;
-  price: number;
-  listPrice: number;
-  listImageUrl: string;
-  largeImageUrl: string;
-  affiliateUrl: string;
-  releaseDate: string;
-  volume?: number | null;
-  reviewCount?: number | null;
-  reviewAverageScore?: number | null;
-  genres: Array<{
-    id: string;
-    name: string;
-  }>;
-  makers: Array<{
-    id: string;
-    name: string;
-  }>;
-  series: Array<{
-    id: string;
-    name: string;
-  }>;
-  sampleLargeImages?: Array<{
-    imageUrl: string;
-    order: number;
-  }>;
-}
+export type WorkItem = WorkItemDetail;
 
 interface WorksListProps {
-  works: WorkItem[];
+  works: WorkItemDetail[];
   layout?: "grid" | "list";
   emptyMessage?: string;
   showPagination?: boolean;
@@ -96,7 +68,7 @@ export function WorksList({
             const discountRate =
               work.listPrice !== work.price
                 ? Math.round(
-                    ((work.listPrice - work.price) / work.listPrice) * 100,
+                    ((work.listPrice - work.price) / work.listPrice) * 100
                   )
                 : 0;
 
@@ -104,7 +76,7 @@ export function WorksList({
               <Link
                 key={work.id}
                 href={urlObjectToString(
-                  pagesPath.doujinshi.works._workId(work.id).$url(),
+                  pagesPath.doujinshi.works._workId(work.id).$url()
                 )}
                 className="group"
               >
@@ -192,7 +164,7 @@ export function WorksList({
           const discountRate =
             work.listPrice !== work.price
               ? Math.round(
-                  ((work.listPrice - work.price) / work.listPrice) * 100,
+                  ((work.listPrice - work.price) / work.listPrice) * 100
                 )
               : 0;
 
@@ -231,7 +203,7 @@ export function WorksList({
                       <h3 className="font-semibold text-lg sm:text-xl leading-tight">
                         <Link
                           href={urlObjectToString(
-                            pagesPath.doujinshi.works._workId(work.id).$url(),
+                            pagesPath.doujinshi.works._workId(work.id).$url()
                           )}
                           className="hover:text-primary transition-colors"
                         >
@@ -268,7 +240,7 @@ export function WorksList({
                                 href={urlObjectToString(
                                   pagesPath.doujinshi.makers
                                     ._makerId(maker.id)
-                                    .$url(),
+                                    .$url()
                                 )}
                               >
                                 <Badge
@@ -294,7 +266,7 @@ export function WorksList({
                               .filter(
                                 (genre) =>
                                   !currentGenreId ||
-                                  Number(genre.id) !== currentGenreId,
+                                  Number(genre.id) !== currentGenreId
                               )
                               .slice(0, 5)
                               .map((genre) => (
@@ -303,7 +275,7 @@ export function WorksList({
                                   href={urlObjectToString(
                                     pagesPath.doujinshi.genres
                                       ._genreId(genre.id)
-                                      .$url(),
+                                      .$url()
                                   )}
                                 >
                                   <Badge
@@ -335,7 +307,7 @@ export function WorksList({
                       <div className="flex items-center space-x-2 shrink-0">
                         <Link
                           href={urlObjectToString(
-                            pagesPath.doujinshi.works._workId(work.id).$url(),
+                            pagesPath.doujinshi.works._workId(work.id).$url()
                           )}
                         >
                           <Button

@@ -4,19 +4,27 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { pagesPath } from "@/lib/$path";
 import { urlObjectToString } from "@/lib/path/urlObjectToString";
-import { getDmmDailyRanking } from "@/server/fetchers/dmm";
-import { getAllGenresWithCounts } from "@/server/fetchers/genres";
 import { ArrowLeft, Hash, Tag, TrendingUp } from "lucide-react";
 import Link from "next/link";
-
-// Enable ISR for genres page - revalidate every 6 hours
-export const revalidate = 21600;
+import { honoClient } from "../../../lib/api/client";
 
 export default async function GenresPage() {
   const [genres, genresForSidebar, dailyRanking] = await Promise.all([
-    getAllGenresWithCounts(100, 0), // メインコンテンツ用に100件取得
-    getAllGenresWithCounts(6, 0), // サイドバー用に6件取得
-    getDmmDailyRanking(),
+    honoClient.api.genres
+      .$get()
+      .then(async (res) =>
+        res.ok ? await res.json().then((body) => body.genres) : []
+      ),
+    honoClient.api.genres
+      .$get()
+      .then(async (res) =>
+        res.ok ? await res.json().then((body) => body.genres) : []
+      ),
+    honoClient.api.dmm["daily-ranking"]
+      .$get()
+      .then(async (res) =>
+        res.ok ? await res.json().then((body) => body.dailyRanking) : []
+      ),
   ]);
 
   // 作品数によるレベル分けとカラー設定
@@ -92,7 +100,7 @@ export default async function GenresPage() {
                     <Link
                       key={genre.id}
                       href={urlObjectToString(
-                        pagesPath.doujinshi.genres._genreId(genre.id).$url(),
+                        pagesPath.doujinshi.genres._genreId(genre.id).$url()
                       )}
                     >
                       <Card
@@ -130,10 +138,10 @@ export default async function GenresPage() {
                                   levelInfo.level === "超人気"
                                     ? "bg-red-500 text-white"
                                     : levelInfo.level === "人気"
-                                      ? "bg-orange-500 text-white"
-                                      : levelInfo.level === "注目"
-                                        ? "bg-blue-500 text-white"
-                                        : "bg-slate-500 text-white"
+                                    ? "bg-orange-500 text-white"
+                                    : levelInfo.level === "注目"
+                                    ? "bg-blue-500 text-white"
+                                    : "bg-slate-500 text-white"
                                 }`}
                               >
                                 {levelInfo.level}
@@ -188,7 +196,7 @@ export default async function GenresPage() {
                     <div className="text-center space-y-2">
                       <p className="text-4xl font-bold text-purple-600">
                         {genres.length > 0
-                          ? (genres[0]?.workCount.toLocaleString() ?? "N/A")
+                          ? genres[0]?.workCount.toLocaleString() ?? "N/A"
                           : "N/A"}
                       </p>
                       <p className="text-base text-muted-foreground">
@@ -200,8 +208,8 @@ export default async function GenresPage() {
                         {Math.round(
                           genres.reduce(
                             (sum, genre) => sum + genre.workCount,
-                            0,
-                          ) / genres.length,
+                            0
+                          ) / genres.length
                         ).toLocaleString()}
                       </p>
                       <p className="text-base text-muted-foreground">

@@ -14,53 +14,53 @@ const nextConfig: NextConfig = {
   },
 
   // Headers for performance and security
-  async headers() {
-    return [
-      {
-        source: "/(.*)",
-        headers: [
-          {
-            key: "X-DNS-Prefetch-Control",
-            value: "on",
-          },
-          {
-            key: "X-XSS-Protection",
-            value: "1; mode=block",
-          },
-          {
-            key: "X-Frame-Options",
-            value: "SAMEORIGIN",
-          },
-          {
-            key: "X-Content-Type-Options",
-            value: "nosniff",
-          },
-          {
-            key: "Referrer-Policy",
-            value: "origin-when-cross-origin",
-          },
-        ],
-      },
-      {
-        source: "/api/(.*)",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=3600, s-maxage=3600",
-          },
-        ],
-      },
-      {
-        source: "/_next/static/(.*)",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
-    ];
-  },
+  // async headers() {
+  //   return [
+  //     {
+  //       source: "/(.*)",
+  //       headers: [
+  //         {
+  //           key: "X-DNS-Prefetch-Control",
+  //           value: "on",
+  //         },
+  //         {
+  //           key: "X-XSS-Protection",
+  //           value: "1; mode=block",
+  //         },
+  //         {
+  //           key: "X-Frame-Options",
+  //           value: "SAMEORIGIN",
+  //         },
+  //         {
+  //           key: "X-Content-Type-Options",
+  //           value: "nosniff",
+  //         },
+  //         {
+  //           key: "Referrer-Policy",
+  //           value: "origin-when-cross-origin",
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       source: "/api/(.*)",
+  //       headers: [
+  //         {
+  //           key: "Cache-Control",
+  //           value: "public, max-age=3600, s-maxage=3600",
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       source: "/_next/static/(.*)",
+  //       headers: [
+  //         {
+  //           key: "Cache-Control",
+  //           value: "public, max-age=31536000, immutable",
+  //         },
+  //       ],
+  //     },
+  //   ];
+  // },
 
   // Enable gzip compression
   compress: true,
@@ -78,21 +78,21 @@ const nextConfig: NextConfig = {
     // Production optimizations can be added here if needed
 
     // Optimize bundle splitting (simplified for compatibility)
-    if (
-      config.optimization?.splitChunks &&
-      typeof config.optimization.splitChunks !== "boolean"
-    ) {
-      config.optimization.splitChunks.cacheGroups = {
-        ...config.optimization.splitChunks.cacheGroups,
-        // Bundle common UI components together
-        ui: {
-          name: "ui",
-          chunks: "all",
-          test: /[\\/]node_modules[\\/](@radix-ui|lucide-react)[\\/]/,
-          priority: 20,
-        },
-      };
-    }
+    // if (
+    //   config.optimization?.splitChunks &&
+    //   typeof config.optimization.splitChunks !== "boolean"
+    // ) {
+    //   config.optimization.splitChunks.cacheGroups = {
+    //     ...config.optimization.splitChunks.cacheGroups,
+    //     // Bundle common UI components together
+    //     ui: {
+    //       name: "ui",
+    //       chunks: "all",
+    //       test: /[\\/]node_modules[\\/](@radix-ui|lucide-react)[\\/]/,
+    //       priority: 20,
+    //     },
+    //   };
+    // }
 
     return config;
   },
@@ -107,12 +107,12 @@ const nextConfig: NextConfig = {
   productionBrowserSourceMaps: false,
 
   // Optimize CSS
-  modularizeImports: {
-    "lucide-react": {
-      transform: "lucide-react/dist/esm/icons/{{kebabCase member}}",
-      preventFullImport: true,
-    },
-  },
+  // modularizeImports: {
+  //   "lucide-react": {
+  //     transform: "lucide-react/dist/esm/icons/{{kebabCase member}}",
+  //     preventFullImport: true,
+  //   },
+  // },
 };
 
 export default nextConfig;

@@ -3,7 +3,7 @@ import { createSQLiteDB } from "@miniflare/shared";
 import { drizzle } from "drizzle-orm/d1";
 import type { DB } from "../src/server/db/client";
 import * as schema from "../src/server/db/schema";
-import { makerScoringService } from "../src/server/service/makerScoring";
+import { makerScoringService } from "../src/server/features/makers/makerScoring.service";
 import { getRequiredEnv } from "./utils/env";
 
 const main = async () => {
@@ -45,12 +45,12 @@ const main = async () => {
         console.log(
           `${index + 1}位: ${entry.maker?.name} (ID: ${
             entry.makerId
-          }) - スコア: ${entry.totalScore}`,
+          }) - スコア: ${entry.totalScore}`
         );
         console.log(
           `   作品数: ${entry.worksCount}, 平均評価: ${
             entry.avgReviewScore?.toFixed(2) ?? "N/A"
-          }, 平均レビュー数: ${entry.avgReviewCount?.toFixed(0) ?? "N/A"}`,
+          }, 平均レビュー数: ${entry.avgReviewCount?.toFixed(0) ?? "N/A"}`
         );
       });
     }

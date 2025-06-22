@@ -1,13 +1,8 @@
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { SITE_CONFIG } from "@/lib/constants/site";
-import {
-  createOrganizationSchema,
-  createWebSiteSchema,
-} from "@/lib/structured-data";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Suspense } from "react";
 import { QueryClientProvider } from "../lib/api/QueryClientProvider";
 import { RootErrorBoundary } from "./providers/RootErrorBoundary";
 
@@ -100,10 +95,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Generate global structured data
-  const organizationSchema = createOrganizationSchema();
-  const webSiteSchema = createWebSiteSchema();
-
   return (
     <html lang="ja">
       <head>
@@ -141,19 +132,6 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//pics.dmm.co.jp" />
         <link rel="dns-prefetch" href="//doujin-assets.dmm.co.jp" />
         <link rel="dns-prefetch" href="//affiliate.dmm.com" />
-
-        {/* Structured Data */}
-        <script
-          type="application/ld+json"
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(
-              [organizationSchema, webSiteSchema],
-              null,
-              2,
-            ),
-          }}
-        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}

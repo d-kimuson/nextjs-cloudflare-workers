@@ -68,6 +68,7 @@ export const pagesPath = {
 export type PagesPath = typeof pagesPath;
 
 export const staticPath = {
+  _headers: '/_headers',
   file_svg: '/file.svg',
   globe_svg: '/globe.svg',
   manifest_json: '/manifest.json',

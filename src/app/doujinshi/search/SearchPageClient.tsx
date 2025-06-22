@@ -4,10 +4,10 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import type { WorksFilterState } from "@/components/works/WorksFilter";
 import type { WorkItem } from "@/components/works/WorksList";
 import { WorksListWithFilter } from "@/components/works/WorksListWithFilter";
-import { getWorksWithFilters } from "@/server/fetchers/works";
 import { AlertCircle } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { honoClient } from "../../../lib/api/client";
 
 interface SearchPageClientProps {
   initialParams: {
@@ -51,7 +51,7 @@ export default function SearchPageClient({
         sortBy: params.sortBy || "newest",
       };
     },
-    [],
+    []
   );
 
   // フィルター状態からURLパラメータを構築
@@ -72,7 +72,7 @@ export default function SearchPageClient({
 
       return params;
     },
-    [],
+    []
   );
 
   // 作品を検索する関数
@@ -81,12 +81,31 @@ export default function SearchPageClient({
     setError(null);
 
     try {
-      const result = await getWorksWithFilters(filters, { page: 1, limit: 50 });
-      setWorks(result.data);
-      setTotalCount(result.pagination.totalItems);
+      const result = await honoClient.api.works
+        .$get({
+          query: {
+            ...filters,
+            minPrice: filters.minPrice?.toString(),
+            maxPrice: filters.maxPrice?.toString(),
+            minRating: filters.minRating?.toString(),
+            sortBy: filters.sortBy,
+          },
+        })
+        .then(async (res) =>
+          res.ok ? await res.json().then((body) => body) : null
+        );
+
+      if (result) {
+        setWorks(result.works);
+        setTotalCount(result.pagination.totalItems);
+      } else {
+        setError("検索中にエラーが発生しました");
+        setWorks([]);
+        setTotalCount(0);
+      }
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "検索中にエラーが発生しました",
+        err instanceof Error ? err.message : "検索中にエラーが発生しました"
       );
       setWorks([]);
       setTotalCount(0);
@@ -102,7 +121,7 @@ export default function SearchPageClient({
       router.push(`/doujinshi/search?${params.toString()}`, { scroll: false });
       searchWorks(filters);
     },
-    [router, buildUrlParams, searchWorks],
+    [router, buildUrlParams, searchWorks]
   );
 
   // 初期表示とURLパラメータ変更時の処理

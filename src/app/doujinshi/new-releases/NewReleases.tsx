@@ -8,10 +8,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Award, Star, TrendingUp, User } from "lucide-react";
 import Image from "next/image";
 import { WorksList } from "../../../components/works/WorksList";
-import type { WorkItemWithMaker } from "../../../types/work";
+import type { WorkItemDetail } from "../../../server/features/works/works.model";
 
 type Props = {
-  works: WorkItemWithMaker[];
+  works: WorkItemDetail[];
   loading: boolean;
 };
 

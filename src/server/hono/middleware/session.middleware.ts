@@ -27,7 +27,7 @@ export type SessionBody = z.infer<typeof sessionBodySchema>;
 
 export const sessionSchema = z.intersection(
   sessionIdentifierSchema,
-  sessionBodySchema,
+  sessionBodySchema
 );
 
 export type SessionData = z.infer<typeof sessionSchema>;
@@ -37,17 +37,16 @@ const encryptSession = async (payload: SessionData): Promise<string> => {
     .setProtectedHeader({ alg: "dir", enc: "A256GCM" })
     .setIssuedAt()
     .setExpirationTime(
-      new Date(getCurrentDate().getTime() + 1000 * 60 * 60 * 24 * 30),
+      new Date(getCurrentDate().getTime() + 1000 * 60 * 60 * 24 * 30)
     )
     .encrypt(joseSecret);
 };
 
 const decryptSession = async (
-  jwt: string,
+  jwt: string
 ): Promise<SessionData | undefined> => {
   try {
     const { payload } = await jwtDecrypt(jwt, joseSecret);
-    console.log("payload", payload);
     return payload as unknown as SessionData;
   } catch (error) {
     console.error("[Session] Decrypt error:", error);
@@ -63,7 +62,7 @@ export const sessionHandler = async (
     string,
     // biome-ignore lint/complexity/noBannedTypes: <explanation>
     {}
-  >,
+  >
 ) => {
   const upsertSession = async (updated: SessionData) => {
     const cookie = await encryptSession(updated);
@@ -76,7 +75,7 @@ export const sessionHandler = async (
         httpOnly: true,
         secure: envUtils.getEnv("ENVIRONMENT") === "production",
         sameSite: "strict",
-      },
+      }
     );
     c.set("session", updated);
   };
@@ -101,9 +100,8 @@ export const sessionMiddleware = createMiddleware<{
   const cookie = await getSignedCookie(
     c,
     envUtils.getEnv("AUTH_SECRET"),
-    "session",
+    "session"
   );
-  console.log("cookie", cookie);
 
   if (typeof cookie !== "string") {
     console.log("cookie is not string");

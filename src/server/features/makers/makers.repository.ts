@@ -1,7 +1,7 @@
 import { count, eq, sql } from "drizzle-orm";
-import { getCurrentDate } from "../../lib/date/currentDate";
-import type { DB } from "../db/client";
-import { makersTable, workMakerTable } from "../db/schema";
+import type { DB } from "../../db/client";
+import { makersTable, workMakerTable } from "../../db/schema";
+import { getCurrentDate } from "../../../lib/date/currentDate";
 
 export interface CreateMakerInput {
   id: number;
@@ -45,7 +45,7 @@ export const makersRepository = (db: DB) => {
         createdAt: makersTable.createdAt,
         updatedAt: makersTable.updatedAt,
         workCount: sql<number>`count(${workMakerTable.workId})`.as(
-          "work_count",
+          "work_count"
         ),
       })
       .from(makersTable)

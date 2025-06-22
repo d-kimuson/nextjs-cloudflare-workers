@@ -1,12 +1,7 @@
 import { Sidebar } from "@/components/layout/Sidebar";
 import { ErrorPage } from "../../../components/ErrorPage";
-import { getDmmDailyRanking } from "../../../server/fetchers/dmm";
-import { getAllGenresWithCounts } from "../../../server/fetchers/genres";
-import { getRecentWorksByTopMakers } from "../../../server/fetchers/works";
+import { honoClient } from "../../../lib/api/client";
 import { NewReleases } from "./NewReleases";
-
-// Enable ISR for new releases - revalidate every hour
-export const revalidate = 3600;
 
 export const metadata = {
   title: "人気作者の新作 - 注目の同人誌・エロ漫画",
@@ -48,11 +43,29 @@ export const metadata = {
 
 export default async function NewReleasesPage() {
   try {
-    const [works, genres, dailyRanking] = await Promise.all([
-      getRecentWorksByTopMakers({ limit: 20, daysAgo: 7 }),
-      getAllGenresWithCounts(6, 0),
-      getDmmDailyRanking(),
-    ]);
+    const [works, genres, dailyRanking, recentWorksByTopMakers] =
+      await Promise.all([
+        honoClient.api.works
+          .$get({ query: { sortBy: "newest" } })
+          .then(async (res) =>
+            res.ok ? await res.json().then((body) => body.works) : []
+          ),
+        honoClient.api.genres
+          .$get()
+          .then(async (res) =>
+            res.ok ? await res.json().then((body) => body.genres) : []
+          ),
+        honoClient.api.dmm["daily-ranking"]
+          .$get()
+          .then(async (res) =>
+            res.ok ? await res.json().then((body) => body.dailyRanking) : []
+          ),
+        honoClient.api["recent-works-by-top-makers"]
+          .$get()
+          .then(async (res) =>
+            res.ok ? await res.json().then((body) => body.works) : []
+          ),
+      ]);
 
     return (
       <div className="min-h-screen bg-background">

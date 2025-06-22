@@ -1,7 +1,7 @@
 import { eq, sql } from "drizzle-orm";
-import { getCurrentDate } from "../../lib/date/currentDate";
-import type { DB } from "../db/client";
-import { makerScoresTable, workMakerTable, worksTable } from "../db/schema";
+import { getCurrentDate } from "../../../lib/date/currentDate";
+import type { DB } from "../../db/client";
+import { makerScoresTable, workMakerTable, worksTable } from "../../db/schema";
 
 export interface CreateMakerScoreInput {
   makerId: number;
@@ -66,7 +66,7 @@ export const makerScoresRepository = (db: DB) => {
 
   // 作者の統計データを取得
   const getMakerStats = async (
-    makerId: number,
+    makerId: number
   ): Promise<MakerScoreStats | null> => {
     const result = await db
       .select({
@@ -76,11 +76,11 @@ export const makerScoresRepository = (db: DB) => {
           number | null
         >`avg(${worksTable.reviewAverageScore})`.as("avg_review_score"),
         avgReviewCount: sql<number | null>`avg(${worksTable.reviewCount})`.as(
-          "avg_review_count",
+          "avg_review_count"
         ),
         reviewScores:
           sql<string>`group_concat(${worksTable.reviewAverageScore})`.as(
-            "review_scores",
+            "review_scores"
           ),
       })
       .from(workMakerTable)

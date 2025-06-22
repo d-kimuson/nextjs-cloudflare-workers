@@ -13,8 +13,9 @@ import {
   sql,
 } from "drizzle-orm";
 import { z } from "zod";
-import { getCurrentDate } from "../../lib/date/currentDate";
-import type { DB } from "../db/client";
+import { subDays } from "date-fns/subDays";
+import { getCurrentDate } from "../../../lib/date/currentDate";
+import type { DB } from "../../db/client";
 import {
   makerScoresTable,
   makersTable,
@@ -24,7 +25,26 @@ import {
   workMakerTable,
   workSeriesTable,
   worksTable,
-} from "../db/schema";
+} from "../../db/schema";
+
+type FilterOptions = {
+  title?: string;
+  genreId?: number;
+  makerId?: number;
+  seriesId?: number;
+  minPrice?: number;
+  maxPrice?: number;
+  startDate?: string;
+  endDate?: string;
+  minRating?: number;
+  sortBy?:
+    | "newest"
+    | "oldest"
+    | "rating-high"
+    | "rating-low"
+    | "price-high"
+    | "price-low";
+};
 
 export const createWorkInput = z.object({
   id: z.string(),
@@ -58,7 +78,7 @@ export const worksRepository = (db: DB) => {
       seriesIds: readonly number[];
       sampleSmallImages: readonly string[];
       sampleLargeImages: readonly string[];
-    }> = {},
+    }> = {}
   ) => {
     const {
       makerIds = [],
@@ -99,7 +119,7 @@ export const worksRepository = (db: DB) => {
             imageUrl,
             order: index,
             createdAt: currentTime,
-          })),
+          }))
         )
         .onConflictDoNothing();
     }
@@ -114,7 +134,7 @@ export const worksRepository = (db: DB) => {
             imageUrl,
             order: index,
             createdAt: currentTime,
-          })),
+          }))
         )
         .onConflictDoNothing();
     }
@@ -127,7 +147,7 @@ export const worksRepository = (db: DB) => {
           genreIds.map((genreId) => ({
             workId: work.id,
             genreId,
-          })),
+          }))
         )
         .onConflictDoNothing();
     }
@@ -140,7 +160,7 @@ export const worksRepository = (db: DB) => {
           seriesIds.map((seriesId) => ({
             workId: work.id,
             seriesId,
-          })),
+          }))
         )
         .onConflictDoNothing();
     }
@@ -153,7 +173,7 @@ export const worksRepository = (db: DB) => {
           makerIds.map((makerId) => ({
             workId: work.id,
             makerId,
-          })),
+          }))
         )
         .onConflictDoNothing();
     }
@@ -236,7 +256,7 @@ export const worksRepository = (db: DB) => {
 
   const findByGenreId = async (
     genreId: number,
-    options?: { limit?: number; offset?: number },
+    options?: { limit?: number; offset?: number }
   ) => {
     const limit = options?.limit ?? 20;
     const offset = options?.offset ?? 0;
@@ -280,7 +300,7 @@ export const worksRepository = (db: DB) => {
 
   const searchByTitle = async (
     searchTerm: string,
-    options?: { limit?: number },
+    options?: { limit?: number }
   ) => {
     const limit = options?.limit ?? 10;
 
@@ -320,7 +340,7 @@ export const worksRepository = (db: DB) => {
 
   const findBySeriesIds = async (
     seriesIds: readonly number[],
-    options?: { limit?: number; excludeWorkId?: string },
+    options?: { limit?: number; excludeWorkId?: string }
   ) => {
     const limit = options?.limit ?? 10;
     const excludeWorkId = options?.excludeWorkId;
@@ -333,7 +353,7 @@ export const worksRepository = (db: DB) => {
       where: excludeWorkId
         ? and(
             inArray(workSeriesTable.seriesId, [...seriesIds]),
-            ne(workSeriesTable.workId, excludeWorkId),
+            ne(workSeriesTable.workId, excludeWorkId)
           )
         : inArray(workSeriesTable.seriesId, [...seriesIds]),
       limit,
@@ -366,38 +386,42 @@ export const worksRepository = (db: DB) => {
 
   const findBySeriesId = async (
     seriesId: number,
-    options?: { limit?: number; offset?: number },
+    options?: { limit?: number; offset?: number }
   ) => {
     const limit = options?.limit ?? 20;
     const offset = options?.offset ?? 0;
 
-    return db.query.workSeriesTable.findMany({
-      where: eq(workSeriesTable.seriesId, seriesId),
-      limit,
-      offset,
-      with: {
-        work: {
-          with: {
-            genres: {
-              with: {
-                genre: true,
+    return db.query.workSeriesTable
+      .findMany({
+        where: eq(workSeriesTable.seriesId, seriesId),
+        limit,
+        offset,
+        with: {
+          work: {
+            with: {
+              genres: {
+                with: {
+                  genre: true,
+                },
               },
-            },
-            makers: {
-              with: {
-                maker: true,
+              makers: {
+                with: {
+                  maker: true,
+                },
               },
-            },
-            series: {
-              with: {
-                series: true,
+              series: {
+                with: {
+                  series: true,
+                },
               },
             },
           },
         },
-      },
-      orderBy: [desc(workSeriesTable.workId)], // 新しい順で表示
-    });
+        orderBy: [desc(workSeriesTable.workId)], // 新しい順で表示
+      })
+      .then((works) => {
+        return works.map(({ work }) => work).filter((work) => work !== null);
+      });
   };
 
   const countBySeriesId = async (seriesId: number) => {
@@ -411,7 +435,7 @@ export const worksRepository = (db: DB) => {
 
   const findByIds = async (
     workIds: readonly string[],
-    options?: { limit?: number },
+    options?: { limit?: number }
   ) => {
     const limit = options?.limit ?? 100;
 
@@ -445,7 +469,7 @@ export const worksRepository = (db: DB) => {
 
   const findByMakerIds = async (
     makerIds: readonly number[],
-    options?: { limit?: number; excludeWorkId?: string },
+    options?: { limit?: number; excludeWorkId?: string }
   ) => {
     const limit = options?.limit ?? 10;
     const excludeWorkId = options?.excludeWorkId;
@@ -458,7 +482,7 @@ export const worksRepository = (db: DB) => {
       where: excludeWorkId
         ? and(
             inArray(workMakerTable.makerId, [...makerIds]),
-            ne(workMakerTable.workId, excludeWorkId),
+            ne(workMakerTable.workId, excludeWorkId)
           )
         : inArray(workMakerTable.makerId, [...makerIds]),
       limit,
@@ -491,15 +515,78 @@ export const worksRepository = (db: DB) => {
 
   const findByMakerId = async (
     makerId: number,
-    options?: { limit?: number; offset?: number },
+    options?: { limit?: number; offset?: number }
   ) => {
     const limit = options?.limit ?? 20;
     const offset = options?.offset ?? 0;
 
-    return db.query.workMakerTable.findMany({
-      where: eq(workMakerTable.makerId, makerId),
-      limit,
-      offset,
+    return db.query.workMakerTable
+      .findMany({
+        where: eq(workMakerTable.makerId, makerId),
+        limit,
+        offset,
+        with: {
+          work: {
+            with: {
+              genres: {
+                with: {
+                  genre: true,
+                },
+              },
+              makers: {
+                with: {
+                  maker: true,
+                },
+              },
+              series: {
+                with: {
+                  series: true,
+                },
+              },
+            },
+          },
+        },
+        orderBy: [desc(workMakerTable.workId)], // 新しい順で表示
+      })
+      .then((works) =>
+        works.map(({ work }) => work).filter((work) => work !== null)
+      );
+  };
+
+  const countByMakerId = async (makerId: number) => {
+    const result = await db
+      .select({ count: count() })
+      .from(workMakerTable)
+      .where(eq(workMakerTable.makerId, makerId));
+
+    return result[0]?.count ?? 0;
+  };
+
+  // 高スコア作者の新作（1週間以内）を取得
+  const findRecentWorksByTopScoredMakers = async (options?: {
+    limit?: number;
+    daysAgo?: number;
+  }) => {
+    const limit = options?.limit ?? 20;
+    const daysAgo = options?.daysAgo ?? 7;
+
+    const topMakerIds = await db.query.makerScoresTable
+      .findMany({
+        limit: 10,
+        orderBy: [desc(makerScoresTable.totalScore)],
+        with: {
+          maker: true,
+        },
+      })
+      .then((makers) => makers.map((maker) => maker.makerId));
+
+    console.log("topMakerIds", topMakerIds);
+
+    // 1週間前の日付を計算
+    const oneWeekAgo = subDays(getCurrentDate(), daysAgo);
+    const oneWeekAgoStr = oneWeekAgo.toISOString().split("T")[0] as string; // YYYY-MM-DD形式
+
+    const workMakers = await db.query.workMakerTable.findMany({
       with: {
         work: {
           with: {
@@ -521,74 +608,31 @@ export const worksRepository = (db: DB) => {
           },
         },
       },
-      orderBy: [desc(workMakerTable.workId)], // 新しい順で表示
+      // TODO
+      where: inArray(workMakerTable.makerId, [...topMakerIds]),
+      // where: and(
+      //   gte(worksTable.releaseDate, oneWeekAgoStr),
+      //   inArray(workMakerTable.makerId, topMakerIds)
+      // ),
+      limit,
+      // orderBy: [
+      //   desc(makerScoresTable.totalScore),
+      //   desc(worksTable.releaseDate),
+      // ],
     });
-  };
 
-  const countByMakerId = async (makerId: number) => {
-    const result = await db
-      .select({ count: count() })
-      .from(workMakerTable)
-      .where(eq(workMakerTable.makerId, makerId));
+    console.log("works.length", workMakers.length);
 
-    return result[0]?.count ?? 0;
-  };
-
-  // 高スコア作者の新作（1週間以内）を取得
-  const findRecentWorksByTopScoredMakers = async (options?: {
-    limit?: number;
-    daysAgo?: number;
-  }) => {
-    const limit = options?.limit ?? 20;
-    const daysAgo = options?.daysAgo ?? 7;
-
-    // 1週間前の日付を計算
-    const oneWeekAgo = new Date();
-    oneWeekAgo.setDate(oneWeekAgo.getDate() - daysAgo);
-    const oneWeekAgoStr = oneWeekAgo.toISOString().split("T")[0]; // YYYY-MM-DD形式
-
-    // 高スコア作者の新作を取得
-    return await db
-      .select({
-        work: {
-          id: worksTable.id,
-          title: worksTable.title,
-          price: worksTable.price,
-          listPrice: worksTable.listPrice,
-          listImageUrl: worksTable.listImageUrl,
-          largeImageUrl: worksTable.largeImageUrl,
-          affiliateUrl: worksTable.affiliateUrl,
-          releaseDate: worksTable.releaseDate,
-          volume: worksTable.volume,
-          reviewCount: worksTable.reviewCount,
-          reviewAverageScore: worksTable.reviewAverageScore,
-          createdAt: worksTable.createdAt,
-          updatedAt: worksTable.updatedAt,
-        },
-        maker: {
-          id: makersTable.id,
-          name: makersTable.name,
-        },
-        score: {
-          totalScore: makerScoresTable.totalScore,
-          avgReviewScore: makerScoresTable.avgReviewScore,
-          worksCount: makerScoresTable.worksCount,
-        },
-      })
-      .from(worksTable)
-      .innerJoin(workMakerTable, eq(worksTable.id, workMakerTable.workId))
-      .innerJoin(makersTable, eq(workMakerTable.makerId, makersTable.id))
-      .innerJoin(makerScoresTable, eq(makersTable.id, makerScoresTable.makerId))
-      .where(sql`${worksTable.releaseDate} >= ${oneWeekAgoStr}`)
-      .orderBy(desc(makerScoresTable.totalScore), desc(worksTable.releaseDate))
-      .limit(limit);
+    return workMakers
+      .map((workMaker) => workMaker.work)
+      .filter((work) => work !== null);
   };
 
   // 価格帯別での作品検索
   const findByPriceRange = async (
     minPrice?: number,
     maxPrice?: number,
-    options?: { limit?: number; offset?: number },
+    options?: { limit?: number; offset?: number }
   ) => {
     const limit = options?.limit ?? 20;
     const offset = options?.offset ?? 0;
@@ -649,7 +693,7 @@ export const worksRepository = (db: DB) => {
   const findByReleaseDateRange = async (
     startDate?: string,
     endDate?: string,
-    options?: { limit?: number; offset?: number },
+    options?: { limit?: number; offset?: number }
   ) => {
     const limit = options?.limit ?? 20;
     const offset = options?.offset ?? 0;
@@ -690,7 +734,7 @@ export const worksRepository = (db: DB) => {
 
   const countByReleaseDateRange = async (
     startDate?: string,
-    endDate?: string,
+    endDate?: string
   ) => {
     let whereCondition: SQL | undefined = undefined;
     if (startDate && endDate) {
@@ -766,6 +810,47 @@ export const worksRepository = (db: DB) => {
     return result[0]?.count ?? 0;
   };
 
+  const toFilterCondition = (filterOptions: FilterOptions) => {
+    const {
+      title,
+      genreId,
+      makerId,
+      seriesId,
+      minPrice,
+      maxPrice,
+      startDate,
+      endDate,
+      minRating,
+    } = filterOptions;
+
+    const conditions = [
+      title ? like(worksTable.title, `%${title}%`) : undefined,
+      genreId ? inArray(workGenreTable.genreId, [genreId]) : undefined,
+      makerId ? inArray(workMakerTable.makerId, [makerId]) : undefined,
+      seriesId ? inArray(workSeriesTable.seriesId, [seriesId]) : undefined,
+      minPrice
+        ? maxPrice
+          ? between(worksTable.price, minPrice, maxPrice)
+          : gte(worksTable.price, minPrice)
+        : maxPrice
+        ? lte(worksTable.price, maxPrice)
+        : undefined,
+      startDate
+        ? endDate
+          ? between(worksTable.releaseDate, startDate, endDate)
+          : gte(worksTable.releaseDate, startDate)
+        : endDate
+        ? lte(worksTable.releaseDate, endDate)
+        : undefined,
+      minRating ? gte(worksTable.reviewAverageScore, minRating) : undefined,
+    ].filter((condition) => condition !== undefined);
+
+    const whereCondition =
+      conditions.length > 0 ? and(...conditions) : undefined;
+
+    return whereCondition;
+  };
+
   // 高度な検索機能 - 複数条件を組み合わせて検索
   const findWithFilters = async (filters: {
     title?: string;
@@ -787,56 +872,9 @@ export const worksRepository = (db: DB) => {
     limit?: number;
     offset?: number;
   }) => {
-    const {
-      title,
-      genreId,
-      makerId,
-      seriesId,
-      minPrice,
-      maxPrice,
-      startDate,
-      endDate,
-      minRating,
-      sortBy = "newest",
-      limit = 20,
-      offset = 0,
-    } = filters;
-
-    // WHERE条件を構築
-    const conditions = [];
-
-    if (title) {
-      conditions.push(like(worksTable.title, `%${title}%`));
-    }
-
-    if (minPrice !== undefined && maxPrice !== undefined) {
-      conditions.push(between(worksTable.price, minPrice, maxPrice));
-    } else if (minPrice !== undefined) {
-      conditions.push(gte(worksTable.price, minPrice));
-    } else if (maxPrice !== undefined) {
-      conditions.push(lte(worksTable.price, maxPrice));
-    }
-
-    if (startDate && endDate) {
-      conditions.push(
-        sql`${worksTable.releaseDate} >= ${startDate} AND ${worksTable.releaseDate} <= ${endDate}`,
-      );
-    } else if (startDate) {
-      conditions.push(sql`${worksTable.releaseDate} >= ${startDate}`);
-    } else if (endDate) {
-      conditions.push(sql`${worksTable.releaseDate} <= ${endDate}`);
-    }
-
-    if (minRating !== undefined) {
-      conditions.push(gte(worksTable.reviewAverageScore, minRating));
-    }
-
-    const whereCondition =
-      conditions.length > 0 ? and(...conditions) : undefined;
-
     // ORDER BY条件を構築
     const orderBy = (() => {
-      switch (sortBy) {
+      switch (filters.sortBy) {
         case "oldest":
           return [worksTable.releaseDate];
         case "rating-high":
@@ -858,9 +896,9 @@ export const worksRepository = (db: DB) => {
     // ジャンル、作者、シリーズでのフィルタリングが必要な場合は、
     // より複雑なクエリが必要になるため、基本的な検索を実装
     return db.query.worksTable.findMany({
-      where: whereCondition,
-      limit,
-      offset,
+      where: toFilterCondition(filters),
+      limit: filters.limit,
+      offset: filters.offset,
       orderBy,
       with: {
         genres: {
@@ -882,58 +920,13 @@ export const worksRepository = (db: DB) => {
     });
   };
 
-  const countWithFilters = async (filters: {
-    title?: string;
-    genreId?: number;
-    makerId?: number;
-    seriesId?: number;
-    minPrice?: number;
-    maxPrice?: number;
-    startDate?: string;
-    endDate?: string;
-    minRating?: number;
-  }) => {
-    const { title, minPrice, maxPrice, startDate, endDate, minRating } =
-      filters;
-
-    // WHERE条件を構築
-    const conditions = [];
-
-    if (title) {
-      conditions.push(like(worksTable.title, `%${title}%`));
-    }
-
-    if (minPrice !== undefined && maxPrice !== undefined) {
-      conditions.push(between(worksTable.price, minPrice, maxPrice));
-    } else if (minPrice !== undefined) {
-      conditions.push(gte(worksTable.price, minPrice));
-    } else if (maxPrice !== undefined) {
-      conditions.push(lte(worksTable.price, maxPrice));
-    }
-
-    if (startDate && endDate) {
-      conditions.push(
-        sql`${worksTable.releaseDate} >= ${startDate} AND ${worksTable.releaseDate} <= ${endDate}`,
-      );
-    } else if (startDate) {
-      conditions.push(sql`${worksTable.releaseDate} >= ${startDate}`);
-    } else if (endDate) {
-      conditions.push(sql`${worksTable.releaseDate} <= ${endDate}`);
-    }
-
-    if (minRating !== undefined) {
-      conditions.push(gte(worksTable.reviewAverageScore, minRating));
-    }
-
-    const whereCondition =
-      conditions.length > 0 ? and(...conditions) : undefined;
-
+  const countWithFilters = async (filters: FilterOptions) => {
     const result = await db
       .select({ count: count() })
       .from(worksTable)
-      .where(whereCondition);
+      .where(toFilterCondition(filters));
 
-    return result[0]?.count ?? 0;
+    return result.at(0)?.count ?? 0;
   };
 
   return {

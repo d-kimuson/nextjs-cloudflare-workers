@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
-import { getCurrentDate } from "../../lib/date/currentDate";
-import type { DB } from "../db/client";
-import { seriesTable } from "../db/schema";
+import { getCurrentDate } from "../../../lib/date/currentDate";
+import type { DB } from "../../db/client";
+import { seriesTable } from "../../db/schema";
 
 export interface CreateSeriesInput {
   id: number;
@@ -13,19 +13,6 @@ export const seriesRepository = (db: DB) => {
   const findById = async (id: number) => {
     return await db.query.seriesTable.findFirst({
       where: eq(seriesTable.id, id),
-    });
-  };
-
-  const findByIdWithWorks = async (id: number) => {
-    return await db.query.seriesTable.findFirst({
-      where: eq(seriesTable.id, id),
-      with: {
-        works: {
-          with: {
-            work: true,
-          },
-        },
-      },
     });
   };
 
@@ -44,7 +31,6 @@ export const seriesRepository = (db: DB) => {
   return {
     createIfNotExists,
     findById,
-    findByIdWithWorks,
   };
 };
 

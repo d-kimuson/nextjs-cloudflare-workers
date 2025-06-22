@@ -8,14 +8,12 @@ import type { PaginationInfo } from "../../../../types/pagination";
 
 interface GenrePageClientProps {
   works: WorkItem[];
-  pagination: PaginationInfo;
   genreId: number;
   genreName: string;
 }
 
 export function GenrePageClient({
   works,
-  pagination,
   genreId,
   genreName,
 }: GenrePageClientProps) {
@@ -39,7 +37,9 @@ export function GenrePageClient({
       }
 
       const queryString = params.toString();
-      return `/doujinshi/genres/${genreId}${queryString ? `?${queryString}` : ""}`;
+      return `/doujinshi/genres/${genreId}${
+        queryString ? `?${queryString}` : ""
+      }`;
     };
   }, [searchParams, genreId]);
 

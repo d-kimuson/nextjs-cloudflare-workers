@@ -4,7 +4,7 @@
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "nextjs-cloudflare-workers",
+  "name": "okazu-navi",
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-03-01",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
@@ -31,11 +31,24 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "nextjs-cloudflare-workers-db",
-      "database_id": "39054d9c-4598-4761-8e3b-3fb90d7cf3d9",
+      "database_name": "okazu-navi-db",
+      "database_id": "aa2d114b-3736-461f-bfdc-20b8c209900f",
       "migrations_dir": "drizzle/migrations"
     }
-  ]
+  ],
+
+  "env": {
+    "production": {
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "okazu-navi-db-production",
+          "database_id": "af1aa429-8613-4f19-94ff-5827ca64d19c",
+          "migrations_dir": "drizzle/migrations"
+        }
+      ]
+    }
+  }
 
   /**
    * Environment Variables

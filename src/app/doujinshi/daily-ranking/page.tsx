@@ -1,8 +1,7 @@
 import { Sidebar } from "@/components/layout/Sidebar";
 import { ErrorPage } from "../../../components/ErrorPage";
-import { getDmmDailyRanking } from "../../../server/fetchers/dmm";
-import { getAllGenresWithCounts } from "../../../server/fetchers/genres";
 import { DailyRanking } from "./DailyRanking";
+import { honoClient } from "../../../lib/api/client";
 
 // Enable ISR for daily ranking - revalidate every 30 minutes
 export const revalidate = 1800;
@@ -48,8 +47,16 @@ export const metadata = {
 export default async function DailyRankingPage() {
   try {
     const [doujinList, genres] = await Promise.all([
-      getDmmDailyRanking(),
-      getAllGenresWithCounts(6, 0),
+      honoClient.api.dmm["daily-ranking"]
+        .$get()
+        .then(async (res) =>
+          res.ok ? await res.json().then((body) => body.dailyRanking) : []
+        ),
+      honoClient.api.genres
+        .$get()
+        .then(async (res) =>
+          res.ok ? await res.json().then((body) => body.genres.slice(0, 6)) : []
+        ),
     ]);
 
     return (
