@@ -102,12 +102,15 @@ export const makerScoringService = (db: DB) => {
         `Calculating scores for makers (limit: ${limit}, offset: ${offset})`
       );
 
+      console.log("[DEBUG] before findAll");
       const makers = await makersRepositoryClient.findAll(limit, offset);
+      console.log("[DEBUG] after findAll", makers.length);
       let processedCount = 0;
       let errorCount = 0;
 
       for (const maker of makers) {
         try {
+          console.log("[DEBUG] maker", maker.name);
           const result = await calculateMakerScore(maker.id);
           if (result.isErr()) {
             console.error(

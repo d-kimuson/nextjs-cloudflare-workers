@@ -20,7 +20,7 @@ const main = async () => {
     const result = await makerScoringServiceClient.calculateAllMakerScores();
 
     if (result.isErr()) {
-      console.error("スコア計算エラー:", result.error);
+      console.error("スコア計算エラー:", result.error, result.error.stack);
       throw result.error;
     }
 

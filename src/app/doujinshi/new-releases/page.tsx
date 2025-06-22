@@ -43,36 +43,30 @@ export const metadata = {
 
 export default async function NewReleasesPage() {
   try {
-    const [works, genres, dailyRanking, recentWorksByTopMakers] =
-      await Promise.all([
-        honoClient.api.works
-          .$get({ query: { sortBy: "newest" } })
-          .then(async (res) =>
-            res.ok ? await res.json().then((body) => body.works) : []
-          ),
-        honoClient.api.genres
-          .$get()
-          .then(async (res) =>
-            res.ok ? await res.json().then((body) => body.genres) : []
-          ),
-        honoClient.api.dmm["daily-ranking"]
-          .$get()
-          .then(async (res) =>
-            res.ok ? await res.json().then((body) => body.dailyRanking) : []
-          ),
-        honoClient.api["recent-works-by-top-makers"]
-          .$get()
-          .then(async (res) =>
-            res.ok ? await res.json().then((body) => body.works) : []
-          ),
-      ]);
+    const [genres, dailyRanking, recentWorksByTopMakers] = await Promise.all([
+      honoClient.api.genres
+        .$get()
+        .then(async (res) =>
+          res.ok ? await res.json().then((body) => body.genres) : []
+        ),
+      honoClient.api.dmm["daily-ranking"]
+        .$get()
+        .then(async (res) =>
+          res.ok ? await res.json().then((body) => body.dailyRanking) : []
+        ),
+      honoClient.api["recent-works-by-top-makers"]
+        .$get()
+        .then(async (res) =>
+          res.ok ? await res.json().then((body) => body.works) : []
+        ),
+    ]);
 
     return (
       <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-8">
           <div className="flex gap-8">
             {/* メインコンテンツ */}
-            <NewReleases works={works} loading={false} />
+            <NewReleases works={recentWorksByTopMakers} loading={false} />
 
             {/* サイドバー */}
             <Sidebar genres={genres} dailyRanking={dailyRanking} />
