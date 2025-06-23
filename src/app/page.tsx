@@ -230,7 +230,7 @@ export default async function Home() {
                           お手頃価格で楽しむ
                         </CardTitle>
                       </div>
-                      <Link href="/doujinshi/search?maxPrice=1000">
+                      <Link href="/doujinshi/search?maxPrice=300">
                         <Button variant="ghost" size="sm">
                           <span>もっと見る</span>
                           <ChevronRight className="h-4 w-4" />

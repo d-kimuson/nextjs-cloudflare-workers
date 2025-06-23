@@ -16,25 +16,11 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { pagesPath } from "@/lib/$path";
-import {
-  Award,
-  Book,
-  Home,
-  Menu,
-  Star,
-  TrendingUp,
-  User,
-  Users,
-} from "lucide-react";
+import { Award, Book, Menu, Star, TrendingUp, User, Users } from "lucide-react";
 import Link from "next/link";
 
 export function Header() {
   const mobileMenuItems = [
-    {
-      href: pagesPath.$url(),
-      icon: Home,
-      label: "ホーム",
-    },
     {
       href: pagesPath.doujinshi.daily_ranking.$url(),
       icon: TrendingUp,
@@ -79,21 +65,6 @@ export function Header() {
           <nav className="hidden lg:flex">
             <NavigationMenu>
               <NavigationMenuList className="flex space-x-1">
-                <NavigationMenuItem>
-                  <NavigationMenuLink asChild>
-                    <Link href={pagesPath.$url()}>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="flex items-center space-x-1"
-                      >
-                        <Home className="h-4 w-4" />
-                        <span>ホーム</span>
-                      </Button>
-                    </Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-
                 <NavigationMenuItem>
                   <NavigationMenuLink asChild>
                     <Link href={pagesPath.doujinshi.daily_ranking.$url()}>
