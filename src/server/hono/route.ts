@@ -15,6 +15,7 @@ import { makersService } from "../features/makers/makers.service";
 import { seriesService } from "../features/series/series.service";
 import z from "zod";
 import { dbMiddleware } from "./middleware/db.middleware";
+import { dmmService } from "../features/dmm/dmm.service";
 
 export const registerRoutes = (app: HonoAppType) => {
   app.use(dbMiddleware);
@@ -93,7 +94,7 @@ export const registerRoutes = (app: HonoAppType) => {
 
       // dmm api proxy
       .get("/dmm/daily-ranking", async (c) => {
-        const dailyRanking = await dmmApiClient.getDailyRankingDoujinList();
+        const dailyRanking = await dmmService().getDmmDailyRanking();
 
         if (dailyRanking.isErr()) {
           return c.json(
@@ -108,7 +109,7 @@ export const registerRoutes = (app: HonoAppType) => {
       })
 
       .get("/dmm/ranking", async (c) => {
-        const ranking = await dmmApiClient.getRankingDoujinList({ hits: 20 });
+        const ranking = await dmmService().getDmmRanking({ hits: 20 });
 
         if (ranking.isErr()) {
           return c.json(
