@@ -7,10 +7,10 @@ export const exploreRanking = async (db: DB) => {
   console.log("Starting database seeding...");
   const workServiceClient = worksService(db);
 
-  // 1. ランキングから100件の同人誌を取得
+  // 1. ランキングから40件の同人誌を取得
   console.log("Fetching ranking doujin list...");
   const rankingResult = await dmmApiClient.getRankingDoujinList({
-    hits: 20,
+    hits: 50, // fetch 上限が50
   });
 
   if (rankingResult.isErr()) {

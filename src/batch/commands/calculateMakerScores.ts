@@ -7,9 +7,7 @@ export const calculateMakerScores = async (db: DB) => {
   console.log("=== 作者スコアリング開始 ===");
 
   // 全作者のスコアを計算
-  const result = await makerScoringServiceClient.calculateAllMakerScores({
-    limit: 50,
-  });
+  const result = await makerScoringServiceClient.calculateAllMakerScores();
 
   if (result.isErr()) {
     console.error("スコア計算エラー:", result.error, result.error.stack);
