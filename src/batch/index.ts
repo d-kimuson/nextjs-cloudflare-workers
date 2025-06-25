@@ -5,15 +5,15 @@ import { exploreRanking } from "./commands/exploreRanking";
 const handler: ExportedHandler<{
   DB: D1Database;
 }> = {
-  async scheduled(event, env, ctx) {
+  async scheduled(event, env, _ctx) {
     const db = getDb(env.DB);
 
     switch (event.cron) {
-      case "36 * * * *": {
+      case "0 */12 * * *": {
         await exploreRanking(db);
         break;
       }
-      case "37 * * * *": {
+      case "1 */12 * * *": {
         await calculateMakerScores(db);
         break;
       }
