@@ -4,9 +4,9 @@ import { drizzle } from "drizzle-orm/d1";
 import { uniqBy } from "es-toolkit";
 import type { DB } from "../src/server/db/client";
 import * as schema from "../src/server/db/schema";
+import { worksService } from "../src/server/features/works/works.service";
 import { dmmApiClient } from "../src/server/lib/dmmApi/client";
 import { getRequiredEnv } from "./utils/env";
-import { worksService } from "../src/server/features/works/works.service";
 
 async function main() {
   console.log("Starting database seeding...");

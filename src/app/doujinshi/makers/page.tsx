@@ -14,8 +14,8 @@ import { Badge } from "../../../components/ui/badge";
 import { Button } from "../../../components/ui/button";
 import { Card, CardContent, CardHeader } from "../../../components/ui/card";
 import { pagesPath } from "../../../lib/$path";
-import { urlObjectToString } from "../../../lib/path/urlObjectToString";
 import { honoClient } from "../../../lib/api/client";
+import { urlObjectToString } from "../../../lib/path/urlObjectToString";
 
 export default async function MakersPage() {
   const [rankings, genres, dailyRanking] = await Promise.all([

@@ -1,3 +1,4 @@
+import { honoClient } from "@/lib/api/client";
 import {
   Calendar,
   Download,
@@ -23,7 +24,6 @@ import { Separator } from "../../../../components/ui/separator";
 import { WorksList } from "../../../../components/works/WorksList";
 import { pagesPath } from "../../../../lib/$path";
 import { urlObjectToString } from "../../../../lib/path/urlObjectToString";
-import { honoClient } from "@/lib/api/client";
 
 // Enable ISR for work detail pages - revalidate every hour
 // export const revalidate = 3600;

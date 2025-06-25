@@ -1,12 +1,12 @@
+import { ResultAsync } from "neverthrow";
 import { calculatePaginationData } from "../../../lib/pagination";
 import type { PaginationParams } from "../../../types/pagination";
 import type { DB } from "../../db/client";
-import { makersRepository } from "./makers.repository";
-import { ResultAsync } from "neverthrow";
 import { worksRepository } from "../works/works.repository";
 import { transformToWorkItem } from "../works/works.transform";
-import type { MakerItemDetail, MakerWithStats } from "./makers.model";
 import { makerScoresRepository } from "./makerScores.repository";
+import type { MakerItemDetail, MakerWithStats } from "./makers.model";
+import { makersRepository } from "./makers.repository";
 
 export const makersService = (db: DB) => {
   const makerRepositoryClient = makersRepository(db);

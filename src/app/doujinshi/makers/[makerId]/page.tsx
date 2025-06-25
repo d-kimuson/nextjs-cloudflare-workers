@@ -2,8 +2,8 @@ import { notFound, redirect } from "next/navigation";
 import { Badge } from "../../../../components/ui/badge";
 import { Breadcrumb } from "../../../../components/ui/breadcrumb";
 import { Card, CardContent, CardHeader } from "../../../../components/ui/card";
-import { MakerPageClient } from "./MakerPageClient";
 import { honoClient } from "../../../../lib/api/client";
+import { MakerPageClient } from "./MakerPageClient";
 
 type MakerPageProps = {
   params: Promise<{

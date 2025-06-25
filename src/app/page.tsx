@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import { FanzaWorksList } from "@/components/works/FanzaWorksList";
 import { WorksList } from "@/components/works/WorksList";
+import { honoClient } from "@/lib/api/client";
 import {
   Award,
   Calendar,
@@ -26,7 +27,6 @@ import {
 import Link from "next/link";
 import { pagesPath } from "../lib/$path";
 import { urlObjectToString } from "../lib/path/urlObjectToString";
-import { honoClient } from "@/lib/api/client";
 
 // Enable ISR for home page - revalidate every 10 minutes
 // export const revalidate = 600;

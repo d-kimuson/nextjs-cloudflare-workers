@@ -4,8 +4,8 @@ import { Alert, AlertDescription } from "../../../../components/ui/alert";
 import { Badge } from "../../../../components/ui/badge";
 import { Breadcrumb } from "../../../../components/ui/breadcrumb";
 import { Separator } from "../../../../components/ui/separator";
-import { GenrePageClient } from "./GenrePageClient";
 import { honoClient } from "../../../../lib/api/client";
+import { GenrePageClient } from "./GenrePageClient";
 
 type GenrePageProps = {
   params: Promise<{

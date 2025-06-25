@@ -1,5 +1,5 @@
-import { dmmApiClient } from "../../lib/dmmApi/client";
 import { ResultAsync } from "neverthrow";
+import { dmmApiClient } from "../../lib/dmmApi/client";
 import { processAffiliateUrl } from "../works/works.transform";
 
 export const dmmService = () => {

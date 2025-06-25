@@ -1,6 +1,6 @@
+import { ResultAsync } from "neverthrow";
 import type { DB } from "../../db/client";
 import { genresRepository } from "./genres.repository";
-import { ResultAsync } from "neverthrow";
 
 export const genreService = (db: DB) => {
   const genresRepositoryClient = genresRepository(db);

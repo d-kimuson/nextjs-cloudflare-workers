@@ -1,7 +1,7 @@
-import { createMiddleware } from "hono/factory";
-import type { HonoVariables } from "../app";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { createMiddleware } from "hono/factory";
 import { getDb } from "../../db/client";
+import type { HonoVariables } from "../app";
 
 export const dbMiddleware = createMiddleware<{
   Variables: HonoVariables;

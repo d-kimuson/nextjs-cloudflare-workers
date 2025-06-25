@@ -1,9 +1,9 @@
-import type { DB } from "../../db/client";
-import { seriesRepository } from "./series.repository";
 import { ResultAsync } from "neverthrow";
-import { transformToWorkItem } from "../works/works.transform";
+import type { DB } from "../../db/client";
 import { worksRepository } from "../works/works.repository";
+import { transformToWorkItem } from "../works/works.transform";
 import type { SeriesItemDetail } from "./series.model";
+import { seriesRepository } from "./series.repository";
 
 export const seriesService = (db: DB) => {
   const seriesRepositoryClient = seriesRepository(db);

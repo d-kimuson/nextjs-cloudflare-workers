@@ -1,7 +1,7 @@
 import { Sidebar } from "@/components/layout/Sidebar";
 import { ErrorPage } from "../../../components/ErrorPage";
-import { DailyRanking } from "./DailyRanking";
 import { honoClient } from "../../../lib/api/client";
+import { DailyRanking } from "./DailyRanking";
 
 // Enable ISR for daily ranking - revalidate every 30 minutes
 export const revalidate = 1800;

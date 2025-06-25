@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { pagesPath } from "../../lib/$path";
 import { urlObjectToString } from "../../lib/path/urlObjectToString";
+import type { WorkItemDetail } from "../../server/features/works/works.model";
 import type { PaginationInfo } from "../../types/pagination";
 import { FavoriteButton } from "../favorite-button";
 import { Alert, AlertDescription } from "../ui/alert";
@@ -10,7 +11,6 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import { Pagination } from "../ui/pagination";
-import type { WorkItemDetail } from "../../server/features/works/works.model";
 
 export type WorkItem = WorkItemDetail;
 

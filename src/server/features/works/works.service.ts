@@ -1,5 +1,7 @@
 import { ResultAsync } from "neverthrow";
 import { BaseError, isBaseError } from "../../../lib/error/BaseError";
+import { calculatePaginationData } from "../../../lib/pagination";
+import type { PaginationInfo } from "../../../types/pagination";
 import type { DB } from "../../db/client";
 import { dmmApiClient } from "../../lib/dmmApi/client";
 import type { ItemItem, ItemMaker } from "../../lib/dmmApi/dmmApi.generated";
@@ -11,8 +13,6 @@ import {
   transformToWorkDetailItem,
   transformToWorkItem,
 } from "./works.transform";
-import { calculatePaginationData } from "../../../lib/pagination";
-import type { PaginationInfo } from "../../../types/pagination";
 
 export const worksService = (db: DB) => {
   const makersRepositoryClient = makersRepository(db);
