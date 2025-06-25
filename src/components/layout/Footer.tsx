@@ -8,7 +8,10 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* サイト情報 */}
           <div className="space-y-3">
-            <h3 className="font-semibold text-foreground">おかずNavi</h3>
+            <h3 className="font-semibold text-foreground">
+              おかずNavi Powered by{" "}
+              <a href="https://affiliate.dmm.com/api/">FANZA Webサービス</a>
+            </h3>
             <p className="text-sm text-muted-foreground">
               新作アダルト作品への発見体験を提供するナビゲーションサイトです。
             </p>

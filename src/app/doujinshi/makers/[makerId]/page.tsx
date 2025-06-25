@@ -36,7 +36,7 @@ export default async function MakerPage({
     if (limit >= 1 && limit <= 100) params.set("limit", limit.toString());
     const queryString = params.toString();
     redirect(
-      `/doujinshi/makers/${makerId}${queryString ? `?${queryString}` : ""}`
+      `/doujinshi/makers/${makerId}${queryString ? `?${queryString}` : ""}`,
     );
   }
 
@@ -46,14 +46,14 @@ export default async function MakerPage({
         param: { makerId: makerIdNumber.toString() },
       })
       .then(async (res) =>
-        res.ok ? await res.json().then((body) => body.maker) : null
+        res.ok ? await res.json().then((body) => body.maker) : null,
       ),
     honoClient.api.makers[":makerId"].works
       .$get({
         param: { makerId: makerIdNumber.toString() },
       })
       .then(async (res) =>
-        res.ok ? await res.json().then((body) => body) : null
+        res.ok ? await res.json().then((body) => body) : null,
       ),
   ]);
 

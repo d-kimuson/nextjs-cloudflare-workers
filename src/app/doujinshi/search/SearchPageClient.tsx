@@ -51,7 +51,7 @@ export default function SearchPageClient({
         sortBy: params.sortBy || "newest",
       };
     },
-    []
+    [],
   );
 
   // フィルター状態からURLパラメータを構築
@@ -72,7 +72,7 @@ export default function SearchPageClient({
 
       return params;
     },
-    []
+    [],
   );
 
   // 作品を検索する関数
@@ -92,7 +92,7 @@ export default function SearchPageClient({
           },
         })
         .then(async (res) =>
-          res.ok ? await res.json().then((body) => body) : null
+          res.ok ? await res.json().then((body) => body) : null,
         );
 
       if (result) {
@@ -105,7 +105,7 @@ export default function SearchPageClient({
       }
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "検索中にエラーが発生しました"
+        err instanceof Error ? err.message : "検索中にエラーが発生しました",
       );
       setWorks([]);
       setTotalCount(0);
@@ -121,7 +121,7 @@ export default function SearchPageClient({
       router.push(`/doujinshi/search?${params.toString()}`, { scroll: false });
       searchWorks(filters);
     },
-    [router, buildUrlParams, searchWorks]
+    [router, buildUrlParams, searchWorks],
   );
 
   // 初期表示とURLパラメータ変更時の処理

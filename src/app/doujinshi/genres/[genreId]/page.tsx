@@ -38,7 +38,7 @@ export default async function GenrePage({
     if (limit >= 1 && limit <= 100) params.set("limit", limit.toString());
     const queryString = params.toString();
     redirect(
-      `/doujinshi/genres/${genreId}${queryString ? `?${queryString}` : ""}`
+      `/doujinshi/genres/${genreId}${queryString ? `?${queryString}` : ""}`,
     );
   }
 
@@ -48,14 +48,14 @@ export default async function GenrePage({
         param: { genreId: genreIdNumber.toString() },
       })
       .then(async (res) =>
-        res.ok ? await res.json().then((body) => body.genre) : null
+        res.ok ? await res.json().then((body) => body.genre) : null,
       ),
     honoClient.api.genres[":genreId"].works
       .$get({
         param: { genreId: genreIdNumber.toString() },
       })
       .then(async (res) =>
-        res.ok ? await res.json().then((body) => body) : null
+        res.ok ? await res.json().then((body) => body) : null,
       ),
   ]);
 

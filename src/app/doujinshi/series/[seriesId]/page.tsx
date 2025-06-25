@@ -38,7 +38,7 @@ export default async function SeriesPage({
     if (limit >= 1 && limit <= 100) params.set("limit", limit.toString());
     const queryString = params.toString();
     redirect(
-      `/doujinshi/series/${seriesId}${queryString ? `?${queryString}` : ""}`
+      `/doujinshi/series/${seriesId}${queryString ? `?${queryString}` : ""}`,
     );
   }
 
@@ -48,14 +48,14 @@ export default async function SeriesPage({
         param: { seriesId: seriesIdNumber.toString() },
       })
       .then(async (res) =>
-        res.ok ? await res.json().then((body) => body.series) : null
+        res.ok ? await res.json().then((body) => body.series) : null,
       ),
     honoClient.api.series[":seriesId"].works
       .$get({
         param: { seriesId: seriesIdNumber.toString() },
       })
       .then(async (res) =>
-        res.ok ? await res.json().then((body) => body.works) : []
+        res.ok ? await res.json().then((body) => body.works) : [],
       ),
   ]);
 

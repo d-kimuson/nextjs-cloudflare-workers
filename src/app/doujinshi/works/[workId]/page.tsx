@@ -42,7 +42,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
       param: { workId },
     })
     .then(async (res) =>
-      res.ok ? await res.json().then((body) => body.work) : null
+      res.ok ? await res.json().then((body) => body.work) : null,
     );
 
   if (!work) {
@@ -58,9 +58,9 @@ export default async function WorkPage({ params }: WorkPageProps) {
         .then(async (res) =>
           res.ok
             ? await res.json().then((body) => body.series?.works ?? [])
-            : []
-        )
-    )
+            : [],
+        ),
+    ),
   ).then((works) => works.flat());
 
   const sameAuthorWorks = await Promise.all(
@@ -70,9 +70,9 @@ export default async function WorkPage({ params }: WorkPageProps) {
           param: { makerId: m.id.toString() },
         })
         .then(async (res) =>
-          res.ok ? await res.json().then((body) => body.works ?? []) : []
-        )
-    )
+          res.ok ? await res.json().then((body) => body.works ?? []) : [],
+        ),
+    ),
   ).then((works) => works.flat());
 
   const formatPrice = (price: number) => {
@@ -261,7 +261,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
                                 href={urlObjectToString(
                                   pagesPath.doujinshi.makers
                                     ._makerId(maker.id)
-                                    .$url()
+                                    .$url(),
                                 )}
                                 className="text-blue-600 hover:text-blue-800 hover:underline font-medium"
                               >
@@ -312,7 +312,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
                               href={urlObjectToString(
                                 pagesPath.doujinshi.genres
                                   ._genreId(genre.id)
-                                  .$url()
+                                  .$url(),
                               )}
                             >
                               <Badge
@@ -340,7 +340,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
                               href={urlObjectToString(
                                 pagesPath.doujinshi.series
                                   ._seriesId(series.id)
-                                  .$url()
+                                  .$url(),
                               )}
                             >
                               <Badge
@@ -520,7 +520,9 @@ export default async function WorkPage({ params }: WorkPageProps) {
                         <Link
                           key={maker.id}
                           href={urlObjectToString(
-                            pagesPath.doujinshi.makers._makerId(maker.id).$url()
+                            pagesPath.doujinshi.makers
+                              ._makerId(maker.id)
+                              .$url(),
                           )}
                         >
                           <Button variant="outline" size="sm">
@@ -567,7 +569,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
                             href={urlObjectToString(
                               pagesPath.doujinshi.series
                                 ._seriesId(series.id)
-                                .$url()
+                                .$url(),
                             )}
                           >
                             <Button variant="outline" size="sm">
@@ -590,7 +592,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
                           href={urlObjectToString(
                             pagesPath.doujinshi.series
                               ._seriesId(series.id)
-                              .$url()
+                              .$url(),
                           )}
                         >
                           <Button variant="outline" size="sm">

@@ -1,6 +1,7 @@
 const requiredEnvKeys = [
   "ENVIRONMENT",
   "DMM_AFFILIATE_ID",
+  "DMM_AFFILIATE_ID_FOR_LINK",
   "DMM_API_ID",
   "AUTH_SECRET",
   "JOSE_SECRET",

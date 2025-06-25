@@ -49,7 +49,7 @@ export const registerRoutes = (app: HonoAppType) => {
         if (session === null) {
           return c.json(
             { success: false, error: "User not allowed using Cookie" },
-            403
+            403,
           );
         }
 
@@ -74,7 +74,7 @@ export const registerRoutes = (app: HonoAppType) => {
         if (session === null) {
           return c.json(
             { success: false, error: "User not allowed using Cookie" },
-            403
+            403,
           );
         }
 
@@ -99,7 +99,7 @@ export const registerRoutes = (app: HonoAppType) => {
         if (dailyRanking.isErr()) {
           return c.json(
             { success: false, error: "Failed to get daily ranking" },
-            500
+            500,
           );
         }
 
@@ -114,7 +114,7 @@ export const registerRoutes = (app: HonoAppType) => {
         if (ranking.isErr()) {
           return c.json(
             { success: false, error: "Failed to get ranking" },
-            500
+            500,
           );
         }
 
@@ -177,7 +177,7 @@ export const registerRoutes = (app: HonoAppType) => {
                 "price-low",
               ])
               .optional(),
-          })
+          }),
         ),
         async (c) => {
           const worksServiceClient = worksService(c.get("db"));
@@ -199,13 +199,13 @@ export const registerRoutes = (app: HonoAppType) => {
             {
               page: 1,
               limit: 20,
-            }
+            },
           );
 
           if (works.isErr()) {
             return c.json(
               { success: false, error: "Failed to get works" },
-              500
+              500,
             );
           }
 
@@ -213,7 +213,7 @@ export const registerRoutes = (app: HonoAppType) => {
             works: works.value.works,
             pagination: works.value.pagination,
           });
-        }
+        },
       )
 
       // genres
@@ -232,7 +232,7 @@ export const registerRoutes = (app: HonoAppType) => {
         const genreId = c.req.param("genreId");
         const genresServiceClient = genreService(c.get("db"));
         const genre = await genresServiceClient.getGenreById(
-          Number.parseInt(genreId)
+          Number.parseInt(genreId),
         );
 
         if (genre.isErr()) {
@@ -246,7 +246,7 @@ export const registerRoutes = (app: HonoAppType) => {
         const genreId = c.req.param("genreId");
         const worksServiceClient = worksService(c.get("db"));
         const works = await worksServiceClient.getWorksByGenreId(
-          Number.parseInt(genreId)
+          Number.parseInt(genreId),
         );
 
         if (works.isErr()) {
@@ -275,7 +275,7 @@ export const registerRoutes = (app: HonoAppType) => {
         const makerId = c.req.param("makerId");
         const makersServiceClient = makersService(c.get("db"));
         const maker = await makersServiceClient.getMakerById(
-          Number.parseInt(makerId)
+          Number.parseInt(makerId),
         );
 
         if (maker.isErr()) {
@@ -289,7 +289,7 @@ export const registerRoutes = (app: HonoAppType) => {
         const makerId = c.req.param("makerId");
         const worksServiceClient = worksService(c.get("db"));
         const works = await worksServiceClient.getWorksByMakerId(
-          Number.parseInt(makerId)
+          Number.parseInt(makerId),
         );
 
         if (works.isErr()) {
@@ -310,7 +310,7 @@ export const registerRoutes = (app: HonoAppType) => {
           console.error(ranking.error);
           return c.json(
             { success: false, error: "Failed to get makers ranking" },
-            500
+            500,
           );
         }
 
@@ -322,7 +322,7 @@ export const registerRoutes = (app: HonoAppType) => {
         const seriesId = c.req.param("seriesId");
         const seriesServiceClient = seriesService(c.get("db"));
         const series = await seriesServiceClient.getSeriesById(
-          Number.parseInt(seriesId)
+          Number.parseInt(seriesId),
         );
 
         if (series.isErr()) {
@@ -336,7 +336,7 @@ export const registerRoutes = (app: HonoAppType) => {
         const seriesId = c.req.param("seriesId");
         const worksServiceClient = worksService(c.get("db"));
         const works = await worksServiceClient.getWorksBySeriesId(
-          Number.parseInt(seriesId)
+          Number.parseInt(seriesId),
         );
 
         if (works.isErr()) {
@@ -357,7 +357,7 @@ export const registerRoutes = (app: HonoAppType) => {
         if (works.isErr()) {
           return c.json(
             { success: false, error: "Failed to get works" } as const,
-            500
+            500,
           );
         }
 

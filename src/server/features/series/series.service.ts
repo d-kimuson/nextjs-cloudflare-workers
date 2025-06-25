@@ -24,14 +24,14 @@ export const seriesService = (db: DB) => {
         (work) =>
           work.reviewAverageScore !== null &&
           work.reviewAverageScore !== undefined &&
-          work.reviewAverageScore > 0
+          work.reviewAverageScore > 0,
       );
 
       const averageRating =
         worksWithRating.length > 0
           ? worksWithRating.reduce(
               (sum, work) => sum + (work.reviewAverageScore || 0),
-              0
+              0,
             ) / worksWithRating.length
           : null;
 
@@ -43,7 +43,7 @@ export const seriesService = (db: DB) => {
           averageRating,
         },
       };
-    }
+    },
   );
 
   return {

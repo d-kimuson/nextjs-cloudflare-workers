@@ -22,17 +22,17 @@ export default async function MakersPage() {
     honoClient.api["makers-ranking"]
       .$get()
       .then(async (res) =>
-        res.ok ? await res.json().then((body) => body.ranking) : []
+        res.ok ? await res.json().then((body) => body.ranking) : [],
       ),
     honoClient.api.genres
       .$get()
       .then(async (res) =>
-        res.ok ? await res.json().then((body) => body.genres) : []
+        res.ok ? await res.json().then((body) => body.genres) : [],
       ),
     honoClient.api.dmm["daily-ranking"]
       .$get()
       .then(async (res) =>
-        res.ok ? await res.json().then((body) => body.dailyRanking) : []
+        res.ok ? await res.json().then((body) => body.dailyRanking) : [],
       ),
   ]);
 
@@ -92,12 +92,12 @@ export default async function MakersPage() {
                   <Link
                     key={ranking.id}
                     href={urlObjectToString(
-                      pagesPath.doujinshi.makers._makerId(ranking.id).$url()
+                      pagesPath.doujinshi.makers._makerId(ranking.id).$url(),
                     )}
                   >
                     <Card
                       className={`transition-all duration-200 hover:shadow-lg hover:scale-[1.02] group border-2 ${getRankColor(
-                        ranking.rank
+                        ranking.rank,
                       )}`}
                     >
                       <CardContent className="p-6">
@@ -237,7 +237,7 @@ export default async function MakersPage() {
                       <p className="text-4xl font-bold text-green-600">
                         {rankings.reduce(
                           (sum, ranking) => sum + ranking.workCount,
-                          0
+                          0,
                         )}
                       </p>
                       <p className="text-base text-muted-foreground">
@@ -247,7 +247,7 @@ export default async function MakersPage() {
                     <div className="text-center space-y-2">
                       <p className="text-4xl font-bold text-purple-600">
                         {rankings.length > 0
-                          ? rankings[0]?.totalScore.toFixed(1) ?? "N/A"
+                          ? (rankings[0]?.totalScore.toFixed(1) ?? "N/A")
                           : "N/A"}
                       </p>
                       <p className="text-base text-muted-foreground">
@@ -259,10 +259,10 @@ export default async function MakersPage() {
                         {Math.round(
                           (rankings.reduce(
                             (sum, ranking) => sum + ranking.totalScore,
-                            0
+                            0,
                           ) /
                             rankings.length) *
-                            10
+                            10,
                         ) / 10}
                       </p>
                       <p className="text-base text-muted-foreground">

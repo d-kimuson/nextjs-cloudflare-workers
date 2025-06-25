@@ -13,17 +13,17 @@ export default async function GenresPage() {
     honoClient.api.genres
       .$get()
       .then(async (res) =>
-        res.ok ? await res.json().then((body) => body.genres) : []
+        res.ok ? await res.json().then((body) => body.genres) : [],
       ),
     honoClient.api.genres
       .$get()
       .then(async (res) =>
-        res.ok ? await res.json().then((body) => body.genres) : []
+        res.ok ? await res.json().then((body) => body.genres) : [],
       ),
     honoClient.api.dmm["daily-ranking"]
       .$get()
       .then(async (res) =>
-        res.ok ? await res.json().then((body) => body.dailyRanking) : []
+        res.ok ? await res.json().then((body) => body.dailyRanking) : [],
       ),
   ]);
 
@@ -100,7 +100,7 @@ export default async function GenresPage() {
                     <Link
                       key={genre.id}
                       href={urlObjectToString(
-                        pagesPath.doujinshi.genres._genreId(genre.id).$url()
+                        pagesPath.doujinshi.genres._genreId(genre.id).$url(),
                       )}
                     >
                       <Card
@@ -138,10 +138,10 @@ export default async function GenresPage() {
                                   levelInfo.level === "超人気"
                                     ? "bg-red-500 text-white"
                                     : levelInfo.level === "人気"
-                                    ? "bg-orange-500 text-white"
-                                    : levelInfo.level === "注目"
-                                    ? "bg-blue-500 text-white"
-                                    : "bg-slate-500 text-white"
+                                      ? "bg-orange-500 text-white"
+                                      : levelInfo.level === "注目"
+                                        ? "bg-blue-500 text-white"
+                                        : "bg-slate-500 text-white"
                                 }`}
                               >
                                 {levelInfo.level}
@@ -196,7 +196,7 @@ export default async function GenresPage() {
                     <div className="text-center space-y-2">
                       <p className="text-4xl font-bold text-purple-600">
                         {genres.length > 0
-                          ? genres[0]?.workCount.toLocaleString() ?? "N/A"
+                          ? (genres[0]?.workCount.toLocaleString() ?? "N/A")
                           : "N/A"}
                       </p>
                       <p className="text-base text-muted-foreground">
@@ -208,8 +208,8 @@ export default async function GenresPage() {
                         {Math.round(
                           genres.reduce(
                             (sum, genre) => sum + genre.workCount,
-                            0
-                          ) / genres.length
+                            0,
+                          ) / genres.length,
                         ).toLocaleString()}
                       </p>
                       <p className="text-base text-muted-foreground">

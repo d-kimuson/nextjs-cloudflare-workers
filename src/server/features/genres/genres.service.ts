@@ -12,7 +12,7 @@ export const genreService = (db: DB) => {
   const getAllGenresWithCounts = ResultAsync.fromThrowable(
     async (limit = 20, offset = 0) => {
       return await genresRepositoryClient.findAllWithCounts(limit, offset);
-    }
+    },
   );
 
   return {

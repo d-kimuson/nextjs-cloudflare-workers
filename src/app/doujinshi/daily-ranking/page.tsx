@@ -50,12 +50,14 @@ export default async function DailyRankingPage() {
       honoClient.api.dmm["daily-ranking"]
         .$get()
         .then(async (res) =>
-          res.ok ? await res.json().then((body) => body.dailyRanking) : []
+          res.ok ? await res.json().then((body) => body.dailyRanking) : [],
         ),
       honoClient.api.genres
         .$get()
         .then(async (res) =>
-          res.ok ? await res.json().then((body) => body.genres.slice(0, 6)) : []
+          res.ok
+            ? await res.json().then((body) => body.genres.slice(0, 6))
+            : [],
         ),
     ]);
 

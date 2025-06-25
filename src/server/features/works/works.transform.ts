@@ -1,3 +1,4 @@
+import { envUtils } from "../../../lib/envUtils";
 import type { WorkItem, WorkItemDetail } from "./works.model";
 
 // データベースの生データの型定義
@@ -36,6 +37,19 @@ type RawWork = {
   }>;
 };
 
+/**
+ * アフィリエイトURLから一時的にクエリパラメタを削除する
+ */
+export function processAffiliateUrl(url: string): string {
+  // const urlObj = new URL(url);
+  // return urlObj.searchParams.get("lurl") ?? url;
+
+  return url.replace(
+    envUtils.getEnv("DMM_AFFILIATE_ID"),
+    envUtils.getEnv("DMM_AFFILIATE_ID_FOR_LINK"),
+  );
+}
+
 export const transformToWorkItem = (rawWork: RawWork): WorkItem => {
   return {
     id: rawWork.id,
@@ -44,7 +58,7 @@ export const transformToWorkItem = (rawWork: RawWork): WorkItem => {
     listPrice: rawWork.listPrice,
     listImageUrl: rawWork.listImageUrl,
     largeImageUrl: rawWork.largeImageUrl,
-    affiliateUrl: rawWork.affiliateUrl,
+    affiliateUrl: processAffiliateUrl(rawWork.affiliateUrl),
     releaseDate: rawWork.releaseDate,
     volume: rawWork.volume,
     reviewCount: rawWork.reviewCount,
@@ -79,7 +93,7 @@ export const transformToWorkDetailItem = (
       imageUrl: string;
       order: number;
     }>;
-  }
+  },
 ): WorkItemDetail => {
   const workItem = transformToWorkItem(rawWork);
   return {

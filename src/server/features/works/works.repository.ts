@@ -78,7 +78,7 @@ export const worksRepository = (db: DB) => {
       seriesIds: readonly number[];
       sampleSmallImages: readonly string[];
       sampleLargeImages: readonly string[];
-    }> = {}
+    }> = {},
   ) => {
     const {
       makerIds = [],
@@ -119,7 +119,7 @@ export const worksRepository = (db: DB) => {
             imageUrl,
             order: index,
             createdAt: currentTime,
-          }))
+          })),
         )
         .onConflictDoNothing();
     }
@@ -134,7 +134,7 @@ export const worksRepository = (db: DB) => {
             imageUrl,
             order: index,
             createdAt: currentTime,
-          }))
+          })),
         )
         .onConflictDoNothing();
     }
@@ -147,7 +147,7 @@ export const worksRepository = (db: DB) => {
           genreIds.map((genreId) => ({
             workId: work.id,
             genreId,
-          }))
+          })),
         )
         .onConflictDoNothing();
     }
@@ -160,7 +160,7 @@ export const worksRepository = (db: DB) => {
           seriesIds.map((seriesId) => ({
             workId: work.id,
             seriesId,
-          }))
+          })),
         )
         .onConflictDoNothing();
     }
@@ -173,7 +173,7 @@ export const worksRepository = (db: DB) => {
           makerIds.map((makerId) => ({
             workId: work.id,
             makerId,
-          }))
+          })),
         )
         .onConflictDoNothing();
     }
@@ -256,7 +256,7 @@ export const worksRepository = (db: DB) => {
 
   const findByGenreId = async (
     genreId: number,
-    options?: { limit?: number; offset?: number }
+    options?: { limit?: number; offset?: number },
   ) => {
     const limit = options?.limit ?? 20;
     const offset = options?.offset ?? 0;
@@ -300,7 +300,7 @@ export const worksRepository = (db: DB) => {
 
   const searchByTitle = async (
     searchTerm: string,
-    options?: { limit?: number }
+    options?: { limit?: number },
   ) => {
     const limit = options?.limit ?? 10;
 
@@ -340,7 +340,7 @@ export const worksRepository = (db: DB) => {
 
   const findBySeriesIds = async (
     seriesIds: readonly number[],
-    options?: { limit?: number; excludeWorkId?: string }
+    options?: { limit?: number; excludeWorkId?: string },
   ) => {
     const limit = options?.limit ?? 10;
     const excludeWorkId = options?.excludeWorkId;
@@ -353,7 +353,7 @@ export const worksRepository = (db: DB) => {
       where: excludeWorkId
         ? and(
             inArray(workSeriesTable.seriesId, [...seriesIds]),
-            ne(workSeriesTable.workId, excludeWorkId)
+            ne(workSeriesTable.workId, excludeWorkId),
           )
         : inArray(workSeriesTable.seriesId, [...seriesIds]),
       limit,
@@ -386,7 +386,7 @@ export const worksRepository = (db: DB) => {
 
   const findBySeriesId = async (
     seriesId: number,
-    options?: { limit?: number; offset?: number }
+    options?: { limit?: number; offset?: number },
   ) => {
     const limit = options?.limit ?? 20;
     const offset = options?.offset ?? 0;
@@ -435,7 +435,7 @@ export const worksRepository = (db: DB) => {
 
   const findByIds = async (
     workIds: readonly string[],
-    options?: { limit?: number }
+    options?: { limit?: number },
   ) => {
     const limit = options?.limit ?? 100;
 
@@ -469,7 +469,7 @@ export const worksRepository = (db: DB) => {
 
   const findByMakerIds = async (
     makerIds: readonly number[],
-    options?: { limit?: number; excludeWorkId?: string }
+    options?: { limit?: number; excludeWorkId?: string },
   ) => {
     const limit = options?.limit ?? 10;
     const excludeWorkId = options?.excludeWorkId;
@@ -482,7 +482,7 @@ export const worksRepository = (db: DB) => {
       where: excludeWorkId
         ? and(
             inArray(workMakerTable.makerId, [...makerIds]),
-            ne(workMakerTable.workId, excludeWorkId)
+            ne(workMakerTable.workId, excludeWorkId),
           )
         : inArray(workMakerTable.makerId, [...makerIds]),
       limit,
@@ -515,7 +515,7 @@ export const worksRepository = (db: DB) => {
 
   const findByMakerId = async (
     makerId: number,
-    options?: { limit?: number; offset?: number }
+    options?: { limit?: number; offset?: number },
   ) => {
     const limit = options?.limit ?? 20;
     const offset = options?.offset ?? 0;
@@ -549,7 +549,7 @@ export const worksRepository = (db: DB) => {
         orderBy: [desc(workMakerTable.workId)], // 新しい順で表示
       })
       .then((works) =>
-        works.map(({ work }) => work).filter((work) => work !== null)
+        works.map(({ work }) => work).filter((work) => work !== null),
       );
   };
 
@@ -632,7 +632,7 @@ export const worksRepository = (db: DB) => {
   const findByPriceRange = async (
     minPrice?: number,
     maxPrice?: number,
-    options?: { limit?: number; offset?: number }
+    options?: { limit?: number; offset?: number },
   ) => {
     const limit = options?.limit ?? 20;
     const offset = options?.offset ?? 0;
@@ -693,7 +693,7 @@ export const worksRepository = (db: DB) => {
   const findByReleaseDateRange = async (
     startDate?: string,
     endDate?: string,
-    options?: { limit?: number; offset?: number }
+    options?: { limit?: number; offset?: number },
   ) => {
     const limit = options?.limit ?? 20;
     const offset = options?.offset ?? 0;
@@ -734,7 +734,7 @@ export const worksRepository = (db: DB) => {
 
   const countByReleaseDateRange = async (
     startDate?: string,
-    endDate?: string
+    endDate?: string,
   ) => {
     let whereCondition: SQL | undefined = undefined;
     if (startDate && endDate) {
@@ -833,15 +833,15 @@ export const worksRepository = (db: DB) => {
           ? between(worksTable.price, minPrice, maxPrice)
           : gte(worksTable.price, minPrice)
         : maxPrice
-        ? lte(worksTable.price, maxPrice)
-        : undefined,
+          ? lte(worksTable.price, maxPrice)
+          : undefined,
       startDate
         ? endDate
           ? between(worksTable.releaseDate, startDate, endDate)
           : gte(worksTable.releaseDate, startDate)
         : endDate
-        ? lte(worksTable.releaseDate, endDate)
-        : undefined,
+          ? lte(worksTable.releaseDate, endDate)
+          : undefined,
       minRating ? gte(worksTable.reviewAverageScore, minRating) : undefined,
     ].filter((condition) => condition !== undefined);
 

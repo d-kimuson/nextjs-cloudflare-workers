@@ -28,7 +28,7 @@ export const makersService = (db: DB) => {
         ...maker,
         works: works.map((work) => transformToWorkItem(work)),
       };
-    }
+    },
   );
 
   const getMakers = ResultAsync.fromThrowable(
@@ -44,7 +44,7 @@ export const makersService = (db: DB) => {
       // データを取得
       const makers = await makerRepositoryClient.findAll(
         paginationData.itemsPerPage,
-        paginationData.offset
+        paginationData.offset,
       );
 
       return {
@@ -53,7 +53,7 @@ export const makersService = (db: DB) => {
             id: maker.id,
             name: maker.name,
             workCount: maker.workCount,
-          })
+          }),
         ),
         pagination: {
           currentPage: paginationData.currentPage,
@@ -62,14 +62,14 @@ export const makersService = (db: DB) => {
           itemsPerPage: paginationData.itemsPerPage,
         },
       };
-    }
+    },
   );
 
   const getMakersRanking = ResultAsync.fromThrowable(
     async (limit = 50, offset = 0) => {
       const rankings = await makerScoresRepositoryClient.findTopScored(
         limit,
-        offset
+        offset,
       );
 
       return rankings.map((ranking, index) => ({
@@ -82,7 +82,7 @@ export const makersService = (db: DB) => {
         scoreVariance: ranking.scoreVariance,
         rank: offset + index + 1,
       }));
-    }
+    },
   );
 
   return {

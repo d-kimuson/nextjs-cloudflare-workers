@@ -26,7 +26,7 @@ async function main() {
 
     if (rankingResult.isErr()) {
       throw new Error(
-        `Failed to fetch ranking: ${rankingResult.error.message}`
+        `Failed to fetch ranking: ${rankingResult.error.message}`,
       );
     }
 
@@ -40,12 +40,12 @@ async function main() {
 
     const makers = uniqBy(
       items.flatMap((item) => item.iteminfo?.maker ?? []),
-      (maker) => maker.id
+      (maker) => maker.id,
     );
 
     console.log(
       "fetch items by ranking makers",
-      makers.map((maker) => maker.name)
+      makers.map((maker) => maker.name),
     );
 
     for (const maker of makers) {

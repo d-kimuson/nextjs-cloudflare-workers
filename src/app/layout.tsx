@@ -7,6 +7,7 @@ import { QueryClientProvider } from "../lib/api/QueryClientProvider";
 import { RootErrorBoundary } from "./providers/RootErrorBoundary";
 
 import "./globals.css";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -132,6 +133,27 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//pics.dmm.co.jp" />
         <link rel="dns-prefetch" href="//doujin-assets.dmm.co.jp" />
         <link rel="dns-prefetch" href="//affiliate.dmm.com" />
+
+        {/* Google Analytics */}
+        <Script
+          async
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-FRZWXSXGVW"
+        />
+        <Script
+          id="gtag-init"
+          strategy="afterInteractive"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+          dangerouslySetInnerHTML={{
+            __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-FRZWXSXGVW');
+           `,
+          }}
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}

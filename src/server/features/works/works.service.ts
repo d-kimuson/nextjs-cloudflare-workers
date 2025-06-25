@@ -25,7 +25,7 @@ export const worksService = (db: DB) => {
       console.log(
         `registerWork: ${item.title} (${
           item.iteminfo?.maker?.at(0)?.name ?? "unknown"
-        })`
+        })`,
       );
 
       // 作者情報を処理
@@ -85,7 +85,7 @@ export const worksService = (db: DB) => {
       return new BaseError("UNKNOWN_ERROR", "UNHANDLED", {
         cause: error,
       });
-    }
+    },
   );
 
   const registerWorksFromMaker = ResultAsync.fromThrowable(
@@ -98,7 +98,7 @@ export const worksService = (db: DB) => {
         console.error(
           "Failed to fetch maker items",
           maker.name,
-          JSON.stringify(makerItems.error, null, 2)
+          JSON.stringify(makerItems.error, null, 2),
         );
 
         return new BaseError("FAILED_TO_FETCH_MAKER_ITEMS", "BAD_REQUEST");
@@ -116,7 +116,7 @@ export const worksService = (db: DB) => {
       return new BaseError("UNKNOWN_ERROR", "UNHANDLED", {
         cause: error,
       });
-    }
+    },
   );
 
   const getWorkById = ResultAsync.fromThrowable(async (workId: string) => {
@@ -131,7 +131,7 @@ export const worksService = (db: DB) => {
       params?: {
         page?: number;
         limit?: number;
-      }
+      },
     ) => {
       const { page = 1, limit = 20 } = params ?? {};
       const totalItems = await worksRepositoryClient.countByGenreId(genreId);
@@ -155,7 +155,7 @@ export const worksService = (db: DB) => {
           hasPreviousPage: paginationData.hasPreviousPage,
         },
       };
-    }
+    },
   );
 
   const getWorksByMakerId = ResultAsync.fromThrowable(
@@ -164,7 +164,7 @@ export const worksService = (db: DB) => {
       params?: {
         page?: number;
         limit?: number;
-      }
+      },
     ) => {
       const { page = 1, limit = 20 } = params ?? {};
       const totalItems = await worksRepositoryClient.countByMakerId(makerId);
@@ -186,7 +186,7 @@ export const worksService = (db: DB) => {
           currentPage: page,
         } satisfies PaginationInfo,
       };
-    }
+    },
   );
 
   const getWorksByMakerIds = ResultAsync.fromThrowable(
@@ -194,7 +194,7 @@ export const worksService = (db: DB) => {
       makerIds: number[],
       params?: {
         limit?: number;
-      }
+      },
     ) => {
       const { limit = 20 } = params ?? {};
       const works = await worksRepositoryClient.findByMakerIds(makerIds, {
@@ -207,7 +207,7 @@ export const worksService = (db: DB) => {
           .filter((work) => work !== null)
           .map((work) => transformToWorkItem(work)),
       };
-    }
+    },
   );
 
   const getWorksBySeriesId = ResultAsync.fromThrowable(
@@ -216,7 +216,7 @@ export const worksService = (db: DB) => {
       params?: {
         page?: number;
         limit?: number;
-      }
+      },
     ) => {
       const { page = 1, limit = 20 } = params ?? {};
       const totalItems = await worksRepositoryClient.countBySeriesId(seriesId);
@@ -237,7 +237,7 @@ export const worksService = (db: DB) => {
           hasPreviousPage: paginationData.hasPreviousPage,
         },
       };
-    }
+    },
   );
 
   const search = ResultAsync.fromThrowable(
@@ -263,7 +263,7 @@ export const worksService = (db: DB) => {
       pagenationParams?: {
         page?: number;
         limit?: number;
-      }
+      },
     ) => {
       const { page = 1, limit = 20 } = pagenationParams ?? {};
       const count = await worksRepositoryClient.countWithFilters(options);
@@ -284,7 +284,7 @@ export const worksService = (db: DB) => {
           hasPreviousPage: paginationData.hasPreviousPage,
         },
       };
-    }
+    },
   );
 
   const getRecentWorksByTopMakers = ResultAsync.fromThrowable(
@@ -298,7 +298,7 @@ export const worksService = (db: DB) => {
       });
 
       return recentWorks.map((work) => transformToWorkItem(work));
-    }
+    },
   );
 
   return {

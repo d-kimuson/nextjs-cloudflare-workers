@@ -30,7 +30,7 @@ export const makerScoringService = (db: DB) => {
       // 対数スケール（多くのレビューがあることを評価）
       const reviewWeight = Math.min(
         Math.log(avgReviewCount + 1) / Math.log(100),
-        1
+        1,
       );
       baseScore += reviewWeight * 20;
     }
@@ -89,7 +89,7 @@ export const makerScoringService = (db: DB) => {
       return new BaseError("FAILED_TO_CALCULATE_MAKER_SCORE", "UNHANDLED", {
         cause: error,
       });
-    }
+    },
   );
 
   // 全作者のスコアを再計算
@@ -99,7 +99,7 @@ export const makerScoringService = (db: DB) => {
       const offset = options?.offset ?? 0;
 
       console.log(
-        `Calculating scores for makers (limit: ${limit}, offset: ${offset})`
+        `Calculating scores for makers (limit: ${limit}, offset: ${offset})`,
       );
 
       console.log("[DEBUG] before findAll");
@@ -115,7 +115,7 @@ export const makerScoringService = (db: DB) => {
           if (result.isErr()) {
             console.error(
               `Failed to calculate score for maker ${maker.id}:`,
-              result.error
+              result.error,
             );
             errorCount++;
           } else {
@@ -128,7 +128,7 @@ export const makerScoringService = (db: DB) => {
       }
 
       console.log(
-        `Score calculation completed. Processed: ${processedCount}, Errors: ${errorCount}`
+        `Score calculation completed. Processed: ${processedCount}, Errors: ${errorCount}`,
       );
 
       return { processedCount, errorCount, totalMakers: makers.length };
@@ -139,9 +139,9 @@ export const makerScoringService = (db: DB) => {
         "UNHANDLED",
         {
           cause: error,
-        }
+        },
       );
-    }
+    },
   );
 
   // 高スコア作者の取得
@@ -156,7 +156,7 @@ export const makerScoringService = (db: DB) => {
       return new BaseError("FAILED_TO_GET_TOP_SCORED_MAKERS", "UNHANDLED", {
         cause: error,
       });
-    }
+    },
   );
 
   // 作者スコアの詳細取得
@@ -178,7 +178,7 @@ export const makerScoringService = (db: DB) => {
       return new BaseError("FAILED_TO_GET_MAKER_SCORE_DETAIL", "UNHANDLED", {
         cause: error,
       });
-    }
+    },
   );
 
   return {

@@ -81,31 +81,31 @@ export default async function Home() {
     honoClient.api.genres
       .$get()
       .then(async (res) =>
-        res.ok ? await res.json().then((body) => body.genres) : []
+        res.ok ? await res.json().then((body) => body.genres) : [],
       ),
     honoClient.api.dmm["daily-ranking"]
       .$get()
       .then(async (res) =>
-        res.ok ? await res.json().then((body) => body.dailyRanking) : []
+        res.ok ? await res.json().then((body) => body.dailyRanking) : [],
       ),
     honoClient.api["recent-works-by-top-makers"]
       .$get()
       .then(async (res) =>
-        res.ok ? await res.json().then((body) => body.works) : []
+        res.ok ? await res.json().then((body) => body.works) : [],
       ),
     honoClient.api.works
       .$get({
         query: { sortBy: "rating-high", maxPrice: "300" },
       })
       .then(async (res) =>
-        res.ok ? await res.json().then((body) => body.works) : []
+        res.ok ? await res.json().then((body) => body.works) : [],
       ),
     honoClient.api.works
       .$get({
         query: { minRating: "4.0", sortBy: "rating-high" },
       })
       .then(async (res) =>
-        res.ok ? await res.json().then((body) => body.works) : []
+        res.ok ? await res.json().then((body) => body.works) : [],
       ),
   ]);
 
@@ -290,7 +290,7 @@ export default async function Home() {
                   <div className="text-center">
                     <Link
                       href={urlObjectToString(
-                        pagesPath.doujinshi.search.$url()
+                        pagesPath.doujinshi.search.$url(),
                       )}
                     >
                       <Button size="lg" className="flex items-center space-x-2">
