@@ -9,8 +9,8 @@ export const exploreRanking = async (db: DB) => {
 
   // 1. ランキングから40件の同人誌を取得
   console.log("Fetching ranking doujin list...");
-  const rankingResult = await dmmApiClient.getRankingDoujinList({
-    hits: 50, // fetch 上限が50
+  const rankingResult = await dmmApiClient.getDailyRankingDoujinList({
+    hits: 20, // fetch 上限は50
   });
 
   if (rankingResult.isErr()) {

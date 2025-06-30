@@ -92,7 +92,11 @@ export const dmmApiClient = {
       return okAsync(result.data.result.items);
     }),
 
-  getDailyRankingDoujinList: () =>
+  getDailyRankingDoujinList: (
+    options?: Partial<{
+      hits: number;
+    }>,
+  ) =>
     ResultAsync.fromPromise(
       itemList({
         ...authInfo,
@@ -101,6 +105,7 @@ export const dmmApiClient = {
         floor: sites["FANZA（アダルト）"].services.同人.floors.同人.code,
         sort: "rank",
         output: "json",
+        hits: options?.hits ?? 20,
         gte_date: formatISOWithoutTZ(subHours(getCurrentDate(), 24)),
       }),
       (error) => {

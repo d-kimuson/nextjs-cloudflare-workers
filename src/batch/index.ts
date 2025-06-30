@@ -9,11 +9,11 @@ const handler: ExportedHandler<{
     const db = getDb(env.DB);
 
     switch (event.cron) {
-      case "0 */12 * * *": {
+      case "0 */4 * * *": {
         await exploreRanking(db);
         break;
       }
-      case "1 */12 * * *": {
+      case "0 */24 * * *": {
         await calculateMakerScores(db);
         break;
       }
