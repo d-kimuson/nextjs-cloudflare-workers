@@ -1,6 +1,7 @@
 "use client";
 
 import { Heart, User } from "lucide-react";
+import { Breadcrumb } from "../../components/ui/breadcrumb";
 import {
   Card,
   CardContent,
@@ -9,16 +10,19 @@ import {
 } from "../../components/ui/card";
 import { WorksList } from "../../components/works/WorksList";
 import { useFavoriteWorks, useSession } from "../../lib/session/useSession";
+import { generateMypageBreadcrumbs } from "../../lib/utils/breadcrumb";
 
 export default function MyPage() {
   const { session } = useSession();
   const favoriteWorks = useFavoriteWorks();
+  const breadcrumbItems = generateMypageBreadcrumbs();
 
   // 同意が必要な場合の処理
   if (session.status === "not-agreed") {
     return (
       <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-8 max-w-6xl">
+          <Breadcrumb items={breadcrumbItems} className="mb-6" />
           <div className="space-y-8">
             {/* ヘッダー */}
             <Card>
@@ -51,6 +55,7 @@ export default function MyPage() {
     return (
       <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-8 max-w-6xl">
+          <Breadcrumb items={breadcrumbItems} className="mb-6" />
           <div className="space-y-8">
             {/* ヘッダー */}
             <Card>
@@ -77,6 +82,7 @@ export default function MyPage() {
     return (
       <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-8 max-w-6xl">
+          <Breadcrumb items={breadcrumbItems} className="mb-6" />
           <div className="space-y-8">
             {/* ヘッダー */}
             <Card>
@@ -106,6 +112,7 @@ export default function MyPage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 max-w-6xl">
+        <Breadcrumb items={breadcrumbItems} className="mb-6" />
         <div className="space-y-8">
           {/* お気に入り作品一覧 */}
           <Card>

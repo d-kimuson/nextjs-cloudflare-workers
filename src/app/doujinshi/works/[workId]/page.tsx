@@ -7,9 +7,15 @@ import {
   Hash,
   Star,
 } from "lucide-react";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import {
+  StructuredData,
+  type WorkData,
+  generateWorkDetailSchemas,
+} from "../../../../components/StructuredData";
 import { FavoriteButton } from "../../../../components/favorite-button";
 import { Badge } from "../../../../components/ui/badge";
 import { Breadcrumb } from "../../../../components/ui/breadcrumb";
@@ -23,7 +29,10 @@ import {
 import { Separator } from "../../../../components/ui/separator";
 import { WorksList } from "../../../../components/works/WorksList";
 import { pagesPath } from "../../../../lib/$path";
+import { SITE_CONFIG } from "../../../../lib/constants/site";
 import { urlObjectToString } from "../../../../lib/path/urlObjectToString";
+import { generateWorkMetadata } from "../../../../lib/seo/metadata";
+import { generateWorkBreadcrumbs } from "../../../../lib/utils/breadcrumb";
 
 // Enable ISR for work detail pages - revalidate every hour
 // export const revalidate = 3600;
@@ -33,6 +42,33 @@ type WorkPageProps = {
     workId: string;
   }>;
 };
+
+export async function generateMetadata({
+  params,
+}: WorkPageProps): Promise<Metadata> {
+  const { workId } = await params;
+
+  const work = await honoClient.api.works[":workId"]
+    .$get({
+      param: { workId },
+    })
+    .then(async (res) =>
+      res.ok ? await res.json().then((body) => body.work) : null,
+    );
+
+  if (!work) {
+    return {
+      title: "作品が見つかりません | おかずNavi",
+      description: "指定された作品は見つかりませんでした。",
+    };
+  }
+
+  return generateWorkMetadata({
+    ...work,
+    reviewCount: work.reviewCount ?? undefined,
+    reviewAverageScore: work.reviewAverageScore ?? undefined,
+  });
+}
 
 export default async function WorkPage({ params }: WorkPageProps) {
   const { workId } = await params;
@@ -68,12 +104,37 @@ export default async function WorkPage({ params }: WorkPageProps) {
       honoClient.api.makers[":makerId"].works
         .$get({
           param: { makerId: m.id.toString() },
+          query: {},
         })
         .then(async (res) =>
           res.ok ? await res.json().then((body) => body.works ?? []) : [],
         ),
     ),
-  ).then((works) => works.flat());
+  ).then((works) => works.flat().filter((w) => w.id !== work.id));
+
+  // 同じジャンルの作品を取得（上位3ジャンルから各5作品まで）
+  const sameGenreWorks = await Promise.all(
+    work.genres.slice(0, 3).map((g) =>
+      honoClient.api.genres[":genreId"].works
+        .$get({
+          param: { genreId: g.id.toString() },
+          query: { limit: "5" },
+        })
+        .then(async (res) =>
+          res.ok ? await res.json().then((body) => body.works ?? []) : [],
+        ),
+    ),
+  ).then(
+    (works) =>
+      works
+        .flat()
+        .filter((w) => w.id !== work.id) // 現在の作品を除外
+        .filter(
+          (w, index, self) =>
+            index === self.findIndex((work) => work.id === w.id),
+        ) // 重複を除去
+        .slice(0, 6), // 最大6作品
+  );
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("ja-JP", {
@@ -100,19 +161,37 @@ export default async function WorkPage({ params }: WorkPageProps) {
     : 0;
 
   // パンくずナビゲーション用のアイテム
-  const breadcrumbItems = [
-    { label: "作品詳細", href: "/doujinshi/works" },
-    {
-      label:
-        work.title.length > 20
-          ? `${work.title.substring(0, 20)}...`
-          : work.title,
-      current: true,
-    },
-  ];
+  const breadcrumbItems = generateWorkBreadcrumbs(work.title);
+
+  // 構造化データの生成
+  const workData: WorkData = {
+    id: work.id,
+    title: work.title,
+    largeImageUrl: work.largeImageUrl,
+    affiliateUrl: work.affiliateUrl,
+    price: work.price,
+    listPrice: work.listPrice,
+    releaseDate: work.releaseDate,
+    volume: work.volume || undefined,
+    reviewCount: work.reviewCount || undefined,
+    reviewAverageScore: work.reviewAverageScore || undefined,
+    makers: work.makers,
+    genres: work.genres,
+    series: work.series,
+  };
+
+  const pageUrl = `${SITE_CONFIG.url}/doujinshi/works/${work.id}`;
+  const structuredDataSchemas = generateWorkDetailSchemas(
+    workData,
+    pageUrl,
+    breadcrumbItems,
+  );
 
   return (
     <div className="min-h-screen bg-background">
+      {/* 構造化データ */}
+      <StructuredData data={structuredDataSchemas} />
+
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         <Breadcrumb items={breadcrumbItems} className="mb-6" />
 
@@ -524,9 +603,10 @@ export default async function WorkPage({ params }: WorkPageProps) {
                               ._makerId(maker.id)
                               .$url(),
                           )}
+                          title={`${maker.name}の同人誌・エロ漫画作品一覧`}
                         >
                           <Button variant="outline" size="sm">
-                            👤 {maker.name} の作品一覧を見る
+                            👤 {maker.name}の他の作品を見る
                           </Button>
                         </Link>
                       ))}
@@ -571,9 +651,10 @@ export default async function WorkPage({ params }: WorkPageProps) {
                                 ._seriesId(series.id)
                                 .$url(),
                             )}
+                            title={`${series.name}シリーズの同人誌・エロ漫画作品一覧`}
                           >
                             <Button variant="outline" size="sm">
-                              📚 {series.name} シリーズを見る
+                              📚 {series.name}シリーズの他の作品
                             </Button>
                           </Link>
                         ))}
@@ -603,6 +684,56 @@ export default async function WorkPage({ params }: WorkPageProps) {
                     </div>
                   </div>
                 )}
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* 同じジャンルの作品セクション */}
+        {sameGenreWorks.length > 0 && (
+          <div className="mb-12">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <span>同じジャンルのおすすめ作品</span>
+                  <Badge variant="outline" className="text-xs">
+                    {work.genres
+                      .slice(0, 2)
+                      .map((g) => g.name)
+                      .join("・")}{" "}
+                    など
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  <WorksList
+                    works={sameGenreWorks}
+                    layout="grid"
+                    emptyMessage="同じジャンルの作品はありません"
+                  />
+                  <div className="text-center">
+                    <p className="text-sm text-gray-600 mb-4">
+                      同じジャンルの他の作品もチェックしてみましょう
+                    </p>
+                    <div className="flex flex-wrap justify-center gap-2">
+                      {work.genres.slice(0, 3).map((genre) => (
+                        <Link
+                          key={genre.id}
+                          href={urlObjectToString(
+                            pagesPath.doujinshi.genres
+                              ._genreId(genre.id)
+                              .$url(),
+                          )}
+                        >
+                          <Button variant="outline" size="sm">
+                            🏷️ {genre.name} ジャンルを見る
+                          </Button>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>

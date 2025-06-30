@@ -186,38 +186,57 @@ export function generateMakerMetadata(
   maker: { id: string; name: string; description?: string },
   totalWorks: number,
   page = 1,
+  hasNextPage = false,
 ): Metadata {
   const pageTitle = page > 1 ? ` - ${page}ページ目` : "";
   const pageUrl = `${SITE_CONFIG.url}/doujinshi/makers/${maker.id}${page > 1 ? `?page=${page}` : ""}`;
 
-  const description = `${maker.name}の同人作品一覧ページ。${totalWorks}作品を掲載中。高品質な同人誌・エロ漫画を安全にダウンロード購入できる正規サイトへご案内します。`;
+  // より詳細で魅力的な説明文を生成
+  const description = `${maker.name}の同人作品ポートフォリオ（全${totalWorks}作品）。人気作品から最新リリースまで、${maker.name}の創作活動の全容をご覧いただけます。高品質な同人誌・エロ漫画を安全・正規ルートでダウンロード購入。${maker.description ? `${maker.description.substring(0, 50)}...` : "クリエイター情報も充実"}`;
 
+  // SEOキーワードを最適化
   const keywords = [
     maker.name,
+    `${maker.name} 作品`,
+    `${maker.name} 同人誌`,
+    `${maker.name} エロ漫画`,
     "制作者",
     "サークル",
+    "クリエイター",
+    "同人作家",
     "同人誌",
     "作品一覧",
+    "ポートフォリオ",
     "正規購入",
     "FANZA",
     "DLsite",
     "ダウンロード",
     "エロ漫画",
+    "アダルトコミック",
+    `${totalWorks}作品`,
   ];
 
+  // タイトルをより魅力的に
+  const title = `${maker.name}の同人作品ポートフォリオ（${totalWorks}作品）${pageTitle}`;
+
   return generatePageMetadata({
-    title: `${maker.name}の同人作品${pageTitle}`,
+    title,
     description,
     keywords,
     canonical: pageUrl,
     ogType: "profile",
+    authors: [maker.name],
+    section: "作者・サークル",
+    tags: [maker.name, "作者", "サークル", "同人作家"],
     prev:
       page > 2
         ? `${SITE_CONFIG.url}/doujinshi/makers/${maker.id}?page=${page - 1}`
         : page > 1
           ? `${SITE_CONFIG.url}/doujinshi/makers/${maker.id}`
           : undefined,
-    next: undefined, // 次ページがあるかは呼び出し元で判断
+    next: hasNextPage
+      ? `${SITE_CONFIG.url}/doujinshi/makers/${maker.id}?page=${page + 1}`
+      : undefined,
   });
 }
 
@@ -228,27 +247,36 @@ export function generateGenreMetadata(
   genre: { id: string; name: string; description?: string },
   totalWorks: number,
   page = 1,
+  hasNextPage = false,
 ): Metadata {
   const pageTitle = page > 1 ? ` - ${page}ページ目` : "";
   const pageUrl = `${SITE_CONFIG.url}/doujinshi/genres/${genre.id}${page > 1 ? `?page=${page}` : ""}`;
 
-  const description = `${genre.name}ジャンルの同人誌・エロ漫画一覧。${totalWorks}作品を掲載中。${genre.name}の人気作品を安全な正規サイトでダウンロード購入できます。`;
+  const description = `${genre.name}ジャンルの同人誌・エロ漫画コレクション（全${totalWorks}作品）。${genre.name}の人気作品から新作まで、安全な正規サイトでダウンロード購入できます。高品質な${genre.name}系同人誌を厳選掲載。`;
 
   const keywords = [
     genre.name,
+    `${genre.name} 同人誌`,
+    `${genre.name} エロ漫画`,
+    `${genre.name} 作品`,
     "ジャンル",
+    "カテゴリ",
+    "タグ",
     "同人誌",
     "エロ漫画",
     "作品一覧",
     "正規購入",
     "FANZA",
     "DLsite",
-    "カテゴリ",
-    "タグ",
+    "ダウンロード",
+    "アダルトコミック",
+    `${totalWorks}作品`,
   ];
 
+  const title = `${genre.name}の同人作品コレクション（${totalWorks}作品）${pageTitle}`;
+
   return generatePageMetadata({
-    title: `${genre.name}の同人作品${pageTitle}`,
+    title,
     description,
     keywords,
     canonical: pageUrl,
@@ -260,6 +288,63 @@ export function generateGenreMetadata(
         : page > 1
           ? `${SITE_CONFIG.url}/doujinshi/genres/${genre.id}`
           : undefined,
-    next: undefined, // 次ページがあるかは呼び出し元で判断
+    next: hasNextPage
+      ? `${SITE_CONFIG.url}/doujinshi/genres/${genre.id}?page=${page + 1}`
+      : undefined,
+  });
+}
+
+/**
+ * シリーズ詳細ページ用のメタデータを生成する
+ */
+export function generateSeriesMetadata(
+  series: { id: string; name: string; description?: string },
+  totalWorks: number,
+  page = 1,
+  hasNextPage = false,
+): Metadata {
+  const pageTitle = page > 1 ? ` - ${page}ページ目` : "";
+  const pageUrl = `${SITE_CONFIG.url}/doujinshi/series/${series.id}${page > 1 ? `?page=${page}` : ""}`;
+
+  const description = `「${series.name}」シリーズの同人誌・エロ漫画コレクション（全${totalWorks}作品）。${series.name}シリーズの人気作品から最新リリースまで、安全な正規サイトでダウンロード購入できます。シリーズ作品を網羅的に掲載。`;
+
+  const keywords = [
+    series.name,
+    `${series.name} シリーズ`,
+    `${series.name} 同人誌`,
+    `${series.name} エロ漫画`,
+    `${series.name} 作品`,
+    "シリーズ",
+    "続編",
+    "関連作品",
+    "同人誌",
+    "エロ漫画",
+    "作品一覧",
+    "正規購入",
+    "FANZA",
+    "DLsite",
+    "ダウンロード",
+    "アダルトコミック",
+    `${totalWorks}作品`,
+  ];
+
+  const title = `「${series.name}」シリーズ作品コレクション（${totalWorks}作品）${pageTitle}`;
+
+  return generatePageMetadata({
+    title,
+    description,
+    keywords,
+    canonical: pageUrl,
+    section: `${series.name}シリーズ`,
+    tags: [series.name, "シリーズ"],
+    prev:
+      page > 2
+        ? `${SITE_CONFIG.url}/doujinshi/series/${series.id}?page=${page - 1}`
+        : page > 1
+          ? `${SITE_CONFIG.url}/doujinshi/series/${series.id}`
+          : undefined,
+    next: hasNextPage
+      ? `${SITE_CONFIG.url}/doujinshi/series/${series.id}?page=${page + 1}`
+      : undefined,
   });
 }

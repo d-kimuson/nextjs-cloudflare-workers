@@ -242,22 +242,46 @@ export const registerRoutes = (app: HonoAppType) => {
         return c.json({ genre: genre.value });
       })
 
-      .get("/genres/:genreId/works", async (c) => {
-        const genreId = c.req.param("genreId");
-        const worksServiceClient = worksService(c.get("db"));
-        const works = await worksServiceClient.getWorksByGenreId(
-          Number.parseInt(genreId),
-        );
+      .get(
+        "/genres/:genreId/works",
+        zValidator(
+          "query",
+          z.object({
+            page: z
+              .string()
+              .optional()
+              .transform((val) => (val ? Number.parseInt(val) : 1)),
+            limit: z
+              .string()
+              .optional()
+              .transform((val) => (val ? Number.parseInt(val) : 20)),
+          }),
+        ),
+        async (c) => {
+          const genreId = c.req.param("genreId");
+          const query = c.req.valid("query");
+          const worksServiceClient = worksService(c.get("db"));
+          const works = await worksServiceClient.getWorksByGenreId(
+            Number.parseInt(genreId),
+            {
+              page: query.page,
+              limit: query.limit,
+            },
+          );
 
-        if (works.isErr()) {
-          return c.json({ success: false, error: "Failed to get works" }, 500);
-        }
+          if (works.isErr()) {
+            return c.json(
+              { success: false, error: "Failed to get works" },
+              500,
+            );
+          }
 
-        return c.json({
-          works: works.value.works,
-          pagination: works.value.pagination,
-        });
-      })
+          return c.json({
+            works: works.value.works,
+            pagination: works.value.pagination,
+          });
+        },
+      )
 
       // makers
       .get("/makers", async (c) => {
@@ -285,22 +309,46 @@ export const registerRoutes = (app: HonoAppType) => {
         return c.json({ maker: maker.value });
       })
 
-      .get("/makers/:makerId/works", async (c) => {
-        const makerId = c.req.param("makerId");
-        const worksServiceClient = worksService(c.get("db"));
-        const works = await worksServiceClient.getWorksByMakerId(
-          Number.parseInt(makerId),
-        );
+      .get(
+        "/makers/:makerId/works",
+        zValidator(
+          "query",
+          z.object({
+            page: z
+              .string()
+              .optional()
+              .transform((val) => (val ? Number.parseInt(val) : 1)),
+            limit: z
+              .string()
+              .optional()
+              .transform((val) => (val ? Number.parseInt(val) : 20)),
+          }),
+        ),
+        async (c) => {
+          const makerId = c.req.param("makerId");
+          const query = c.req.valid("query");
+          const worksServiceClient = worksService(c.get("db"));
+          const works = await worksServiceClient.getWorksByMakerId(
+            Number.parseInt(makerId),
+            {
+              page: query.page,
+              limit: query.limit,
+            },
+          );
 
-        if (works.isErr()) {
-          return c.json({ success: false, error: "Failed to get works" }, 500);
-        }
+          if (works.isErr()) {
+            return c.json(
+              { success: false, error: "Failed to get works" },
+              500,
+            );
+          }
 
-        return c.json({
-          works: works.value.works,
-          pagination: works.value.pagination,
-        });
-      })
+          return c.json({
+            works: works.value.works,
+            pagination: works.value.pagination,
+          });
+        },
+      )
 
       .get("/makers-ranking", async (c) => {
         const makersServiceClient = makersService(c.get("db"));

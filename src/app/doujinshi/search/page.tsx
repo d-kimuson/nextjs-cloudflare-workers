@@ -1,5 +1,6 @@
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Skeleton } from "@/components/ui/skeleton";
+import { generateSearchBreadcrumbs } from "@/lib/utils/breadcrumb";
 import { Search } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -27,17 +28,12 @@ interface SearchPageProps {
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const params = await searchParams;
+  const breadcrumbItems = generateSearchBreadcrumbs(params.title);
 
   return (
     <div className="container mx-auto px-4 py-8">
       {/* パンくずナビ */}
-      <Breadcrumb
-        className="mb-6"
-        items={[
-          { label: "同人誌", href: "/doujinshi" },
-          { label: "作品検索", current: true },
-        ]}
-      />
+      <Breadcrumb className="mb-6" items={breadcrumbItems} />
 
       {/* ページヘッダー */}
       <div className="mb-8">

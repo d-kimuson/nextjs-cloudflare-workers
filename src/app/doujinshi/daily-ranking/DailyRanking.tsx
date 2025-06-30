@@ -1,6 +1,7 @@
 "use client";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { FanzaWorksList } from "@/components/works/FanzaWorksList";
+import { generateDailyRankingBreadcrumbs } from "@/lib/utils/breadcrumb";
 import type { ItemItem } from "@/server/lib/dmmApi/dmmApi.generated";
 import { TrendingUp } from "lucide-react";
 
@@ -9,7 +10,7 @@ type Props = {
 };
 
 export const DailyRanking: React.FC<Props> = ({ doujinList }) => {
-  const breadcrumbItems = [{ label: "新作ランキング", current: true }];
+  const breadcrumbItems = generateDailyRankingBreadcrumbs();
 
   return (
     <div className="flex-1">

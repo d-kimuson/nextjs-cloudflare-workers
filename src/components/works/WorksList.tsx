@@ -79,6 +79,7 @@ export function WorksList({
                   pagesPath.doujinshi.works._workId(work.id).$url(),
                 )}
                 className="group"
+                title={`${work.title} - 同人誌・エロ漫画の詳細ページ`}
               >
                 <Card className="transition-all duration-200 hover:shadow-lg hover:scale-105">
                   <div className="overflow-hidden rounded-t-lg relative">
@@ -206,6 +207,7 @@ export function WorksList({
                             pagesPath.doujinshi.works._workId(work.id).$url(),
                           )}
                           className="hover:text-primary transition-colors"
+                          title={`${work.title} - 同人誌・エロ漫画の詳細情報を確認`}
                         >
                           {work.title}
                         </Link>
@@ -242,6 +244,7 @@ export function WorksList({
                                     ._makerId(maker.id)
                                     .$url(),
                                 )}
+                                title={`${maker.name}の同人誌・エロ漫画作品一覧`}
                               >
                                 <Badge
                                   variant="outline"
@@ -277,6 +280,7 @@ export function WorksList({
                                       ._genreId(genre.id)
                                       .$url(),
                                   )}
+                                  title={`${genre.name}ジャンルの同人誌・エロ漫画作品一覧`}
                                 >
                                   <Badge
                                     variant="secondary"

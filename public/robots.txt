@@ -23,11 +23,6 @@ Disallow: /tmp/
 Disallow: /cache/
 
 Sitemap: https://okazu-navi.com/sitemap-index.xml
-Sitemap: https://okazu-navi.com/sitemap.xml
-Sitemap: https://okazu-navi.com/sitemap-works.xml
-Sitemap: https://okazu-navi.com/sitemap-makers.xml
-Sitemap: https://okazu-navi.com/sitemap-series.xml
-Sitemap: https://okazu-navi.com/sitemap-genres.xml
 
 Crawl-delay: 1
 

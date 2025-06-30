@@ -1,3 +1,7 @@
+import {
+  StructuredData,
+  generateWebSiteSchema,
+} from "@/components/StructuredData";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { SITE_CONFIG } from "@/lib/constants/site";
@@ -96,9 +100,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const websiteSchema = generateWebSiteSchema();
+
   return (
     <html lang="ja">
       <head>
+        {/* 構造化データ - WebSite schema */}
+        <StructuredData data={websiteSchema} />
+
         {/* Manifest for PWA */}
         <link rel="manifest" href="/manifest.json" />
 

@@ -5,6 +5,7 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { generateNewReleasesBreadcrumbs } from "@/lib/utils/breadcrumb";
 import { Award, Star, TrendingUp, User } from "lucide-react";
 import Image from "next/image";
 import { WorksList } from "../../../components/works/WorksList";
@@ -16,7 +17,7 @@ type Props = {
 };
 
 export const NewReleases: React.FC<Props> = ({ works, loading }) => {
-  const breadcrumbItems = [{ label: "人気作者の新作", current: true }];
+  const breadcrumbItems = generateNewReleasesBreadcrumbs();
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("ja-JP", {

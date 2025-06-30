@@ -11,11 +11,13 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "../../../components/ui/badge";
+import { Breadcrumb } from "../../../components/ui/breadcrumb";
 import { Button } from "../../../components/ui/button";
 import { Card, CardContent, CardHeader } from "../../../components/ui/card";
 import { pagesPath } from "../../../lib/$path";
 import { honoClient } from "../../../lib/api/client";
 import { urlObjectToString } from "../../../lib/path/urlObjectToString";
+import { generateMakersListBreadcrumbs } from "../../../lib/utils/breadcrumb";
 
 export default async function MakersPage() {
   const [rankings, genres, dailyRanking] = await Promise.all([
@@ -53,12 +55,17 @@ export default async function MakersPage() {
     return "text-slate-600 bg-slate-50 border-slate-200";
   };
 
+  const breadcrumbItems = generateMakersListBreadcrumbs();
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         <div className="flex gap-8">
           {/* メインコンテンツ */}
           <div className="flex-1 space-y-8">
+            {/* パンくずナビゲーション */}
+            <Breadcrumb items={breadcrumbItems} className="mb-6" />
+
             {/* ページヘッダー */}
             <div className="space-y-6">
               <div className="flex items-center space-x-4">
