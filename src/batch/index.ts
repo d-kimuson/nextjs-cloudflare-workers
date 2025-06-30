@@ -1,5 +1,6 @@
 import { getDb } from "../server/db/client";
 import { calculateMakerScores } from "./commands/calculateMakerScores";
+import { exploreCheapWorks } from "./commands/exploreCheapWorks";
 import { exploreRanking } from "./commands/exploreRanking";
 
 const handler: ExportedHandler<{
@@ -13,7 +14,12 @@ const handler: ExportedHandler<{
         await exploreRanking(db);
         break;
       }
-      case "0 */24 * * *": {
+      case "0 12 * * *": {
+        // 毎日12時（正午）に安い作品を探索
+        await exploreCheapWorks(db);
+        break;
+      }
+      case "1 12 * * *": {
         await calculateMakerScores(db);
         break;
       }

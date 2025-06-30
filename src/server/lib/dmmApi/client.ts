@@ -159,4 +159,30 @@ export const dmmApiClient = {
 
       return okAsync(result.data.result.items);
     }),
+
+  getItemList: (
+    params: Omit<ItemListParams, "api_id" | "affiliate_id" | "output">,
+  ) =>
+    ResultAsync.fromPromise(
+      itemList({
+        ...authInfo,
+        ...params,
+        output: "json",
+      }),
+      (error) => {
+        console.error(error);
+        return new BaseError("NETWORK_ERROR", "UNHANDLED");
+      },
+    ).andThen((result) => {
+      if (result.status !== 200) {
+        switch (result.status) {
+          case 400:
+            return errAsync(new BaseError("BAD_REQUEST", "BAD_REQUEST"));
+          default:
+            return errAsync(new BaseError("UNHANDLED", "UNHANDLED"));
+        }
+      }
+
+      return okAsync(result.data.result.items);
+    }),
 };
