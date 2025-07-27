@@ -1,7 +1,9 @@
 import { getDb } from "../server/db/client";
 import { calculateMakerScores } from "./commands/calculateMakerScores";
 import { exploreCheapWorks } from "./commands/exploreCheapWorks";
+import { exploreNewWorksByPopularMakers } from "./commands/exploreNewWorksByPopularMakers";
 import { exploreRanking } from "./commands/exploreRanking";
+import { seedCuratedMakers } from "./commands/seedCuratedMakers";
 
 const handler: ExportedHandler<{
   DB: D1Database;
@@ -21,6 +23,16 @@ const handler: ExportedHandler<{
       }
       case "1 12 * * *": {
         await calculateMakerScores(db);
+        break;
+      }
+      case "0 6 * * *": {
+        // 毎日6時（早朝）に人気作者の新作を探索
+        await exploreNewWorksByPopularMakers(db);
+        break;
+      }
+      case "0 3 * * 0": {
+        // 毎週日曜日3時に目利き作者の初期データをシード
+        await seedCuratedMakers(db);
         break;
       }
       default: {

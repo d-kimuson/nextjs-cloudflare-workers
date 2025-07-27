@@ -628,6 +628,57 @@ export const worksRepository = (db: DB) => {
       .filter((work) => work !== null);
   };
 
+  // 指定した作者IDリストの新作を取得
+  const findRecentWorksByMakerIds = async (options: {
+    makerIds: number[];
+    limit?: number;
+    daysAgo?: number;
+  }) => {
+    const { makerIds, limit = 20, daysAgo = 7 } = options;
+
+    if (makerIds.length === 0) {
+      return [];
+    }
+
+    // N日前の日付を計算
+    const cutoffDate = subDays(getCurrentDate(), daysAgo);
+    const cutoffDateStr = cutoffDate.toISOString().split("T")[0] as string; // YYYY-MM-DD形式
+
+    const workMakers = await db.query.workMakerTable.findMany({
+      with: {
+        work: {
+          with: {
+            genres: {
+              with: {
+                genre: true,
+              },
+            },
+            makers: {
+              with: {
+                maker: true,
+              },
+            },
+            series: {
+              with: {
+                series: true,
+              },
+            },
+          },
+        },
+      },
+      where: and(
+        inArray(workMakerTable.makerId, makerIds),
+        gte(worksTable.releaseDate, cutoffDateStr),
+      ),
+      limit,
+      orderBy: [desc(worksTable.releaseDate)],
+    });
+
+    return workMakers
+      .map((workMaker) => workMaker.work)
+      .filter((work) => work !== null);
+  };
+
   // 価格帯別での作品検索
   const findByPriceRange = async (
     minPrice?: number,
@@ -944,6 +995,7 @@ export const worksRepository = (db: DB) => {
     findByIds,
     findByMakerIds,
     findRecentWorksByTopScoredMakers,
+    findRecentWorksByMakerIds,
     findByPriceRange,
     countByPriceRange,
     findByReleaseDateRange,

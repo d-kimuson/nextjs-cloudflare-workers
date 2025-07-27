@@ -212,3 +212,27 @@ export const makerScoresTableRelations = relations(
     }),
   }),
 );
+
+// 目利き作者テーブル
+export const curatedMakersTable = sqliteTable("curated_makers", {
+  id: int().primaryKey({ autoIncrement: true }),
+  makerId: int()
+    .references(() => makersTable.id)
+    .notNull()
+    .unique(),
+  priority: int().notNull().default(0), // 表示優先度（数値が大きいほど優先）
+  isActive: int({ mode: "boolean" }).notNull().default(true), // アクティブ状態
+  description: text(), // 目利きメモ
+  createdAt: text().default("CURRENT_TIMESTAMP"),
+  updatedAt: text().default("CURRENT_TIMESTAMP"),
+});
+
+export const curatedMakersTableRelations = relations(
+  curatedMakersTable,
+  ({ one }) => ({
+    maker: one(makersTable, {
+      fields: [curatedMakersTable.makerId],
+      references: [makersTable.id],
+    }),
+  }),
+);

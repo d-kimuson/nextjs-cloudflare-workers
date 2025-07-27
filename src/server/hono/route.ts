@@ -1,6 +1,7 @@
 import { zValidator } from "@hono/zod-validator";
 import { ulid } from "ulid";
 import z from "zod";
+import { curatedMakersService } from "../features/curatedMakers/curatedMakers.service";
 import { dmmService } from "../features/dmm/dmm.service";
 import { genreService } from "../features/genres/genres.service";
 import { makersService } from "../features/makers/makers.service";
@@ -399,8 +400,9 @@ export const registerRoutes = (app: HonoAppType) => {
 
       // others
       .get("/recent-works-by-top-makers", async (c) => {
-        const worksServiceClient = worksService(c.get("db"));
-        const works = await worksServiceClient.getRecentWorksByTopMakers();
+        const curatedMakersServiceClient = curatedMakersService(c.get("db"));
+        const works =
+          await curatedMakersServiceClient.getRecentWorksByCuratedMakers();
 
         if (works.isErr()) {
           return c.json(
